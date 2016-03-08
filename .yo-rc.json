@@ -1,0 +1,26 @@
+{
+  "generator-jhipster": {
+    "baseName": "Volunteercrowd",
+    "packageName": "com.hielfsoft.volunteercrowd",
+    "packageFolder": "com/hielfsoft/volunteercrowd",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "useSass": false,
+    "buildTool": "gradle",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "99a73e2edb1d2d5b000636fd0f7d3ad47ad66d65",
+    "testFrameworks": [
+      "gatling",
+      "cucumber",
+      "protractor"
+    ]
+  }
+}
