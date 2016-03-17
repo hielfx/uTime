@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-1">
+        <addColumn tableName="app_user">
+            <column name="address" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-2">
+        <addColumn tableName="app_user">
+            <column name="city" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-3">
+        <addColumn tableName="app_user">
+            <column name="country" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-4">
+        <addColumn tableName="app_user">
+            <column name="image" type="bytea"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-5">
+        <addColumn tableName="app_user">
+            <column name="province" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-6">
+        <addColumn tableName="app_user">
+            <column name="showAddress" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-7">
+        <addColumn tableName="app_user">
+            <column name="showCity" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-8">
+        <addColumn tableName="app_user">
+            <column name="showCountry" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-9">
+        <addColumn tableName="app_user">
+            <column name="showProvince" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-10">
+        <addColumn tableName="app_user">
+            <column name="showZipCode" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-11">
+        <addColumn tableName="app_user">
+            <column name="tokens" type="int4"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-12">
+        <addColumn tableName="app_user">
+            <column name="zipCode" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-13">
+        <dropUniqueConstraint constraintName="app_user_user_id_key" tableName="app_user"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-14">
+        <dropSequence sequenceName="app_user_id_seq"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-15">
+        <dropSequence sequenceName="jhi_persistent_audit_event_event_id_seq"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1458214545246-16">
+        <dropSequence sequenceName="jhi_user_id_seq"/>
+    </changeSet>
+</databaseChangeLog>

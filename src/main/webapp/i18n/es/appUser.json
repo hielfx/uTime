@@ -1,0 +1,24 @@
+{
+    "volunteercrowdApp": {
+        "appUser" : {
+            "home": {
+                "title": "AppUsers",
+                "createLabel": "Crear nuevo AppUser",
+                "createOrEditLabel": "Crear o editar AppUser",
+                "search": "Search for AppUser"
+            },
+            "created": "Un nuevo AppUser ha sido creado con el identificador {{ param }}",
+            "updated": "Un AppUser ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un AppUser ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar AppUser {{ id }}?"
+            },
+            "detail": {
+                "title": "AppUser"
+            },
+            "phoneNomber": "PhoneNomber",
+            "isOnline": "IsOnline",
+            "user": "User"
+        }
+    }
+}

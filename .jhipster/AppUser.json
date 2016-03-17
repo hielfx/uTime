@@ -1,0 +1,33 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "phoneNomber",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "([+]\\d{2})?\\d{9}",
+            "fieldValidateRulesPatternJava": "([+]\\\\d{2})?\\\\d{9}"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "isOnline",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20160317104815",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pager"
+}
