@@ -67,7 +67,7 @@ class AppUserGatlingTest extends Simulation {
             .exec(http("Create new appUser")
             .post("/api/appUsers")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "phoneNomber":"SAMPLE_TEXT", "isOnline":null}""")).asJSON
+            .body(StringBody("""{"id":null, "phoneNumber":"SAMPLE_TEXT", "isOnline":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_appUser_url")))
             .pause(10)

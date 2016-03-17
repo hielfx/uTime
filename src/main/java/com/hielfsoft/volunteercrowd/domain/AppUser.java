@@ -1,5 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Objects;
 
@@ -41,8 +43,45 @@ public class AppUser implements Serializable {
 
     private Address address;
 
+    //Relationships
     @OneToOne
     private User user;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "jhi_following_follower",
+        joinColumns = {@JoinColumn(name = "app_user", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "ap_user", referencedColumnName = "id")})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private List<AppUser> followers;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "jhi_following_follower",
+        joinColumns = {@JoinColumn(name = "app_user", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "ap_user", referencedColumnName = "id")})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private List<User> following;
+
+    //Getters and Setters
+
+    public List<AppUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<AppUser> followers) {
+        this.followers = followers;
+    }
+
+    public List<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<User> following) {
+        this.following = following;
+    }
 
     public int getTokens() {
         return tokens;
@@ -76,12 +115,12 @@ public class AppUser implements Serializable {
         this.id = id;
     }
 
-    public String getPhoneNomber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNomber(String phoneNomber) {
-        this.phoneNumber = phoneNomber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Boolean getIsOnline() {

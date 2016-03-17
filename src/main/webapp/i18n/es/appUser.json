@@ -16,7 +16,7 @@
             "detail": {
                 "title": "AppUser"
             },
-            "phoneNomber": "PhoneNomber",
+            "phoneNumber": "PhoneNumber",
             "isOnline": "IsOnline",
             "user": "User"
         }

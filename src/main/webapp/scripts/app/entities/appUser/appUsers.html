@@ -6,7 +6,7 @@
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="appUser.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span 
+                    <span
 class="hidden-xs"                        translate="volunteercrowdApp.appUser.home.createLabel">Create new AppUser
                     </span>
                 </button>
@@ -31,7 +31,7 @@ class="hidden-xs"                        translate="volunteercrowdApp.appUser.ho
             <thead>
                 <tr jh-sort="predicate" ascending="reverse" callback="loadAll()">
                     <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="phoneNomber"><span translate="volunteercrowdApp.appUser.phoneNomber">PhoneNomber</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="phoneNumber"><span translate="volunteercrowdApp.appUser.phoneNumber">PhoneNumber</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="isOnline"><span translate="volunteercrowdApp.appUser.isOnline">IsOnline</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="user.id"><span translate="volunteercrowdApp.appUser.user">user</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
@@ -40,7 +40,7 @@ class="hidden-xs"                        translate="volunteercrowdApp.appUser.ho
             <tbody>
                 <tr ng-repeat="appUser in appUsers track by appUser.id">
                     <td><a ui-sref="appUser.detail({id:appUser.id})">{{appUser.id}}</a></td>
-                    <td>{{appUser.phoneNomber}}</td>
+                    <td>{{appUser.phoneNumber}}</td>
                     <td>{{appUser.isOnline}}</td>
                     <td>
                         {{appUser.user.id}}
@@ -49,7 +49,7 @@ class="hidden-xs"                        translate="volunteercrowdApp.appUser.ho
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
                                     ui-sref="appUser.detail({id:appUser.id})"
-                                    class="btn btn-info btn-sm"> 
+                                    class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                             </button>
@@ -61,7 +61,7 @@ class="hidden-xs"                        translate="volunteercrowdApp.appUser.ho
                             </button>
                             <button type="submit"
                                     ui-sref="appUser.delete({id:appUser.id})"
-                                    class="btn btn-danger btn-sm">                                    
+                                    class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
                             </button>

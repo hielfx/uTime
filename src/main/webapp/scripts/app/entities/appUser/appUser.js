@@ -61,7 +61,7 @@ angular.module('volunteercrowdApp')
                         resolve: {
                             entity: function () {
                                 return {
-                                    phoneNomber: null,
+                                    phoneNumber: null,
                                     isOnline: null,
                                     id: null
                                 };

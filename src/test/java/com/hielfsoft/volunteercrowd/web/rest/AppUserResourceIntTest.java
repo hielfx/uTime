@@ -77,7 +77,7 @@ public class AppUserResourceIntTest {
     @Before
     public void initTest() {
         appUser = new AppUser();
-        appUser.setPhoneNomber(DEFAULT_PHONE_NOMBER);
+        appUser.setPhoneNumber(DEFAULT_PHONE_NOMBER);
         appUser.setIsOnline(DEFAULT_IS_ONLINE);
     }
 
@@ -97,7 +97,7 @@ public class AppUserResourceIntTest {
         List<AppUser> appUsers = appUserRepository.findAll();
         assertThat(appUsers).hasSize(databaseSizeBeforeCreate + 1);
         AppUser testAppUser = appUsers.get(appUsers.size() - 1);
-        assertThat(testAppUser.getPhoneNomber()).isEqualTo(DEFAULT_PHONE_NOMBER);
+        assertThat(testAppUser.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NOMBER);
         assertThat(testAppUser.getIsOnline()).isEqualTo(DEFAULT_IS_ONLINE);
     }
 
@@ -112,7 +112,7 @@ public class AppUserResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(appUser.getId().intValue())))
-                .andExpect(jsonPath("$.[*].phoneNomber").value(hasItem(DEFAULT_PHONE_NOMBER.toString())))
+                .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NOMBER.toString())))
                 .andExpect(jsonPath("$.[*].isOnline").value(hasItem(DEFAULT_IS_ONLINE.booleanValue())));
     }
 
@@ -127,7 +127,7 @@ public class AppUserResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(appUser.getId().intValue()))
-            .andExpect(jsonPath("$.phoneNomber").value(DEFAULT_PHONE_NOMBER.toString()))
+            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NOMBER.toString()))
             .andExpect(jsonPath("$.isOnline").value(DEFAULT_IS_ONLINE.booleanValue()));
     }
 
@@ -148,7 +148,7 @@ public class AppUserResourceIntTest {
 		int databaseSizeBeforeUpdate = appUserRepository.findAll().size();
 
         // Update the appUser
-        appUser.setPhoneNomber(UPDATED_PHONE_NOMBER);
+        appUser.setPhoneNumber(UPDATED_PHONE_NOMBER);
         appUser.setIsOnline(UPDATED_IS_ONLINE);
 
         restAppUserMockMvc.perform(put("/api/appUsers")
@@ -160,7 +160,7 @@ public class AppUserResourceIntTest {
         List<AppUser> appUsers = appUserRepository.findAll();
         assertThat(appUsers).hasSize(databaseSizeBeforeUpdate);
         AppUser testAppUser = appUsers.get(appUsers.size() - 1);
-        assertThat(testAppUser.getPhoneNomber()).isEqualTo(UPDATED_PHONE_NOMBER);
+        assertThat(testAppUser.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NOMBER);
         assertThat(testAppUser.getIsOnline()).isEqualTo(UPDATED_IS_ONLINE);
     }
 

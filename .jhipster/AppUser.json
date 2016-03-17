@@ -12,7 +12,7 @@
     "fields": [
         {
             "fieldId": 1,
-            "fieldName": "phoneNomber",
+            "fieldName": "phoneNumber",
             "fieldType": "String",
             "fieldValidateRules": [
                 "pattern"

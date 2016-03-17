@@ -38,7 +38,7 @@ angular.module('volunteercrowdApp')
 
         $scope.clear = function () {
             $scope.appUser = {
-                phoneNomber: null,
+                phoneNumber: null,
                 isOnline: null,
                 id: null
             };
