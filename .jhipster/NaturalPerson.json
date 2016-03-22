@@ -1,0 +1,36 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "gender",
+            "otherEntityName": "gender",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "name",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "naturalPerson"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "appUser",
+            "otherEntityName": "appUser",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "naturalPerson"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "birthDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160318112652",
+    "dto": "no",
+    "service": "no",
+    "pagination": "pager"
+}

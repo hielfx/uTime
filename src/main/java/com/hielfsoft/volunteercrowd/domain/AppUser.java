@@ -41,6 +41,13 @@ public class AppUser implements Serializable {
     @Column(name="image")
     private byte[] image;
 
+    @AttributeOverrides({
+        @AttributeOverride(name = "showAddress", column = @Column(name = "show_address")),
+        @AttributeOverride(name = "showCity", column = @Column(name = "show_city")),
+        @AttributeOverride(name = "showZipCode", column = @Column(name = "show_zip_code")),
+        @AttributeOverride(name = "showCountry", column = @Column(name = "show_country")),
+        @AttributeOverride(name = "zipCode", column = @Column(name = "zip_code")),
+        @AttributeOverride(name = "showProvince", column = @Column(name = "show_province"))})
     private Address address;
 
     //Relationships
@@ -50,22 +57,35 @@ public class AppUser implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "jhi_following_follower",
-        joinColumns = {@JoinColumn(name = "app_user", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "ap_user", referencedColumnName = "id")})
+        name = "following_follower",
+        joinColumns = {@JoinColumn(name = "app_user_following_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "app_user_follower_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<AppUser> followers;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "jhi_following_follower",
-        joinColumns = {@JoinColumn(name = "app_user", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "ap_user", referencedColumnName = "id")})
+        name = "following_follower",
+        joinColumns = {@JoinColumn(name = "app_user_follower_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "app_user_following_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private List<User> following;
+    private List<AppUser> following;
+
+    @OneToOne(mappedBy = "appUser")
+    @JsonIgnore
+    private NaturalPerson naturalPerson;
 
     //Getters and Setters
+
+
+    public NaturalPerson getNaturalPerson() {
+        return naturalPerson;
+    }
+
+    public void setNaturalPerson(NaturalPerson naturalPerson) {
+        this.naturalPerson = naturalPerson;
+    }
 
     public List<AppUser> getFollowers() {
         return followers;
@@ -75,11 +95,11 @@ public class AppUser implements Serializable {
         this.followers = followers;
     }
 
-    public List<User> getFollowing() {
+    public List<AppUser> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<User> following) {
+    public void setFollowing(List<AppUser> following) {
         this.following = following;
     }
 

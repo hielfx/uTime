@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
  * Created by Daniel Sánchez on 17/03/2016.
  */
 @Embeddable
-@Access(AccessType.PROPERTY)
 public class Address {
 
     @NotNull

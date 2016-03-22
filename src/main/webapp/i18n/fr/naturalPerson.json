@@ -1,0 +1,25 @@
+{
+    "volunteercrowdApp": {
+        "naturalPerson" : {
+            "home": {
+                "title": "NaturalPersons",
+                "createLabel": "Créer un nouveau NaturalPerson",
+                "createOrEditLabel": "Créer ou éditer un NaturalPerson",
+                "search": "Search for NaturalPerson"
+            },
+            "created": "Un nouveau NaturalPerson a été créé avec l'identifiant {{ param }}",
+            "updated": "Le NaturalPerson avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le NaturalPerson avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le NaturalPerson {{ id }} ?"
+            },
+            "detail": {
+                "title": "NaturalPerson"
+            },
+            "birthDate": "BirthDate",
+            "gender": "Gender",
+            "appUser": "AppUser"
+        }
+    }
+}
+

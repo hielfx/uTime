@@ -1,10 +1,13 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.domain.Address;
 import com.hielfsoft.volunteercrowd.domain.AppUser;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
 import com.hielfsoft.volunteercrowd.service.AppUserService;
 
+import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,11 +45,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class AppUserResourceIntTest {
 
-    private static final String DEFAULT_PHONE_NOMBER = "AAAAA";
-    private static final String UPDATED_PHONE_NOMBER = "BBBBB";
+    private static final String DEFAULT_PHONE_NUMBER = "+34616378275";
+    private static final String UPDATED_PHONE_NUMBER = "616378275";
 
     private static final Boolean DEFAULT_IS_ONLINE = false;
     private static final Boolean UPDATED_IS_ONLINE = true;
+
+    @Inject
+    private UserService userService;//Added manually
 
     @Inject
     private AppUserRepository appUserRepository;
@@ -76,9 +82,27 @@ public class AppUserResourceIntTest {
 
     @Before
     public void initTest() {
+        User user = userService.getUserWithAuthoritiesByLogin("user").get();
         appUser = new AppUser();
-        appUser.setPhoneNumber(DEFAULT_PHONE_NOMBER);
+        appUser.setPhoneNumber(DEFAULT_PHONE_NUMBER);
         appUser.setIsOnline(DEFAULT_IS_ONLINE);
+
+        //Added manually
+        Address address = new Address();
+        address.setAddress("AAAAAA");
+        address.setCity("AAAAAA");
+        address.setCountry("AAAAAA");
+        address.setProvince("AAAAAAA");
+        address.setShowAddress(true);
+        address.setShowCity(true);
+        address.setZipCode("AAAAAA");
+        address.setShowCountry(true);
+        address.setShowProvince(true);
+        address.setShowZipCode(true);
+
+        appUser.setAddress(address);
+        appUser.setUser(user);
+        appUser.setTokens(0);
     }
 
     @Test
@@ -97,7 +121,7 @@ public class AppUserResourceIntTest {
         List<AppUser> appUsers = appUserRepository.findAll();
         assertThat(appUsers).hasSize(databaseSizeBeforeCreate + 1);
         AppUser testAppUser = appUsers.get(appUsers.size() - 1);
-        assertThat(testAppUser.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NOMBER);
+        assertThat(testAppUser.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
         assertThat(testAppUser.getIsOnline()).isEqualTo(DEFAULT_IS_ONLINE);
     }
 
@@ -112,7 +136,7 @@ public class AppUserResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(appUser.getId().intValue())))
-                .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NOMBER.toString())))
+                .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())))
                 .andExpect(jsonPath("$.[*].isOnline").value(hasItem(DEFAULT_IS_ONLINE.booleanValue())));
     }
 
@@ -127,7 +151,7 @@ public class AppUserResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(appUser.getId().intValue()))
-            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NOMBER.toString()))
+            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()))
             .andExpect(jsonPath("$.isOnline").value(DEFAULT_IS_ONLINE.booleanValue()));
     }
 
@@ -148,7 +172,7 @@ public class AppUserResourceIntTest {
 		int databaseSizeBeforeUpdate = appUserRepository.findAll().size();
 
         // Update the appUser
-        appUser.setPhoneNumber(UPDATED_PHONE_NOMBER);
+        appUser.setPhoneNumber(UPDATED_PHONE_NUMBER);
         appUser.setIsOnline(UPDATED_IS_ONLINE);
 
         restAppUserMockMvc.perform(put("/api/appUsers")
@@ -160,7 +184,7 @@ public class AppUserResourceIntTest {
         List<AppUser> appUsers = appUserRepository.findAll();
         assertThat(appUsers).hasSize(databaseSizeBeforeUpdate);
         AppUser testAppUser = appUsers.get(appUsers.size() - 1);
-        assertThat(testAppUser.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NOMBER);
+        assertThat(testAppUser.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
         assertThat(testAppUser.getIsOnline()).isEqualTo(UPDATED_IS_ONLINE);
     }
 
