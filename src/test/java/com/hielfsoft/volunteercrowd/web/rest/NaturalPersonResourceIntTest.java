@@ -55,10 +55,10 @@ public class NaturalPersonResourceIntTest {
     @Inject
     private UserService userService; //Added manually
 
-    @Inject
+    @Inject //TODO:Delete repository and use service
     private AppUserRepository appUserRepository; //Added manually
 
-    @Inject
+    @Inject //TODO:Delete repository and use service
     private GenderRepository genderRepository; //Added manually
 
     @Inject

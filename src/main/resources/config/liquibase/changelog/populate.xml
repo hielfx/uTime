@@ -5,12 +5,19 @@
     that is why we create a custom changeset to populate a data base with examples. We shouldnt
      write a load tag in a generated changeset tag, please create new ones. To follow a method,
      id should be populateX where X is the name of the entity -->
-    <changeSet author="Daniel Sánchez (generated)" id="00000000000001-01">
+    <changeSet author="Daniel Sánchez (generated)" id="gender_data">
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/gender.csv"
                   separator=";"
                   tableName="gender"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="request_status_data">
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/request_status.csv"
+                  separator=";"
+                  tableName="request_status"/>
     </changeSet>
 
 </databaseChangeLog>

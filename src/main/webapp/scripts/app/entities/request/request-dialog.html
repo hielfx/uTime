@@ -1,0 +1,70 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myRequestLabel" translate="volunteercrowdApp.request.home.createOrEditLabel">Create or edit a Request</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="request.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.creationDate" for="field_creationDate">CreationDate</label>
+                <div class="input-group">
+                    <input id="field_creationDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="request.creationDate" is-open="datePickerForCreationDate.status.opened"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datePickerForCreationDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.description" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="request.description"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.code" for="field_code">Code</label>
+            <input type="text" class="form-control" name="code" id="field_code"
+                    ng-model="request.code"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.finishDate" for="field_finishDate">FinishDate</label>
+                <div class="input-group">
+                    <input id="field_finishDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="request.finishDate" is-open="datePickerForFinishDate.status.opened"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datePickerForFinishDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.deleted" for="field_deleted">Deleted</label>
+            <input type="checkbox" class="form-control" name="deleted" id="field_deleted"
+                    ng-model="request.deleted"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label translate="volunteercrowdApp.request.applicant" for="field_applicant">applicant</label>
+            <select class="form-control" id="field_applicant" name="applicant" ng-model="request.applicant" ng-options="appUser as appUser.id for appUser in appusers track by appUser.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

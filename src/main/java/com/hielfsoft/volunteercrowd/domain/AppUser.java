@@ -38,6 +38,7 @@ public class AppUser implements Serializable {
     private int tokens;
 
     // Data types
+    @Lob
     @Column(name="image")
     private byte[] image;
 
@@ -75,6 +76,11 @@ public class AppUser implements Serializable {
     @OneToOne(mappedBy = "appUser")
     @JsonIgnore
     private NaturalPerson naturalPerson;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicant")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Request> requests = new HashSet<Request>();
 
     //Getters and Setters
 

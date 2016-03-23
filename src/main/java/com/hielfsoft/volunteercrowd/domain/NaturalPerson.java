@@ -31,12 +31,14 @@ public class NaturalPerson implements Serializable {
     private LocalDate birthDate;
 
     @NotNull
-    @OneToOne
-    @JoinTable(
-        name = "natural_person_gender",
-        joinColumns = {@JoinColumn(name = "natural_person_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "gender_name", referencedColumnName = "name")})
-    @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @ManyToOne
+    @JoinColumn(name="gender")
+//    @OneToOne
+//    @JoinTable(
+//        name = "natural_person_gender",
+//        joinColumns = {@JoinColumn(name = "natural_person_id", referencedColumnName = "id")},
+//        inverseJoinColumns = {@JoinColumn(name = "gender_name", referencedColumnName = "name")})
+//    @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Gender gender;
 
     @NotNull
