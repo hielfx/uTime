@@ -77,6 +77,10 @@ public class AppUser implements Serializable {
     @JsonIgnore
     private NaturalPerson naturalPerson;
 
+    @OneToOne(mappedBy = "appUser")
+    @JsonIgnore
+    private LegalEntity legalEntity;
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -84,6 +88,21 @@ public class AppUser implements Serializable {
 
     //Getters and Setters
 
+    public LegalEntity getLegalEntity() {
+        return legalEntity;
+    }
+
+    public void setLegalEntity(LegalEntity legalEntity) {
+        this.legalEntity = legalEntity;
+    }
+
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
+    }
 
     public NaturalPerson getNaturalPerson() {
         return naturalPerson;

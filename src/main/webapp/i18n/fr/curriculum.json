@@ -1,0 +1,26 @@
+{
+    "volunteercrowdApp": {
+        "curriculum" : {
+            "home": {
+                "title": "Curriculums",
+                "createLabel": "Créer un nouveau Curriculum",
+                "createOrEditLabel": "Créer ou éditer un Curriculum",
+                "search": "Search for Curriculum"
+            },
+            "created": "Un nouveau Curriculum a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Curriculum avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Curriculum avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Curriculum {{ id }} ?"
+            },
+            "detail": {
+                "title": "Curriculum"
+            },
+            "website": "Website",
+            "creationDate": "CreationDate",
+            "modificationDate": "ModificationDate",
+            "naturalPerson": "NaturalPerson"
+        }
+    }
+}
+

@@ -1,0 +1,33 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "naturalPerson",
+            "otherEntityName": "naturalPerson",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "curriculum"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "website",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "creationDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "modificationDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "changelogDate": "20160325105612",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pager"
+}

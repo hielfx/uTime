@@ -27,6 +27,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,15 +48,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RequestResourceIntTest {
 
 
-    private static final LocalDate DEFAULT_CREATION_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusYears(1);
+    private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusSeconds(1);
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
     private static final String DEFAULT_CODE = "AAAAA";
     private static final String UPDATED_CODE = "BBBBB";
 
-    private static final LocalDate DEFAULT_FINISH_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_FINISH_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final ZonedDateTime DEFAULT_FINISH_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusYears(1);
+    private static final ZonedDateTime UPDATED_FINISH_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusSeconds(1);
 
     private static final Boolean DEFAULT_DELETED = false;
     private static final Boolean UPDATED_DELETED = true;

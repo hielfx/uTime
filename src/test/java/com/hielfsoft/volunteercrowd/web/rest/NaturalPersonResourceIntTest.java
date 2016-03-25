@@ -29,6 +29,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +51,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NaturalPersonResourceIntTest {
 
 
-    private static final LocalDate DEFAULT_BIRTH_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_BIRTH_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final ZonedDateTime DEFAULT_BIRTH_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusYears(1);
+    private static final ZonedDateTime UPDATED_BIRTH_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusYears(2);
 
     @Inject
     private UserService userService; //Added manually

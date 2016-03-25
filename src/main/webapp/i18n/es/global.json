@@ -10,6 +10,8 @@
                 "appUser": "AppUser",
                 "naturalPerson": "NaturalPerson",
                 "request": "Request",
+                "legalEntity": "LegalEntity",
+                "curriculum": "Curriculum",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

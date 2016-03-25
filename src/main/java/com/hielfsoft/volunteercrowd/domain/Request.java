@@ -1,9 +1,8 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.LocalDate;
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -11,8 +10,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -28,8 +27,10 @@ public class Request implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "creation_date")
-    private LocalDate creationDate;
+    @NotNull
+    @Past
+    @Column(name = "creation_date", nullable = false)
+    private ZonedDateTime creationDate;
 
     @Column(name = "description")
     private String description;
@@ -41,7 +42,7 @@ public class Request implements Serializable {
     private String code;
 
     @Column(name = "finish_date")
-    private LocalDate finishDate;
+    private ZonedDateTime finishDate;
 
     @Column(name = "deleted")
     private Boolean deleted;
@@ -71,11 +72,11 @@ public class Request implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getCreationDate() {
+    public ZonedDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(ZonedDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -95,11 +96,11 @@ public class Request implements Serializable {
         this.code = code;
     }
 
-    public LocalDate getFinishDate() {
+    public ZonedDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDate finishDate) {
+    public void setFinishDate(ZonedDateTime finishDate) {
         this.finishDate = finishDate;
     }
 

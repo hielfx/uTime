@@ -1,0 +1,26 @@
+{
+    "volunteercrowdApp": {
+        "legalEntity" : {
+            "home": {
+                "title": "LegalEntitys",
+                "createLabel": "Crear nuevo LegalEntity",
+                "createOrEditLabel": "Crear o editar LegalEntity",
+                "search": "Search for LegalEntity"
+            },
+            "created": "Un nuevo LegalEntity ha sido creado con el identificador {{ param }}",
+            "updated": "Un LegalEntity ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un LegalEntity ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar LegalEntity {{ id }}?"
+            },
+            "detail": {
+                "title": "LegalEntity"
+            },
+            "mission": "Mission",
+            "vision": "Vision",
+            "website": "Website",
+            "description": "Description",
+            "appUser": "AppUser"
+        }
+    }
+}

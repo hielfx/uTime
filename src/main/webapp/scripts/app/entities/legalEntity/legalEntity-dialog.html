@@ -1,0 +1,56 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myLegalEntityLabel" translate="volunteercrowdApp.legalEntity.home.createOrEditLabel">Create or edit a LegalEntity</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="legalEntity.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.mission" for="field_mission">Mission</label>
+            <input type="text" class="form-control" name="mission" id="field_mission"
+                    ng-model="legalEntity.mission"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.vision" for="field_vision">Vision</label>
+            <input type="text" class="form-control" name="vision" id="field_vision"
+                    ng-model="legalEntity.vision"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.website" for="field_website">Website</label>
+            <input type="text" class="form-control" name="website" id="field_website"
+                    ng-model="legalEntity.website"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.description" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="legalEntity.description"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label translate="volunteercrowdApp.legalEntity.appUser" for="field_appUser">appUser</label>
+            <select class="form-control" id="field_appUser" name="appUser" ng-model="legalEntity.appUser" ng-options="appUser as appUser.id for appUser in appusers | orderBy:'id' track by appUser.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

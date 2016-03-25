@@ -1,0 +1,39 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "appUser",
+            "otherEntityName": "appUser",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "legalEntity"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "mission",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "vision",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "website",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160325102836",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pager"
+}

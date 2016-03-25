@@ -1,16 +1,18 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.LocalDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -26,9 +28,10 @@ public class NaturalPerson implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Past
     @NotNull
     @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    private ZonedDateTime birthDate;
 
     @NotNull
     @ManyToOne
@@ -47,6 +50,19 @@ public class NaturalPerson implements Serializable {
     @JoinColumn(name="app_user_id") //Added because the liquibase configuration was using appUser_id
     private AppUser appUser;
 
+    @OneToOne
+    @Valid
+    @JoinColumn(name = "curriculum_id")
+    private Curriculum curriculum;
+
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
+    }
+
     public Long getId() {
         return id;
     }
@@ -55,11 +71,11 @@ public class NaturalPerson implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getBirthDate() {
+    public ZonedDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(ZonedDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
