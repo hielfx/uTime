@@ -56,6 +56,18 @@ public class Request implements Serializable {
     @JoinColumn(name="status")
     private RequestStatus status;
 
+//    @ManyToOne
+//    @JoinColumn(name="need_id")
+//    private Need need;
+//
+//    public Need getNeed() {
+//        return need;
+//    }
+//
+//    public void setNeed(Need need) {
+//        this.need = need;
+//    }
+
     public RequestStatus getStatus() {
         return status;
     }

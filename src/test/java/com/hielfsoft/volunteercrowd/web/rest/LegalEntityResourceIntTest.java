@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -113,9 +114,9 @@ public class LegalEntityResourceIntTest {
         address.setShowZipCode(true);
 
         appUser.setAddress(address);
-        appUser.setFollowers(new ArrayList<AppUser>());
+        appUser.setFollowers(new HashSet<AppUser>());
         appUser.setUser(user);
-        appUser.setFollowing(new ArrayList<AppUser>());
+        appUser.setFollowing(new HashSet<AppUser>());
         appUser.setIsOnline(false);
         appUser.setTokens(0);
 

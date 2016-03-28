@@ -1,0 +1,37 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "tag",
+            "otherEntityName": "tag",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "ability"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "appUser",
+            "otherEntityName": "appUser",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "hidden",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20160328090047",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pager"
+}

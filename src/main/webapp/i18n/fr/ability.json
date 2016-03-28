@@ -1,0 +1,26 @@
+{
+    "volunteercrowdApp": {
+        "ability" : {
+            "home": {
+                "title": "Abilitys",
+                "createLabel": "Créer un nouveau Ability",
+                "createOrEditLabel": "Créer ou éditer un Ability",
+                "search": "Search for Ability"
+            },
+            "created": "Un nouveau Ability a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Ability avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Ability avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Ability {{ id }} ?"
+            },
+            "detail": {
+                "title": "Ability"
+            },
+            "name": "Name",
+            "hidden": "Hidden",
+            "tag": "Tag",
+            "appUser": "AppUser"
+        }
+    }
+}
+

@@ -62,7 +62,7 @@ public class AppUser implements Serializable {
         joinColumns = {@JoinColumn(name = "app_user_following_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "app_user_follower_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private List<AppUser> followers;
+    private Set<AppUser> followers = new HashSet<AppUser>();
 
     @JsonIgnore
     @ManyToMany
@@ -71,7 +71,7 @@ public class AppUser implements Serializable {
         joinColumns = {@JoinColumn(name = "app_user_follower_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "app_user_following_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private List<AppUser> following;
+    private Set<AppUser> following = new HashSet<AppUser>();
 
     @OneToOne(mappedBy = "appUser")
     @JsonIgnore
@@ -82,11 +82,25 @@ public class AppUser implements Serializable {
     private LegalEntity legalEntity;
 
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appUser")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Ability> abilities = new HashSet<Ability>();
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Request> requests = new HashSet<Request>();
 
     //Getters and Setters
+
+
+    public Set<Ability> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(Set<Ability> abilities) {
+        this.abilities = abilities;
+    }
 
     public LegalEntity getLegalEntity() {
         return legalEntity;
@@ -112,19 +126,19 @@ public class AppUser implements Serializable {
         this.naturalPerson = naturalPerson;
     }
 
-    public List<AppUser> getFollowers() {
+    public Set<AppUser> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<AppUser> followers) {
+    public void setFollowers(Set<AppUser> followers) {
         this.followers = followers;
     }
 
-    public List<AppUser> getFollowing() {
+    public Set<AppUser> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<AppUser> following) {
+    public void setFollowing(Set<AppUser> following) {
         this.following = following;
     }
 

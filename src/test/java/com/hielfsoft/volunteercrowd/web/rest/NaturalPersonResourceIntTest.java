@@ -1,23 +1,24 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.Application;
-import com.hielfsoft.volunteercrowd.domain.*;
+import com.hielfsoft.volunteercrowd.domain.Address;
+import com.hielfsoft.volunteercrowd.domain.AppUser;
+import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
 import com.hielfsoft.volunteercrowd.repository.GenderRepository;
 import com.hielfsoft.volunteercrowd.repository.NaturalPersonRepository;
 import com.hielfsoft.volunteercrowd.repository.search.NaturalPersonSearchRepository;
-
 import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -27,14 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -111,9 +111,9 @@ public class NaturalPersonResourceIntTest {
         address.setShowZipCode(true);
 
         appUser.setAddress(address);
-        appUser.setFollowers(new ArrayList<AppUser>());
+        appUser.setFollowers(new HashSet<AppUser>());
         appUser.setUser(user);
-        appUser.setFollowing(new ArrayList<AppUser>());
+        appUser.setFollowing(new HashSet<AppUser>());
         appUser.setIsOnline(false);
         appUser.setTokens(0);
 

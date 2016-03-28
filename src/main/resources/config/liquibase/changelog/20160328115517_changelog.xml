@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-1">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-1">
+        <createTable tableName="ability">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="abilityPK"/>
+            </column>
+            <column name="hidden" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="app_user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-2">
         <createTable tableName="app_user">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="app_userPK"/>
@@ -22,7 +34,7 @@
             <column name="user_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-2">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-3">
         <createTable tableName="curriculum">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="curriculumPK"/>
@@ -36,7 +48,7 @@
             <column name="website" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-3">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-4">
         <createTable tableName="following_follower">
             <column name="app_user_follower_id" type="BIGINT">
                 <constraints nullable="false"/>
@@ -46,14 +58,14 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-4">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-5">
         <createTable tableName="gender">
             <column name="name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-5">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-6">
         <createTable tableName="legal_entity">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="legal_entityPK"/>
@@ -71,7 +83,7 @@
             <column name="app_user_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-6">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-7">
         <createTable tableName="natural_person">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="natural_personPK"/>
@@ -84,7 +96,7 @@
             <column name="gender" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-7">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-8">
         <createTable tableName="request">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="requestPK"/>
@@ -102,47 +114,66 @@
             <column name="status" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-8">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-9">
         <createTable tableName="request_status">
             <column name="name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-9">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-10">
+        <createTable tableName="tag">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="tagPK"/>
+            </column>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ability_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-11">
         <addPrimaryKey columnNames="name" constraintName="genderPK" tableName="gender"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-10">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-12">
         <addPrimaryKey columnNames="name" constraintName="request_statusPK" tableName="request_status"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-11">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-13">
         <addUniqueConstraint columnNames="code" constraintName="UC_REQUESTCODE_COL" tableName="request"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-12">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-14">
         <addForeignKeyConstraint baseColumnNames="applicant_id" baseTableName="request" constraintName="FK_1j2k8lbwcb62hofij3thlr3lc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="app_user"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-13">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-15">
+        <addForeignKeyConstraint baseColumnNames="ability_id" baseTableName="tag" constraintName="FK_4689q5f1wtc4cxu6bf41memmu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ability"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-16">
         <addForeignKeyConstraint baseColumnNames="app_user_follower_id" baseTableName="following_follower" constraintName="FK_6antr20hmnt6w7pc0rweikdq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="app_user"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-14">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-17">
         <addForeignKeyConstraint baseColumnNames="gender" baseTableName="natural_person" constraintName="FK_7nqict90p8m6l5s1h3q1n4t7i" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="gender"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-15">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-18">
         <addForeignKeyConstraint baseColumnNames="curriculum_id" baseTableName="natural_person" constraintName="FK_aaxonceuhdvqpcngaiwesfm4c" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="curriculum"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-16">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-19">
         <addForeignKeyConstraint baseColumnNames="status" baseTableName="request" constraintName="FK_gtsnidrsylpi5idb2jkk9w9x" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="request_status"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-17">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-20">
+        <addForeignKeyConstraint baseColumnNames="app_user_id" baseTableName="ability" constraintName="FK_jfkuq4hhgmfr9ayxq6g0of3l" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="app_user"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-21">
         <addForeignKeyConstraint baseColumnNames="app_user_id" baseTableName="natural_person" constraintName="FK_jlvwrasrmb2p4nekukvp4mak4" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="app_user"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-18">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-22">
         <addForeignKeyConstraint baseColumnNames="app_user_id" baseTableName="legal_entity" constraintName="FK_m6ecm8xbc0lrpea989dic28rp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="app_user"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-19">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-23">
         <addForeignKeyConstraint baseColumnNames="app_user_following_id" baseTableName="following_follower" constraintName="FK_m9bit6m3bb5y614yoescp5w52" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="app_user"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="1458938198059-20">
+    <changeSet author="Daniel Sánchez (generated)" id="1459158959611-24">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="app_user" constraintName="FK_qjho89hmbuv32f9a8tbocpr0i" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
     </changeSet>
 </databaseChangeLog>
