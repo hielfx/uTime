@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.assessment.detail.title">Assessment</span> {{assessment.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.assessment.creationMoment">CreationMoment</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{assessment.creationMoment | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.assessment.rating">Rating</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{assessment.rating}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.assessment.comment">Comment</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{assessment.comment}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.assessment.creator">creator</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="appUser.detail({id:assessment.creator.id})">{{assessment.creator.id}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.assessment.recipient">recipient</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="appUser.detail({id:assessment.recipient.id})">{{assessment.recipient.id}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

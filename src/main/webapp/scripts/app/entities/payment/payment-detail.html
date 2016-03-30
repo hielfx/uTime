@@ -1,0 +1,54 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.payment.detail.title">Payment</span> {{payment.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.payment.amount">Amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{payment.amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.payment.paymentMoment">PaymentMoment</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{payment.paymentMoment | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.payment.request">request</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="request.detail({id:payment.request.id})">{{payment.request.id}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.payment.payer">payer</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="appUser.detail({id:payment.payer.id})">{{payment.payer.id}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

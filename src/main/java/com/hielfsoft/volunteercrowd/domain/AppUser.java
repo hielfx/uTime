@@ -96,8 +96,39 @@ public class AppUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Need> needs = new HashSet<Need>();
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Assessment> createdAssessments = new HashSet<Assessment>();
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipient")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Assessment> relatedAssessments = new HashSet<Assessment>();
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payer")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Payment> payments = new HashSet<Payment>();
+
     //Getters and Setters
 
+
+    public Set<Assessment> getCreatedAssessments() {
+        return createdAssessments;
+    }
+
+    public void setCreatedAssessments(Set<Assessment> createdAssessments) {
+        this.createdAssessments = createdAssessments;
+    }
+
+    public Set<Assessment> getRelatedAssessments() {
+        return relatedAssessments;
+    }
+
+    public void setRelatedAssessments(Set<Assessment> relatedAssessments) {
+        this.relatedAssessments = relatedAssessments;
+    }
 
     public Set<Need> getNeeds() {
         return needs;

@@ -48,8 +48,11 @@ public class Request implements Serializable {
     @Column(name = "finish_date")
     private ZonedDateTime finishDate;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted=false;
+
+    @Column(name = "paid", nullable = false)
+    private boolean paid=false;
 
     @NotNull
     @Valid
@@ -73,6 +76,11 @@ public class Request implements Serializable {
     @Valid
     @JoinColumn(name="need_id")
     private Need need;
+
+    @OneToOne(mappedBy = "request")
+    @Valid
+    @JoinColumn(name="payment_id")
+    private Payment payment;
 
     public Need getNeed() {
         return need;
@@ -130,11 +138,11 @@ public class Request implements Serializable {
         this.finishDate = finishDate;
     }
 
-    public Boolean getDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
 

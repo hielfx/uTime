@@ -1,0 +1,26 @@
+{
+    "volunteercrowdApp": {
+        "assessment" : {
+            "home": {
+                "title": "Assessments",
+                "createLabel": "Crear nuevo Assessment",
+                "createOrEditLabel": "Crear o editar Assessment",
+                "search": "Search for Assessment"
+            },
+            "created": "Un nuevo Assessment ha sido creado con el identificador {{ param }}",
+            "updated": "Un Assessment ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Assessment ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Assessment {{ id }}?"
+            },
+            "detail": {
+                "title": "Assessment"
+            },
+            "creationMoment": "CreationMoment",
+            "rating": "Rating",
+            "comment": "Comment",
+            "creator": "Creator",
+            "recipient": "Recipient"
+        }
+    }
+}

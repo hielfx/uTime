@@ -1,0 +1,41 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "request",
+            "otherEntityName": "request",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "payment"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "payer",
+            "otherEntityName": "appUser",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "amount",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "1"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "paymentMoment",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "changelogDate": "20160330110624",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pagination"
+}
