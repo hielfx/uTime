@@ -1,0 +1,24 @@
+{
+    "volunteercrowdApp": {
+        "disponibility" : {
+            "home": {
+                "title": "Disponibilitys",
+                "createLabel": "Create a new Disponibility",
+                "createOrEditLabel": "Create or edit a Disponibility",
+                "search": "Search for Disponibility"
+            },
+            "created": "A new Disponibility is created with identifier {{ param }}",
+            "updated": "A Disponibility is updated with identifier {{ param }}",
+            "deleted": "A Disponibility is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Disponibility {{ id }}?"
+            },
+            "detail": {
+                "title": "Disponibility"
+            },
+            "startMoment": "StartMoment",
+            "endMoment": "EndMoment",
+            "need": "Need"
+        }
+    }
+}

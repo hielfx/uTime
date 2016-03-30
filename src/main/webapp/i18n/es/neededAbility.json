@@ -1,0 +1,23 @@
+{
+    "volunteercrowdApp": {
+        "neededAbility" : {
+            "home": {
+                "title": "NeededAbilitys",
+                "createLabel": "Crear nuevo NeededAbility",
+                "createOrEditLabel": "Crear o editar NeededAbility",
+                "search": "Search for NeededAbility"
+            },
+            "created": "Un nuevo NeededAbility ha sido creado con el identificador {{ param }}",
+            "updated": "Un NeededAbility ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un NeededAbility ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar NeededAbility {{ id }}?"
+            },
+            "detail": {
+                "title": "NeededAbility"
+            },
+            "name": "Name",
+            "need": "Need"
+        }
+    }
+}

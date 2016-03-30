@@ -91,8 +91,21 @@ public class AppUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Request> requests = new HashSet<Request>();
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appUser")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Need> needs = new HashSet<Need>();
+
     //Getters and Setters
 
+
+    public Set<Need> getNeeds() {
+        return needs;
+    }
+
+    public void setNeeds(Set<Need> needs) {
+        this.needs = needs;
+    }
 
     public Set<Ability> getAbilities() {
         return abilities;

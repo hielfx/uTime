@@ -1,0 +1,23 @@
+{
+    "volunteercrowdApp": {
+        "neededAbility" : {
+            "home": {
+                "title": "NeededAbilitys",
+                "createLabel": "Create a new NeededAbility",
+                "createOrEditLabel": "Create or edit a NeededAbility",
+                "search": "Search for NeededAbility"
+            },
+            "created": "A new NeededAbility is created with identifier {{ param }}",
+            "updated": "A NeededAbility is updated with identifier {{ param }}",
+            "deleted": "A NeededAbility is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete NeededAbility {{ id }}?"
+            },
+            "detail": {
+                "title": "NeededAbility"
+            },
+            "name": "Name",
+            "need": "Need"
+        }
+    }
+}

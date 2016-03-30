@@ -1,11 +1,15 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.domain.Address;
+import com.hielfsoft.volunteercrowd.domain.AppUser;
 import com.hielfsoft.volunteercrowd.domain.Request;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.RequestRepository;
 import com.hielfsoft.volunteercrowd.repository.RequestStatusRepository;
 import com.hielfsoft.volunteercrowd.service.RequestService;
 
+import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +33,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,6 +72,9 @@ public class RequestResourceIntTest {
     @Inject
     private RequestService requestService;
 
+    @Inject
+    private UserService userService;
+
     @Inject //TODO:Delete repository and use service
     private RequestStatusRepository requestStatusRepository; //Added manually
 
@@ -100,7 +108,30 @@ public class RequestResourceIntTest {
         request.setDeleted(DEFAULT_DELETED);
 
         //Added manually
+
+        AppUser appUser = new AppUser();
+        Address address = new Address();
+        User user = userService.getUserWithAuthoritiesByLogin("user").get();
+
+        address.setAddress("AAAAAA");
+        address.setCity("AAAAAA");
+        address.setCountry("AAAAAA");
+        address.setProvince("AAAAAAA");
+        address.setShowAddress(true);
+        address.setShowCity(true);
+        address.setZipCode("AAAAAA");
+        address.setShowCountry(true);
+        address.setShowProvince(true);
+        address.setShowZipCode(true);
+
+        appUser.setAddress(address);
+        appUser.setFollowers(new HashSet<AppUser>());
+        appUser.setUser(user);
+        appUser.setFollowing(new HashSet<AppUser>());
+        appUser.setIsOnline(false);
+        appUser.setTokens(0);
         request.setStatus(requestStatusRepository.findAll().get(0));
+        request.setApplicant(appUser);
 
     }
 

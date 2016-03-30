@@ -1,0 +1,46 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.disponibility.detail.title">Disponibility</span> {{disponibility.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.disponibility.startMoment">StartMoment</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{disponibility.startMoment | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.disponibility.endMoment">EndMoment</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{disponibility.endMoment | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.disponibility.need">need</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="need.detail({id:disponibility.need.id})">{{disponibility.need.id}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

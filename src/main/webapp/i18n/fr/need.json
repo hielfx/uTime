@@ -1,0 +1,32 @@
+{
+    "volunteercrowdApp": {
+        "need" : {
+            "home": {
+                "title": "Needs",
+                "createLabel": "Créer un nouveau Need",
+                "createOrEditLabel": "Créer ou éditer un Need",
+                "search": "Search for Need"
+            },
+            "created": "Un nouveau Need a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Need avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Need avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Need {{ id }} ?"
+            },
+            "detail": {
+                "title": "Need"
+            },
+            "title": "Title",
+            "description": "Description",
+            "cathegory": "Cathegory",
+            "deleted": "Deleted",
+            "location": "Location",
+            "creationDate": "CreationDate",
+            "modificationDate": "ModificationDate",
+            "appUser": "AppUser",
+            "neededAbility": "NeededAbility",
+            "disponibility": "Disponibility"
+        }
+    }
+}
+

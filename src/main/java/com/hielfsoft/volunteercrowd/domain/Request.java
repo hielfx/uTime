@@ -1,5 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -7,12 +8,15 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Request.
@@ -47,26 +51,36 @@ public class Request implements Serializable {
     @Column(name = "deleted")
     private Boolean deleted;
 
+    @NotNull
+    @Valid
     @ManyToOne
     @JoinColumn(name = "applicant_id")
     private AppUser applicant;
 
     @NotNull
     @ManyToOne
+    @Valid
     @JoinColumn(name="status")
     private RequestStatus status;
 
-//    @ManyToOne
-//    @JoinColumn(name="need_id")
-//    private Need need;
-//
-//    public Need getNeed() {
-//        return need;
-//    }
-//
-//    public void setNeed(Need need) {
-//        this.need = need;
-//    }
+    @OneToMany(mappedBy = "request")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Incidence> incidences = new HashSet<Incidence>();
+
+    @ManyToOne
+    @NotNull
+    @Valid
+    @JoinColumn(name="need_id")
+    private Need need;
+
+    public Need getNeed() {
+        return need;
+    }
+
+    public void setNeed(Need need) {
+        this.need = need;
+    }
 
     public RequestStatus getStatus() {
         return status;

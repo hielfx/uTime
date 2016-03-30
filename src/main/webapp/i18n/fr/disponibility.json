@@ -1,0 +1,25 @@
+{
+    "volunteercrowdApp": {
+        "disponibility" : {
+            "home": {
+                "title": "Disponibilitys",
+                "createLabel": "Créer un nouveau Disponibility",
+                "createOrEditLabel": "Créer ou éditer un Disponibility",
+                "search": "Search for Disponibility"
+            },
+            "created": "Un nouveau Disponibility a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Disponibility avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Disponibility avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Disponibility {{ id }} ?"
+            },
+            "detail": {
+                "title": "Disponibility"
+            },
+            "startMoment": "StartMoment",
+            "endMoment": "EndMoment",
+            "need": "Need"
+        }
+    }
+}
+

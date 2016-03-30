@@ -1,0 +1,27 @@
+{
+    "volunteercrowdApp": {
+        "incidence" : {
+            "home": {
+                "title": "Incidences",
+                "createLabel": "Crear nuevo Incidence",
+                "createOrEditLabel": "Crear o editar Incidence",
+                "search": "Search for Incidence"
+            },
+            "created": "Un nuevo Incidence ha sido creado con el identificador {{ param }}",
+            "updated": "Un Incidence ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Incidence ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Incidence {{ id }}?"
+            },
+            "detail": {
+                "title": "Incidence"
+            },
+            "creationDate": "CreationDate",
+            "closed": "Closed",
+            "description": "Description",
+            "adminComment": "AdminComment",
+            "administrator": "Administrator",
+            "request": "Request"
+        }
+    }
+}

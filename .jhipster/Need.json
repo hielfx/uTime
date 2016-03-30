@@ -1,0 +1,79 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "appUser",
+            "otherEntityName": "appUser",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "neededAbility",
+            "otherEntityName": "neededAbility",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "need"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "disponibility",
+            "otherEntityName": "disponibility",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "need"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "title",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "cathegory",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "deleted",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "location",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "modificationDate",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "changelogDate": "20160330090908",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pagination"
+}
