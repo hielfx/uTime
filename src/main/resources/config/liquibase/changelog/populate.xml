@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <!--Checksums are applied to changesets tags and they are not recommended to be changed,
     that is why we create a custom changeset to populate a data base with examples. We shouldnt
      write a load tag in a generated changeset tag, please create new ones. To follow a method,
      id should be populateX where X is the name of the entity -->
-    <changeSet author="Daniel Sánchez (generated)" id="gender_data">
+    <changeSet author="Daniel Sánchez" id="populateGender">
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/gender.csv"
-                  separator=";"
+                  separator=","
                   tableName="gender"/>
     </changeSet>
-    <changeSet author="Daniel Sánchez (generated)" id="request_status_data">
+    <changeSet author="Daniel Sánchez" id="populateRequestStatus">
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/request_status.csv"
-                  separator=";"
+                  separator=","
                   tableName="request_status"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez" id="populateAppUser">
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/app_user.csv"
+                  separator=","
+                  tableName="app_user"/>
     </changeSet>
 
 </databaseChangeLog>
