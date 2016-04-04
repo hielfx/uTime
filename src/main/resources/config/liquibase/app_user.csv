@@ -1,4 +1,9 @@
 id,address,city,country,province,show_address,show_city,show_country,show_province,show_zip_code,zip_code,image,is_online,phone_number,tokens,user_id
-8,address1,city1,country1,province1,true,true,true,true,true,zip_code1,null,false,696874562,3,5
-9,address2,city2,country2,province2,true,true,true,true,true,zip_code2,null,false,698745632,2,6
-10,address3,city3,country3,privince3,true,true,true,true,true,zip_code3,null,false,698745231,3,7
+9,address1,city1,country1,province1,true,true,true,true,true,zip_code1,null,false,696874562,3,5
+10,address2,city2,country2,province2,true,true,false,true,true,zip_code2,NULL,false,698745632,2,6
+11,address3,city3,country3,province3,true,true,true,false,true,zip_code3,NULL,false,698745231,3,7
+12,address4,city4,country4,province4,true,true,true,true,false,zip_code4,NULL,false,698742531,3,8
+18,address5,city5,country5,province5,true,true,true,false,false,zip_code5,NULL,false,698742531,3,14
+19,address6,city6,country6,province6,true,false,false,true,true,zip_code6,NULL,false,698742531,3,15
+20,address7,city7,country7,province7,true,false,true,true,true,zip_code7,NULL,false,698742531,3,16
+21,address8,city8,country8,province8,true,false,false,false,false,zip_code8,NULL,false,698742531,3,17

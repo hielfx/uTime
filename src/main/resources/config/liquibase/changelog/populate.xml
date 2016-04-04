@@ -29,4 +29,18 @@
                   tableName="app_user"/>
     </changeSet>
 
+    <changeSet author="Daniel Sánchez" id="populateNaturalPerson">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/natural_person.csv"
+                  separator=","
+                  tableName="natural_person"/>
+    </changeSet>
+
+    <changeSet author="Daniel Sánchez" id="populateLegalEntity">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/legal_entity.csv"
+                  separator=","
+                  tableName="legal_entity"/>
+    </changeSet>
+
 </databaseChangeLog>

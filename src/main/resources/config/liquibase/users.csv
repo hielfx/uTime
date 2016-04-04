@@ -3,7 +3,11 @@ id,login,password_hash,first_name,last_name,email,activated,lang_key,created_by
 2,anonymousUser,$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO,Anonymous,User,anonymous@localhost,true,en,system
 3,admin,$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC,Administrator,Administrator,admin@localhost,true,en,system
 4,user,$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K,User,User,user@localhost,true,en,system
-5,user1,$2a$10$sKsRaFb8AdQOgbpkQuPtseK5sLK28KhS215ezu8g.9zCwYpN0IKDy,User1,User1,user1@localhost,true,es,user
-6,user2,$2a$10$hLjaXQ9NqKAP.ZVHYLpUsuhTkn93UMSXTrsqg0E6KJO1q7HDyb8SW,User2,User2,user2@locahost,true,es,user
-7,user3,$2a$10$sINuVjrYnPKp78MqZ4mZIOw7okBrG2d15U9lNSMk5kbQGWTPMNGRq,User3,User3,user3@localhost,true,es,user
-8,user4,$2a$10$5DUWN10Yd6lr5Xbj8F6/UeJQODURuqPief5P2hsQEsHbU5jcklHkS,User4,User4,user4@localhost,true,es,user
+5,nperson1,$2a$10$Zkx/OO6u/L076biPkBtf3eXUftqKLXOE6O6xRJu2oQb6bjNE1w0u.,Natural1,Person1,nperson1@localhost,true,es,user
+6,nperson2,$2a$10$mpKmiDB1eeoRXcMZXnAsxepNYvZmHI6HBRpIChq9ji0S4zQO7UViu,Natural2,Person2,npserson2@localhsot,true,es,user
+7,nperson3,$2a$10$hyYiwpvWoATbZ02e2hzlquYd5LZJkSfanBprRmjtgdubtasWt.326,Natural3,Person3,nperson3@localhost,true,es,user
+8,nperson4,$2a$10$btVwdZIQ9chgd9BOrKXtCeJPRQi3nQ7LlrxXQgWr9FdZFr2crOahK,Natural4,Person4,nperson4@localhsot,true,es,user
+14,lentity1,$2a$10$DRHHuWgO8jJ9Zo8Xm8j.DOHA.gMENeaek/99HU3mmCeifuDmtKUVS,Legal1,Entity1,lentity1@localhost,true,es,user
+15,lentity2,$2a$10$5pJFTWGzVomnbXuM1UBupuH.Cm0juscHomYPyyFSmbJXOzfIlUggK,Legal2,Entity2,lentity2@localhsot,true,es,user
+16,lentity3,$2a$10$Wn0gYtLnXM7m2PsWy83w5.KvoOKx.NdVz9.adnejX14Yus47MevEO,Legal3,Entity3,lentity3@localhost,true,es,user
+17,lentity4,$2a$10$ECNlJeZD6Yroe.9F1D5HwOpsJQDjEQrA2k0RIb/XdYR5y4ezZv3VC,Legal4,Entity4,lentity4@localhost,true,es,user
