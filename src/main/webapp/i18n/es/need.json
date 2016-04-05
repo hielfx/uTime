@@ -18,7 +18,7 @@
             },
             "title": "Title",
             "description": "Description",
-            "cathegory": "Cathegory",
+            "category": "category",
             "deleted": "Deleted",
             "location": "Location",
             "creationDate": "CreationDate",

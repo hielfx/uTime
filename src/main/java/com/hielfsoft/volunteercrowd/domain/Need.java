@@ -3,16 +3,17 @@ package com.hielfsoft.volunteercrowd.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Need.
@@ -36,8 +37,8 @@ public class Need implements Serializable {
     private String description;
 
     @NotNull
-    @Column(name = "cathegory", nullable = false)
-    private String cathegory;
+    @Column(name = "category", nullable = false)
+    private String category;
 
     @Column(name = "deleted")
     private boolean deleted;
@@ -94,12 +95,12 @@ public class Need implements Serializable {
         this.description = description;
     }
 
-    public String getCathegory() {
-        return cathegory;
+    public String getcategory() {
+        return category;
     }
 
-    public void setCathegory(String cathegory) {
-        this.cathegory = cathegory;
+    public void setcategory(String category) {
+        this.category = category;
     }
 
     public boolean getDeleted() {
@@ -184,7 +185,7 @@ public class Need implements Serializable {
             "id=" + id +
             ", title='" + title + "'" +
             ", description='" + description + "'" +
-            ", cathegory='" + cathegory + "'" +
+            ", category='" + category + "'" +
             ", deleted='" + deleted + "'" +
             ", location='" + location + "'" +
             ", creationDate='" + creationDate + "'" +

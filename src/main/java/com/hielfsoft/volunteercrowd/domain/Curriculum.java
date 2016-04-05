@@ -1,6 +1,5 @@
 package com.hielfsoft.volunteercrowd.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -60,7 +59,6 @@ public class Curriculum implements Serializable {
     private String vision;
 
     @OneToOne(mappedBy = "curriculum")
-    @JsonIgnore
     private NaturalPerson naturalPerson;
 
     public byte[] getFile() {

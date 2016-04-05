@@ -40,7 +40,7 @@ angular.module('volunteercrowdApp')
             $scope.need = {
                 title: null,
                 description: null,
-                cathegory: null,
+                category: null,
                 deleted: null,
                 location: null,
                 creationDate: null,

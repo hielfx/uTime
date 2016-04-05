@@ -67,7 +67,7 @@ class NeedGatlingTest extends Simulation {
             .exec(http("Create new need")
             .post("/api/needs")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "title":"SAMPLE_TEXT", "description":"SAMPLE_TEXT", "cathegory":"SAMPLE_TEXT", "deleted":null, "location":"SAMPLE_TEXT", "creationDate":"2020-01-01T00:00:00.000Z", "modificationDate":"2020-01-01T00:00:00.000Z"}""")).asJSON
+            .body(StringBody("""{"id":null, "title":"SAMPLE_TEXT", "description":"SAMPLE_TEXT", "category":"SAMPLE_TEXT", "deleted":null, "location":"SAMPLE_TEXT", "creationDate":"2020-01-01T00:00:00.000Z", "modificationDate":"2020-01-01T00:00:00.000Z"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_need_url")))
             .pause(10)

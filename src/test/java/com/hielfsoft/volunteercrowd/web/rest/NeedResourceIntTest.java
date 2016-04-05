@@ -4,17 +4,15 @@ import com.hielfsoft.volunteercrowd.Application;
 import com.hielfsoft.volunteercrowd.domain.Need;
 import com.hielfsoft.volunteercrowd.repository.NeedRepository;
 import com.hielfsoft.volunteercrowd.service.NeedService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -25,12 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,8 +51,8 @@ public class NeedResourceIntTest {
     private static final String UPDATED_TITLE = "BBBBB";
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
-    private static final String DEFAULT_CATHEGORY = "AAAAA";
-    private static final String UPDATED_CATHEGORY = "BBBBB";
+    private static final String DEFAULT_category = "AAAAA";
+    private static final String UPDATED_category = "BBBBB";
 
     private static final Boolean DEFAULT_DELETED = false;
     private static final Boolean UPDATED_DELETED = true;
@@ -99,7 +98,7 @@ public class NeedResourceIntTest {
         need = new Need();
         need.setTitle(DEFAULT_TITLE);
         need.setDescription(DEFAULT_DESCRIPTION);
-        need.setCathegory(DEFAULT_CATHEGORY);
+        need.setcategory(DEFAULT_category);
         need.setDeleted(DEFAULT_DELETED);
         need.setLocation(DEFAULT_LOCATION);
         need.setCreationDate(DEFAULT_CREATION_DATE);
@@ -124,7 +123,7 @@ public class NeedResourceIntTest {
         Need testNeed = needs.get(needs.size() - 1);
         assertThat(testNeed.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testNeed.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testNeed.getCathegory()).isEqualTo(DEFAULT_CATHEGORY);
+        assertThat(testNeed.getcategory()).isEqualTo(DEFAULT_category);
         assertThat(testNeed.getDeleted()).isEqualTo(DEFAULT_DELETED);
         assertThat(testNeed.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testNeed.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
@@ -169,10 +168,10 @@ public class NeedResourceIntTest {
 
     @Test
     @Transactional
-    public void checkCathegoryIsRequired() throws Exception {
+    public void checkcategoryIsRequired() throws Exception {
         int databaseSizeBeforeTest = needRepository.findAll().size();
         // set the field null
-        need.setCathegory(null);
+        need.setcategory(null);
 
         // Create the Need, which fails.
 
@@ -216,7 +215,7 @@ public class NeedResourceIntTest {
                 .andExpect(jsonPath("$.[*].id").value(hasItem(need.getId().intValue())))
                 .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
                 .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-                .andExpect(jsonPath("$.[*].cathegory").value(hasItem(DEFAULT_CATHEGORY.toString())))
+                .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_category.toString())))
                 .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
                 .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION.toString())))
                 .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE_STR)))
@@ -236,7 +235,7 @@ public class NeedResourceIntTest {
             .andExpect(jsonPath("$.id").value(need.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.cathegory").value(DEFAULT_CATHEGORY.toString()))
+            .andExpect(jsonPath("$.category").value(DEFAULT_category.toString()))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION.toString()))
             .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE_STR))
@@ -262,7 +261,7 @@ public class NeedResourceIntTest {
         // Update the need
         need.setTitle(UPDATED_TITLE);
         need.setDescription(UPDATED_DESCRIPTION);
-        need.setCathegory(UPDATED_CATHEGORY);
+        need.setcategory(UPDATED_category);
         need.setDeleted(UPDATED_DELETED);
         need.setLocation(UPDATED_LOCATION);
         need.setCreationDate(UPDATED_CREATION_DATE);
@@ -279,7 +278,7 @@ public class NeedResourceIntTest {
         Need testNeed = needs.get(needs.size() - 1);
         assertThat(testNeed.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testNeed.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testNeed.getCathegory()).isEqualTo(UPDATED_CATHEGORY);
+        assertThat(testNeed.getcategory()).isEqualTo(UPDATED_category);
         assertThat(testNeed.getDeleted()).isEqualTo(UPDATED_DELETED);
         assertThat(testNeed.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testNeed.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);

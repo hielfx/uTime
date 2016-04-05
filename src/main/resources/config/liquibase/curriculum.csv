@@ -1,1 +1,3 @@
-id,creation_date,modification_date,website
+id,creation_date,file,mission,modification_date,statement,website,vision
+35,2016-04-01 0:0:0,null,curriculum1 mission,2016-04-01 0:0:0,The curriculum 1 statement,,curriculum1 vision
+36,2015-05-01 0:0:0,null,,2016-04-01 0:0:0,The curriculum 2 statement,http://www.personal-page.com,curriculum2 vision

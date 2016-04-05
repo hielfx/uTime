@@ -38,13 +38,13 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" translate="volunteercrowdApp.need.cathegory" for="field_cathegory">Cathegory</label>
-            <input type="text" class="form-control" name="cathegory" id="field_cathegory"
-                    ng-model="need.cathegory"
+            <label class="control-label" translate="volunteercrowdApp.need.category" for="field_category">category</label>
+            <input type="text" class="form-control" name="category" id="field_category"
+                    ng-model="need.category"
                     required />
-            <div ng-show="editForm.cathegory.$invalid">
+            <div ng-show="editForm.category.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.cathegory.$error.required" translate="entity.validation.required">
+                    ng-show="editForm.category.$error.required" translate="entity.validation.required">
                     This field is required.
                 </p>
             </div>

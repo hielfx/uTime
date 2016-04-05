@@ -29,6 +29,13 @@
                   tableName="app_user"/>
     </changeSet>
 
+    <changeSet author="Daniel Sánchez" id="populateCurriculum">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/curriculum.csv"
+                  separator=","
+                  tableName="curriculum"/>
+    </changeSet>
+
     <changeSet author="Daniel Sánchez" id="populateNaturalPerson">
         <loadData encoding="UTF-8"
                   file="config/liquibase/natural_person.csv"

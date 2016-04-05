@@ -63,7 +63,7 @@ angular.module('volunteercrowdApp')
                                 return {
                                     title: null,
                                     description: null,
-                                    cathegory: null,
+                                    category: null,
                                     deleted: null,
                                     location: null,
                                     creationDate: null,
