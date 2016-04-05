@@ -57,4 +57,11 @@
                   tableName="administrator"/>
     </changeSet>
 
+    <changeSet author="Daniel Sánchez" id="populateNeed">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/need.csv"
+                  separator=","
+                  tableName="need"/>
+    </changeSet>
+
 </databaseChangeLog>

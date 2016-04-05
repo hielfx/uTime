@@ -1,2 +1,8 @@
 id,category,creation_date,deleted,description,location,modification_date,title,app_user_id
 37,Job,2016-04-04 15:36:59,false,Need1 description,The location is unclear,2016-04-04 15:36:59,Job Needed,9
+38,Education,2016-02-28 23:36:59,false,I need some math professor to help my child,"C/John Doe 2, 9B",2016-03-04 15:36:59,Math class,10
+39,Music,2015-03-04 15:00:01,false,I need some band for my daughter birthday party,"C/John Doe 2, 9B",2015-03-04 15:00:01,Music for birthday party,10
+40,Education,2016-02-26 23:45:32,true,I need some math professor to help my childsda,"C/John Doe 2, 9B",2016-02-26 23:45:32,Math class,10
+41,Sport,"2013-12-30 20:36:48",false,"We need goalkeeper for a football match the Dec 31","C/Football Club Stadium sn","2013-12-30 20:36:48","Need goalkeeper",9
+42,Sport,"2013-12-30 20:36:48",true,"We need goalkeeper for a football match the Dec 31","C/Football Club Stadium sn","2013-12-30 20:36:48","Need goalkeeper",9
+43,Charitable,"2016-01-01 23:41:26",false,"We are going to celebrate the founder of the city's 21st anniversary   ","C/My city, Seville","2016-01-01 23:41:26","Charitable celebration",21
