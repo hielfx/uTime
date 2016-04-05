@@ -43,4 +43,11 @@
                   tableName="legal_entity"/>
     </changeSet>
 
+    <changeSet author="Daniel Sánchez" id="populateAdministrator">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/administrator.csv"
+                  separator=","
+                  tableName="administrator"/>
+    </changeSet>
+
 </databaseChangeLog>

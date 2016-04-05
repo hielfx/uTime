@@ -1,23 +1,17 @@
 package com.hielfsoft.volunteercrowd.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.LocalDate;
-
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import com.hielfsoft.volunteercrowd.validator.Past;;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -48,9 +42,42 @@ public class Curriculum implements Serializable {
     @Column(name = "modification_date", nullable = false)
     private ZonedDateTime modificationDate;
 
+    @NotNull
+    @NotBlank
+    @Column(name="statement", nullable = false)
+    private String statement;
+
+    @Lob
+    @Column(name="file")
+    private byte[] file;
+
+    @NotNull
+    @Column(name="mission", nullable = false)
+    private String mission;
+
+    @NotNull
+    @Column(name="vision", nullable = false)
+    private String vision;
+
     @OneToOne(mappedBy = "curriculum")
     @JsonIgnore
     private NaturalPerson naturalPerson;
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getStatement() {
+        return statement;
+    }
+
+    public void setStatement(String statement) {
+        this.statement = statement;
+    }
 
     public Long getId() {
         return id;

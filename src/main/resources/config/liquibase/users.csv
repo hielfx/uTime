@@ -11,3 +11,6 @@ id,login,password_hash,first_name,last_name,email,activated,lang_key,created_by
 15,lentity2,$2a$10$5pJFTWGzVomnbXuM1UBupuH.Cm0juscHomYPyyFSmbJXOzfIlUggK,Legal2,Entity2,lentity2@localhsot,true,es,user
 16,lentity3,$2a$10$Wn0gYtLnXM7m2PsWy83w5.KvoOKx.NdVz9.adnejX14Yus47MevEO,Legal3,Entity3,lentity3@localhost,true,es,user
 17,lentity4,$2a$10$ECNlJeZD6Yroe.9F1D5HwOpsJQDjEQrA2k0RIb/XdYR5y4ezZv3VC,Legal4,Entity4,lentity4@localhost,true,es,user
+29,adminisrator1,$2a$10$7tsZFwMTDEbHPbW5vsZqSet/A/F7VBEJ5KRIks9q9i01o5rEALk0W,Admi1,Nistrator1,administrator1@localhost,true,es,user
+30,administrator2,$2a$10$1lQa9iiZ3KF6zB2nOjYCfuBbYXD.VGRZ84.MqM3y.7YXovho16u/.,Admi2,Nistrator2,administrator2@localhost,true,es,user
+31,administrator3,$2a$10$bSoGfM50wboQCcnR/uTOU..qQC0tc0TK0WU8w0kSAG1.1GxSR9g1.,Admi3,Nistrator3,administrator3@localhost,true,es,user
