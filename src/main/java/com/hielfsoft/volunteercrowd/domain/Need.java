@@ -40,7 +40,7 @@ public class Need implements Serializable {
     @Column(name = "category", nullable = false)
     private String category;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
     @NotNull
@@ -54,6 +54,9 @@ public class Need implements Serializable {
     @Past
     @Column(name = "modification_date")
     private ZonedDateTime modificationDate;
+
+    @Column(name = "completed", nullable = false)
+    private boolean completed;
 
     @NotNull
     @Valid
@@ -70,6 +73,22 @@ public class Need implements Serializable {
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Disponibility> disponibility = new HashSet<>();
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
 
     public Long getId() {
         return id;
@@ -93,14 +112,6 @@ public class Need implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getcategory() {
-        return category;
-    }
-
-    public void setcategory(String category) {
-        this.category = category;
     }
 
     public boolean getDeleted() {
@@ -168,7 +179,7 @@ public class Need implements Serializable {
             return false;
         }
         Need need = (Need) o;
-        if(need.id == null || id == null) {
+        if (need.id == null || id == null) {
             return false;
         }
         return Objects.equals(id, need.id);

@@ -1,7 +1,8 @@
-id,code,creation_date,deleted,description,finish_date,paid,applicant_id,need_id
-44,1255F5CBED1B,"2016-01-23 15:49:06",false,"May I help you?","2016-02-23 15:49:06",false,12,37
-45,1BFA6A2A5F59,"2016-03-17 02:57:39",false,"I am a very good math professor","2016-04-17 02:57:39",true,12,38
-46,1BFA6A2A5F60,"2013-12-30 21:14:57",false,"I played as a goalkeeper on the 'Juventus'","2013-12-30 21:14:57",false,12,41
-47,1BFA6A2A5F61,"2013-12-30 21:14:57",true,"I played as a goalkeeper on the 'Juventus'","2013-12-30 21:14:57",false,12,41
-48,1260A5CBED1B,"2016-01-01 23:41:26",false,"I can go with my band and play some good music","2016-02-01 23:41:26",false,12,43
-49,1260A5CBED1A,"2016-01-01 23:41:26",true,"I can go with my band and play some good music","2016-02-01 23:41:26",false,18,43
+id,code,creation_date,deleted,description,finish_date,paid,applicant_id,need_id,status
+44,1255F5CBED1B,"2016-01-23 15:49:06",false,"May I help you?","2016-02-23 15:49:06",false,12,37,STATUS_PENDING
+45,1BFA6A2A5F59,"2016-03-17 02:57:39",false,"I am a very good math professor","2016-04-17 02:57:39",true,12,38,STATUS_ACCEPTED
+46,1BFA6A2A5F60,"2013-12-30 21:14:57",false,"I played as a goalkeeper on the 'Juventus'","2013-12-30 21:14:57",false,12,41,STATUS_ACCEPTED
+47,1BFA6A2A5F61,"2013-12-30 21:14:57",true,"I played as a goalkeeper on the 'Juventus'","2013-12-30 21:14:57",false,12,41,STATUS_PENDING
+48,1260A5CBED1B,"2016-01-01 23:41:26",false,"I can go with my band and play some good music","2016-02-01 23:41:26",false,12,43,STATUS_REJECTED
+49,1260A5CBED1A,"2016-01-01 23:41:26",true,"I can go with my band and play some good music","2016-02-01 23:41:26",false,18,43,STATUS_PENDING
+50,1260A5CBED2F,"2015-05-05 14:37:19",false,"I have 3 years of experience developing web pages","2015-06-05 14:37:19",true,9,43,STATUS_PENDING

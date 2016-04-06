@@ -98,7 +98,7 @@ public class NeedResourceIntTest {
         need = new Need();
         need.setTitle(DEFAULT_TITLE);
         need.setDescription(DEFAULT_DESCRIPTION);
-        need.setcategory(DEFAULT_category);
+        need.setCategory(DEFAULT_category);
         need.setDeleted(DEFAULT_DELETED);
         need.setLocation(DEFAULT_LOCATION);
         need.setCreationDate(DEFAULT_CREATION_DATE);
@@ -123,7 +123,7 @@ public class NeedResourceIntTest {
         Need testNeed = needs.get(needs.size() - 1);
         assertThat(testNeed.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testNeed.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testNeed.getcategory()).isEqualTo(DEFAULT_category);
+        assertThat(testNeed.getCategory()).isEqualTo(DEFAULT_category);
         assertThat(testNeed.getDeleted()).isEqualTo(DEFAULT_DELETED);
         assertThat(testNeed.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testNeed.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
@@ -171,7 +171,7 @@ public class NeedResourceIntTest {
     public void checkcategoryIsRequired() throws Exception {
         int databaseSizeBeforeTest = needRepository.findAll().size();
         // set the field null
-        need.setcategory(null);
+        need.setCategory(null);
 
         // Create the Need, which fails.
 
@@ -261,7 +261,7 @@ public class NeedResourceIntTest {
         // Update the need
         need.setTitle(UPDATED_TITLE);
         need.setDescription(UPDATED_DESCRIPTION);
-        need.setcategory(UPDATED_category);
+        need.setCategory(UPDATED_category);
         need.setDeleted(UPDATED_DELETED);
         need.setLocation(UPDATED_LOCATION);
         need.setCreationDate(UPDATED_CREATION_DATE);
@@ -278,7 +278,7 @@ public class NeedResourceIntTest {
         Need testNeed = needs.get(needs.size() - 1);
         assertThat(testNeed.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testNeed.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testNeed.getcategory()).isEqualTo(UPDATED_category);
+        assertThat(testNeed.getCategory()).isEqualTo(UPDATED_category);
         assertThat(testNeed.getDeleted()).isEqualTo(UPDATED_DELETED);
         assertThat(testNeed.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testNeed.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
