@@ -78,4 +78,17 @@
                   tableName="payment"/>
     </changeSet>
 
+    <changeSet author="Daniel Sánchez" id="populateAbility">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/ability.csv"
+                  separator=","
+                  tableName="ability"/>
+    </changeSet>
+    <changeSet author="Daniel Sánchez" id="populateTag">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/tag.csv"
+                  separator=","
+                  tableName="tag"/>
+    </changeSet>
+
 </databaseChangeLog>
