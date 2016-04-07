@@ -12,7 +12,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -53,6 +52,11 @@ public class Request implements Serializable {
 
     @Column(name = "paid", nullable = false)
     private boolean paid=false;
+
+    @Past
+    @NotNull
+    @Column(name = "modification_date", nullable = false)
+    private ZonedDateTime modificationDate;
 
     @NotNull
     @Valid

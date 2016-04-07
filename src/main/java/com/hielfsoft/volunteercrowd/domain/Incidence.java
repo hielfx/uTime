@@ -3,8 +3,6 @@ package com.hielfsoft.volunteercrowd.domain;
 import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -12,8 +10,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -41,21 +38,34 @@ public class Incidence implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @NotNull
-    @Column(name = "admin_comment", nullable = false)
-    private String adminComment;
+    //    @NotNull
+    @Column(name = "admin_comment"/*, nullable = false*/)//When the incidence is created there is no admin comment yet.
+    private String adminComment;                         //When the admin reviews the incidence is when the comment is set
 
-    @NotNull
     @ManyToOne
     @Valid
-    @JoinColumn(name = "administrator_id", nullable = false)
+    @JoinColumn(name = "administrator_id")
     private Administrator administrator;
 
     @ManyToOne
-    @JoinColumn(name = "request_id")
+    @JoinColumn(name = "request_id", nullable = false)
     @NotNull
     @Valid
     private Request request;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "creator_id", nullable = false)
+    @NotNull
+    @Valid
+    private AppUser creator;
+
+    public AppUser getCreator() {
+        return creator;
+    }
+
+    public void setCreator(AppUser creator) {
+        this.creator = creator;
+    }
 
     public Long getId() {
         return id;

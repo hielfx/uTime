@@ -10,106 +10,113 @@
     <changeSet author="Daniel Sánchez" id="populateGender">
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/gender.csv"
+                  file="config/liquibase/populate/gender.csv"
                   separator=","
                   tableName="gender"/>
     </changeSet>
     <changeSet author="Daniel Sánchez" id="populateRequestStatus">
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/request_status.csv"
+                  file="config/liquibase/populate/request_status.csv"
                   separator=","
                   tableName="request_status"/>
     </changeSet>
     <changeSet author="Daniel Sánchez" id="populateAppUser">
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/app_user.csv"
+                  file="config/liquibase/populate/app_user.csv"
                   separator=","
                   tableName="app_user"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateCurriculum">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/curriculum.csv"
+                  file="config/liquibase/populate/curriculum.csv"
                   separator=","
                   tableName="curriculum"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateNaturalPerson">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/natural_person.csv"
+                  file="config/liquibase/populate/natural_person.csv"
                   separator=","
                   tableName="natural_person"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateLegalEntity">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/legal_entity.csv"
+                  file="config/liquibase/populate/legal_entity.csv"
                   separator=","
                   tableName="legal_entity"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateAdministrator">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/administrator.csv"
+                  file="config/liquibase/populate/administrator.csv"
                   separator=","
                   tableName="administrator"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateNeed">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/need.csv"
+                  file="config/liquibase/populate/need.csv"
                   separator=","
                   tableName="need"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateRequest">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/request.csv"
+                  file="config/liquibase/populate/request.csv"
                   separator=","
                   tableName="request"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populatePayment">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/payment.csv"
+                  file="config/liquibase/populate/payment.csv"
                   separator=","
                   tableName="payment"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateAbility">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/ability.csv"
+                  file="config/liquibase/populate/ability.csv"
                   separator=","
                   tableName="ability"/>
     </changeSet>
     <changeSet author="Daniel Sánchez" id="populateTag">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/tag.csv"
+                  file="config/liquibase/populate/tag.csv"
                   separator=","
                   tableName="tag"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateNeededAbility">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/needed_ability.csv"
+                  file="config/liquibase/populate/needed_ability.csv"
                   separator=","
                   tableName="needed_ability"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateAvailability">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/availability.csv"
+                  file="config/liquibase/populate/availability.csv"
                   separator=","
                   tableName="availability"/>
     </changeSet>
 
     <changeSet author="Daniel Sánchez" id="populateAssessment">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/assessment.csv"
+                  file="config/liquibase/populate/assessment.csv"
                   separator=","
                   tableName="assessment"/>
+    </changeSet>
+
+    <changeSet author="Daniel Sánchez" id="populateIncidence">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/populate/incidence.csv"
+                  separator=","
+                  tableName="incidence"/>
     </changeSet>
 
 </databaseChangeLog>

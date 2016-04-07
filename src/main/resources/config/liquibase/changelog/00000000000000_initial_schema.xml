@@ -112,7 +112,7 @@
                                  referencedTableName="jhi_user"/>
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/users.csv"
+                  file="config/liquibase/populate/users.csv"
                   separator=","
                   tableName="jhi_user">
             <column name="activated" type="boolean"/>
@@ -121,12 +121,12 @@
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/authorities.csv"
+                  file="config/liquibase/populate/authorities.csv"
                   separator=","
                   tableName="jhi_authority"/>
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/users_authorities.csv"
+                  file="config/liquibase/populate/users_authorities.csv"
                   separator=","
                   tableName="jhi_user_authority"/>
 

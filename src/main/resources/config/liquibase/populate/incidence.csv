@@ -1,0 +1,3 @@
+id,admin_comment,closed,creation_date,description,administrator_id,creator_id,request_id
+115,"Ok, I will delete it",true,2013/12/30 21:15:30,"Hi, I sent a request and I want to delete it. Can someone delete it for me?",32,12,47
+116,null,false,2016/01/01 23:41:26,"This user rejected my request!",null,12,48

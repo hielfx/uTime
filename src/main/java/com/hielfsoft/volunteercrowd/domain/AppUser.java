@@ -6,12 +6,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A AppUser.
@@ -111,8 +111,28 @@ public class AppUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Payment> payments = new HashSet<Payment>();
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Incidence> incidences = new HashSet<Incidence>();
+
     //Getters and Setters
 
+    public Set<Incidence> getIncidences() {
+        return incidences;
+    }
+
+    public void setIncidences(Set<Incidence> incidences) {
+        this.incidences = incidences;
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
+    }
 
     public Set<Assessment> getCreatedAssessments() {
         return createdAssessments;
