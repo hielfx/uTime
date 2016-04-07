@@ -2,15 +2,15 @@ package com.hielfsoft.volunteercrowd.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -45,6 +45,19 @@ public class Payment implements Serializable {
     @Valid
     @JoinColumn(name = "payer_id")
     private AppUser payer;
+
+    @OneToOne(mappedBy = "payment")
+    @Valid
+    @JoinColumn(name = "assessment_id")
+    private Assessment assessment;
+
+    public Assessment getAssessment() {
+        return assessment;
+    }
+
+    public void setAssessment(Assessment assessment) {
+        this.assessment = assessment;
+    }
 
     public Long getId() {
         return id;
