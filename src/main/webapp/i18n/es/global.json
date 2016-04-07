@@ -18,7 +18,7 @@
                 "incidence": "Incidence",
                 "need": "Need",
                 "neededAbility": "NeededAbility",
-                "disponibility": "Disponibility",
+                "availability": "Availability",
                 "assessment": "Assessment",
                 "payment": "Payment",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"

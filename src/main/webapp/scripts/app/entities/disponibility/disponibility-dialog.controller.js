@@ -1,19 +1,19 @@
 'use strict';
 
-angular.module('volunteercrowdApp').controller('DisponibilityDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Disponibility', 'Need',
-        function($scope, $stateParams, $uibModalInstance, entity, Disponibility, Need) {
+angular.module('volunteercrowdApp').controller('AvailabilityDialogController',
+    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Availability', 'Need',
+        function ($scope, $stateParams, $uibModalInstance, entity, Availability, Need) {
 
-        $scope.disponibility = entity;
+            $scope.availability = entity;
         $scope.needs = Need.query();
         $scope.load = function(id) {
-            Disponibility.get({id : id}, function(result) {
-                $scope.disponibility = result;
+            Availability.get({id: id}, function (result) {
+                $scope.availability = result;
             });
         };
 
         var onSaveSuccess = function (result) {
-            $scope.$emit('volunteercrowdApp:disponibilityUpdate', result);
+            $scope.$emit('volunteercrowdApp:availabilityUpdate', result);
             $uibModalInstance.close(result);
             $scope.isSaving = false;
         };
@@ -24,10 +24,10 @@ angular.module('volunteercrowdApp').controller('DisponibilityDialogController',
 
         $scope.save = function () {
             $scope.isSaving = true;
-            if ($scope.disponibility.id != null) {
-                Disponibility.update($scope.disponibility, onSaveSuccess, onSaveError);
+            if ($scope.availability.id != null) {
+                Availability.update($scope.availability, onSaveSuccess, onSaveError);
             } else {
-                Disponibility.save($scope.disponibility, onSaveSuccess, onSaveError);
+                Availability.save($scope.availability, onSaveSuccess, onSaveError);
             }
         };
 

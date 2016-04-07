@@ -16,8 +16,8 @@
         },
         {
             "relationshipId": 3,
-            "relationshipName": "disponibility",
-            "otherEntityName": "disponibility",
+            "relationshipName": "availability",
+            "otherEntityName": "availability",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "need"
         }

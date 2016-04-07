@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="volunteercrowdApp.disponibility.detail.title">Disponibility</span> {{disponibility.id}}</h2>
+    <h2><span translate="volunteercrowdApp.availability.detail.title">Availability</span> {{availability.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -12,26 +12,26 @@
             <tbody>
             <tr>
                 <td>
-                    <span translate="volunteercrowdApp.disponibility.startMoment">StartMoment</span>
+                    <span translate="volunteercrowdApp.availability.startMoment">StartMoment</span>
                 </td>
                 <td>
-                    <span class="form-control-static">{{disponibility.startMoment | date:'medium'}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="volunteercrowdApp.disponibility.endMoment">EndMoment</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{disponibility.endMoment | date:'medium'}}</span>
+                    <span class="form-control-static">{{availability.startMoment | date:'medium'}}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span translate="volunteercrowdApp.disponibility.need">need</span>
+                    <span translate="volunteercrowdApp.availability.endMoment">EndMoment</span>
                 </td>
                 <td>
-                    <a class="form-control-static" ui-sref="need.detail({id:disponibility.need.id})">{{disponibility.need.id}}</a>
+                    <span class="form-control-static">{{availability.endMoment | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.availability.need">need</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="need.detail({id:availability.need.id})">{{availability.need.id}}</a>
                 </td>
             </tr>
             </tbody>

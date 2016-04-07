@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('volunteercrowdApp')
-    .factory('Disponibility', function ($resource, DateUtils) {
-        return $resource('api/disponibilitys/:id', {}, {
+    .factory('Availability', function ($resource, DateUtils) {
+        return $resource('api/availabilitys/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',

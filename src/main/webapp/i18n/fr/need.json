@@ -25,7 +25,7 @@
             "modificationDate": "ModificationDate",
             "appUser": "AppUser",
             "neededAbility": "NeededAbility",
-            "disponibility": "Disponibility"
+            "availability": "Availability"
         }
     }
 }

@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('volunteercrowdApp')
-	.controller('DisponibilityDeleteController', function($scope, $uibModalInstance, entity, Disponibility) {
+    .controller('AvailabilityDeleteController', function ($scope, $uibModalInstance, entity, Availability) {
 
-        $scope.disponibility = entity;
+        $scope.availability = entity;
         $scope.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
         $scope.confirmDelete = function (id) {
-            Disponibility.delete({id: id},
+            Availability.delete({id: id},
                 function () {
                     $uibModalInstance.close(true);
                 });

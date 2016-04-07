@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('volunteercrowdApp')
-    .controller('DisponibilityDetailController', function ($scope, $rootScope, $stateParams, entity, Disponibility, Need) {
-        $scope.disponibility = entity;
+    .controller('AvailabilityDetailController', function ($scope, $rootScope, $stateParams, entity, Availability, Need) {
+        $scope.availability = entity;
         $scope.load = function (id) {
-            Disponibility.get({id: id}, function(result) {
-                $scope.disponibility = result;
+            Availability.get({id: id}, function (result) {
+                $scope.availability = result;
             });
         };
-        var unsubscribe = $rootScope.$on('volunteercrowdApp:disponibilityUpdate', function(event, result) {
-            $scope.disponibility = result;
+        var unsubscribe = $rootScope.$on('volunteercrowdApp:availabilityUpdate', function (event, result) {
+            $scope.availability = result;
         });
         $scope.$on('$destroy', unsubscribe);
 

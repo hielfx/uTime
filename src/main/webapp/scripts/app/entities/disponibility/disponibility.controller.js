@@ -1,17 +1,21 @@
 'use strict';
 
 angular.module('volunteercrowdApp')
-    .controller('DisponibilityController', function ($scope, $state, Disponibility, DisponibilitySearch, ParseLinks) {
+    .controller('AvailabilityController', function ($scope, $state, Availability, AvailabilitySearch, ParseLinks) {
 
-        $scope.disponibilitys = [];
+        $scope.availabilitys = [];
         $scope.predicate = 'id';
         $scope.reverse = true;
         $scope.page = 1;
         $scope.loadAll = function() {
-            Disponibility.query({page: $scope.page - 1, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+            Availability.query({
+                page: $scope.page - 1,
+                size: 20,
+                sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']
+            }, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.totalItems = headers('X-Total-Count');
-                $scope.disponibilitys = result;
+                $scope.availabilitys = result;
             });
         };
         $scope.loadPage = function(page) {
@@ -22,8 +26,8 @@ angular.module('volunteercrowdApp')
 
 
         $scope.search = function () {
-            DisponibilitySearch.query({query: $scope.searchQuery}, function(result) {
-                $scope.disponibilitys = result;
+            AvailabilitySearch.query({query: $scope.searchQuery}, function (result) {
+                $scope.availabilitys = result;
             }, function(response) {
                 if(response.status === 404) {
                     $scope.loadAll();
@@ -37,7 +41,7 @@ angular.module('volunteercrowdApp')
         };
 
         $scope.clear = function () {
-            $scope.disponibility = {
+            $scope.availability = {
                 startMoment: null,
                 endMoment: null,
                 id: null

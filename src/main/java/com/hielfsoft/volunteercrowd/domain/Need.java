@@ -72,7 +72,7 @@ public class Need implements Serializable {
     @OneToMany(mappedBy = "need")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Disponibility> disponibility = new HashSet<>();
+    private Set<Availability> availability = new HashSet<>();
 
     public String getCategory() {
         return category;
@@ -162,12 +162,12 @@ public class Need implements Serializable {
         this.neededAbilities = neededAbilities;
     }
 
-    public Set<Disponibility> getDisponibility() {
-        return disponibility;
+    public Set<Availability> getAvailability() {
+        return availability;
     }
 
-    public void setDisponibility(Set<Disponibility> disponibility) {
-        this.disponibility = disponibility;
+    public void setAvailability(Set<Availability> availability) {
+        this.availability = availability;
     }
 
     @Override

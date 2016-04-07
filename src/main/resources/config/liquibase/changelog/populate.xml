@@ -91,4 +91,25 @@
                   tableName="tag"/>
     </changeSet>
 
+    <changeSet author="Daniel Sánchez" id="populateNeededAbility">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/needed_ability.csv"
+                  separator=","
+                  tableName="needed_ability"/>
+    </changeSet>
+
+    <changeSet author="Daniel Sánchez" id="populateAvailability">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/availability.csv"
+                  separator=","
+                  tableName="availability"/>
+    </changeSet>
+
+    <changeSet author="Daniel Sánchez" id="populateAssessment">
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/assessment.csv"
+                  separator=","
+                  tableName="assessment"/>
+    </changeSet>
+
 </databaseChangeLog>

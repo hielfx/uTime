@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the Disponibility entity.
+ * Performance test for the Availability entity.
  */
-class DisponibilityGatlingTest extends Simulation {
+class AvailabilityGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -37,7 +37,7 @@ class DisponibilityGatlingTest extends Simulation {
         "X-CSRF-TOKEN" -> "${csrf_token}"
     )
 
-    val scn = scenario("Test the Disponibility entity")
+    val scn = scenario("Test the Availability entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -59,26 +59,26 @@ class DisponibilityGatlingTest extends Simulation {
         .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token")))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all disponibilitys")
-            .get("/api/disponibilitys")
+            exec(http("Get all availabilities")
+            .get("/api/availabilities")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new disponibility")
-            .post("/api/disponibilitys")
+            .exec(http("Create new availability")
+            .post("/api/availabilities")
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null, "startMoment":"2020-01-01T00:00:00.000Z", "endMoment":"2020-01-01T00:00:00.000Z"}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_disponibility_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_availability_url")))
             .pause(10)
             .repeat(5) {
-                exec(http("Get created disponibility")
-                .get("${new_disponibility_url}")
+                exec(http("Get created availability")
+                .get("${new_availability_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created disponibility")
-            .delete("${new_disponibility_url}")
+            .exec(http("Delete created availability")
+            .delete("${new_availability_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

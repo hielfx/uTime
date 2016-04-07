@@ -3,60 +3,60 @@
 angular.module('volunteercrowdApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('disponibility', {
+            .state('availability', {
                 parent: 'entity',
-                url: '/disponibilitys',
+                url: '/availabilitys',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'volunteercrowdApp.disponibility.home.title'
+                    pageTitle: 'volunteercrowdApp.availability.home.title'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/disponibility/disponibilitys.html',
-                        controller: 'DisponibilityController'
+                        templateUrl: 'scripts/app/entities/availability/availabilitys.html',
+                        controller: 'AvailabilityController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('disponibility');
+                        $translatePartialLoader.addPart('availability');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
                 }
             })
-            .state('disponibility.detail', {
+            .state('availability.detail', {
                 parent: 'entity',
-                url: '/disponibility/{id}',
+                url: '/availability/{id}',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'volunteercrowdApp.disponibility.detail.title'
+                    pageTitle: 'volunteercrowdApp.availability.detail.title'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/disponibility/disponibility-detail.html',
-                        controller: 'DisponibilityDetailController'
+                        templateUrl: 'scripts/app/entities/availability/availability-detail.html',
+                        controller: 'AvailabilityDetailController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('disponibility');
+                        $translatePartialLoader.addPart('availability');
                         return $translate.refresh();
                     }],
-                    entity: ['$stateParams', 'Disponibility', function($stateParams, Disponibility) {
-                        return Disponibility.get({id : $stateParams.id});
+                    entity: ['$stateParams', 'Availability', function ($stateParams, Availability) {
+                        return Availability.get({id: $stateParams.id});
                     }]
                 }
             })
-            .state('disponibility.new', {
-                parent: 'disponibility',
+            .state('availability.new', {
+                parent: 'availability',
                 url: '/new',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/disponibility/disponibility-dialog.html',
-                        controller: 'DisponibilityDialogController',
+                        templateUrl: 'scripts/app/entities/availability/availability-dialog.html',
+                        controller: 'AvailabilityDialogController',
                         size: 'lg',
                         resolve: {
                             entity: function () {
@@ -68,53 +68,53 @@ angular.module('volunteercrowdApp')
                             }
                         }
                     }).result.then(function(result) {
-                        $state.go('disponibility', null, { reload: true });
+                            $state.go('availability', null, {reload: true});
                     }, function() {
-                        $state.go('disponibility');
+                            $state.go('availability');
                     })
                 }]
             })
-            .state('disponibility.edit', {
-                parent: 'disponibility',
+            .state('availability.edit', {
+                parent: 'availability',
                 url: '/{id}/edit',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/disponibility/disponibility-dialog.html',
-                        controller: 'DisponibilityDialogController',
+                        templateUrl: 'scripts/app/entities/availability/availability-dialog.html',
+                        controller: 'AvailabilityDialogController',
                         size: 'lg',
                         resolve: {
-                            entity: ['Disponibility', function(Disponibility) {
-                                return Disponibility.get({id : $stateParams.id});
+                            entity: ['Availability', function (Availability) {
+                                return Availability.get({id: $stateParams.id});
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('disponibility', null, { reload: true });
+                            $state.go('availability', null, {reload: true});
                     }, function() {
                         $state.go('^');
                     })
                 }]
             })
-            .state('disponibility.delete', {
-                parent: 'disponibility',
+            .state('availability.delete', {
+                parent: 'availability',
                 url: '/{id}/delete',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/disponibility/disponibility-delete-dialog.html',
-                        controller: 'DisponibilityDeleteController',
+                        templateUrl: 'scripts/app/entities/availability/availability-delete-dialog.html',
+                        controller: 'AvailabilityDeleteController',
                         size: 'md',
                         resolve: {
-                            entity: ['Disponibility', function(Disponibility) {
-                                return Disponibility.get({id : $stateParams.id});
+                            entity: ['Availability', function (Availability) {
+                                return Availability.get({id: $stateParams.id});
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('disponibility', null, { reload: true });
+                            $state.go('availability', null, {reload: true});
                     }, function() {
                         $state.go('^');
                     })

@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('volunteercrowdApp').controller('NeedDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Need', 'AppUser', 'NeededAbility', 'Disponibility',
-        function($scope, $stateParams, $uibModalInstance, entity, Need, AppUser, NeededAbility, Disponibility) {
+    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Need', 'AppUser', 'NeededAbility', 'Availability',
+        function ($scope, $stateParams, $uibModalInstance, entity, Need, AppUser, NeededAbility, Availability) {
 
         $scope.need = entity;
         $scope.appusers = AppUser.query();
         $scope.neededabilitys = NeededAbility.query();
-        $scope.disponibilitys = Disponibility.query();
+            $scope.availabilitys = Availability.query();
         $scope.load = function(id) {
             Need.get({id : id}, function(result) {
                 $scope.need = result;

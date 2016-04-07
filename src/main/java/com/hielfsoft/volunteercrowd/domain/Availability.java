@@ -2,25 +2,23 @@ package com.hielfsoft.volunteercrowd.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
- * A Disponibility.
+ * A Availability.
  */
 @Entity
-@Table(name = "disponibility")
+@Table(name = "availability")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "disponibility")
-public class Disponibility implements Serializable {
+@Document(indexName = "availability")
+public class Availability implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,11 +78,11 @@ public class Disponibility implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Disponibility disponibility = (Disponibility) o;
-        if(disponibility.id == null || id == null) {
+        Availability availability = (Availability) o;
+        if (availability.id == null || id == null) {
             return false;
         }
-        return Objects.equals(id, disponibility.id);
+        return Objects.equals(id, availability.id);
     }
 
     @Override
@@ -94,7 +92,7 @@ public class Disponibility implements Serializable {
 
     @Override
     public String toString() {
-        return "Disponibility{" +
+        return "Availability{" +
             "id=" + id +
             ", startMoment='" + startMoment + "'" +
             ", endMoment='" + endMoment + "'" +

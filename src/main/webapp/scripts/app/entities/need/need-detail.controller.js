@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('volunteercrowdApp')
-    .controller('NeedDetailController', function ($scope, $rootScope, $stateParams, entity, Need, AppUser, NeededAbility, Disponibility) {
+    .controller('NeedDetailController', function ($scope, $rootScope, $stateParams, entity, Need, AppUser, NeededAbility, Availability) {
         $scope.need = entity;
         $scope.load = function (id) {
             Need.get({id: id}, function(result) {
