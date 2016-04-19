@@ -40,6 +40,6 @@
     ],
     "changelogDate": "20160318112652",
     "dto": "no",
-    "service": "no",
-    "pagination": "pager"
+    "service": "serviceClass",
+    "pagination": "pagination"
 }

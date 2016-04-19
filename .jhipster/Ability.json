@@ -33,5 +33,5 @@
     "changelogDate": "20160328090047",
     "dto": "no",
     "service": "serviceClass",
-    "pagination": "pager"
+    "pagination": "pagination"
 }

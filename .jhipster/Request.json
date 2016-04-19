@@ -6,14 +6,23 @@
             "otherEntityName": "appUser",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "need",
+            "otherEntityName": "need",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "fields": [
         {
             "fieldId": 1,
             "fieldName": "creationDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": []
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 2,
@@ -30,16 +39,35 @@
         {
             "fieldId": 4,
             "fieldName": "finishDate",
-            "fieldType": "LocalDate"
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldId": 5,
             "fieldName": "deleted",
-            "fieldType": "Boolean"
+            "fieldType": "Boolean",
+            "fieldValidateRules":[
+                "required"
+            ]
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "paid",
+            "fieldType": "Boolean",
+            "fieldValidateRules":[
+                "required"
+            ]
+        }
+        {
+            "fieldId": 7,
+            "fieldName": "modificationDate",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules":[
+                "required"
+            ]
         }
     ],
     "changelogDate": "20160323123345",
     "dto": "no",
     "service": "serviceClass",
-    "pagination": "pager"
+    "pagination": "pagination"
 }

@@ -13,6 +13,14 @@
             "otherEntityName": "appUser",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "payment",
+            "otherEntityName": "payment",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "fields": [

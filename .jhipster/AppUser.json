@@ -7,6 +7,104 @@
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "followers",
+            "otherEntityName": "appUser",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "following",
+            "otherEntityName": "appUser",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "followers"
+        },
+        {
+            "relationshipId": 5,
+            "relationshipName": "naturalPerson",
+            "otherEntityName": "naturalPerson",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "appUser"
+        },
+        {
+            "relationshipId": 6,
+            "relationshipName": "legalEntity",
+            "otherEntityName": "legalEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "appUser"
+        },
+        {
+            "relationshipId": 7,
+            "relationshipName": "abilities",
+            "otherEntityName": "ability",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "appUser"
+        },
+        {
+            "relationshipId": 8,
+            "relationshipName": "requests",
+            "otherEntityName": "request",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "applicant"
+        },
+        {
+            "relationshipId": 9,
+            "relationshipName": "needs",
+            "otherEntityName": "need",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "appUser"
+        },
+        {
+            "relationshipId": 10,
+            "relationshipName": "createdAssessments",
+            "otherEntityName": "assessment",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "creator"
+        },
+        {
+            "relationshipId": 11,
+            "relationshipName": "relatedAssessments",
+            "otherEntityName": "assessment",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "recipient"
+        },
+        {
+            "relationshipId": 12,
+            "relationshipName": "payments",
+            "otherEntityName": "payment",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "payer"
+        },
+        {
+            "relationshipId": 13,
+            "relationshipName": "incidences",
+            "otherEntityName": "incidence",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "creator"
         }
     ],
     "fields": [
@@ -24,10 +122,32 @@
             "fieldId": 2,
             "fieldName": "isOnline",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "tokens",
+            "fieldType": "Intger",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldId":4,
+            "fieldName": "image",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "address",
+            "fieldType": "String",
+            "fieldValidateRules": []
         }
     ],
     "changelogDate": "20160317104815",
     "dto": "no",
     "service": "serviceClass",
-    "pagination": "pager"
+    "pagination": "pagination"
 }

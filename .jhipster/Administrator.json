@@ -1,8 +1,24 @@
 {
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "user",
+            "otherEntityName": "appUser",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "incidences",
+            "otherEntityName": "incidence",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id"
+        }
+    ],
     "fields": [],
     "changelogDate": "20160328103400",
     "dto": "no",
     "service": "serviceClass",
-    "pagination": "pager"
+    "pagination": "pagination"
 }

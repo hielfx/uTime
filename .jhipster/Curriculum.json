@@ -18,16 +18,43 @@
         {
             "fieldId": 2,
             "fieldName": "creationDate",
-            "fieldType": "LocalDate"
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldId": 3,
             "fieldName": "modificationDate",
-            "fieldType": "LocalDate"
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "file",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "statement",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "vision",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "mission",
+            "fieldType": "String",
+            "fieldValidateRules": []
         }
     ],
     "changelogDate": "20160325105612",
     "dto": "no",
     "service": "serviceClass",
-    "pagination": "pager"
+    "pagination": "pagination"
 }

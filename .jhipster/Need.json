@@ -9,15 +9,22 @@
         },
         {
             "relationshipId": 2,
-            "relationshipName": "neededAbility",
+            "relationshipName": "neededAbilities",
             "otherEntityName": "neededAbility",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "need"
         },
         {
             "relationshipId": 3,
-            "relationshipName": "availability",
+            "relationshipName": "availabilities",
             "otherEntityName": "availability",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "need"
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "requests",
+            "otherEntityName": "request",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "need"
         }
@@ -70,6 +77,12 @@
             "fieldId": 7,
             "fieldName": "modificationDate",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 8,
+            "fieldName": "completed",
+            "fieldType": "boolean",
+            "fieldValidationRules": []
         }
     ],
     "changelogDate": "20160330090908",
