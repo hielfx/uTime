@@ -18,7 +18,8 @@
             },
             "birthDate": "BirthDate",
             "gender": "Gender",
-            "appUser": "AppUser"
+            "appUser": "AppUser",
+            "curriculum": "Curriculum"
         }
     }
 }

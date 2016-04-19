@@ -1,19 +1,20 @@
 'use strict';
 
 angular.module('volunteercrowdApp').controller('NaturalPersonDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'NaturalPerson', 'Gender', 'AppUser',
-        function($scope, $stateParams, $uibModalInstance, $q, entity, NaturalPerson, Gender, AppUser) {
+    ['$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'NaturalPerson', 'Gender', 'AppUser', 'Curriculum',
+        function ($scope, $stateParams, $uibModalInstance, $q, entity, NaturalPerson, Gender, AppUser, Curriculum) {
 
         $scope.naturalPerson = entity;
-        $scope.genders = Gender.query({filter: 'naturalperson-is-null'});
-        $q.all([$scope.naturalPerson.$promise, $scope.genders.$promise]).then(function() {
+            //$scope.genders = Gender.get();
+            $scope.genders = Gender.query(/*{filter: 'naturalperson-is-null'}*/);
+            /*$q.all([$scope.naturalPerson.$promise, $scope.genders.$promise]).then(function() {
             if (!$scope.naturalPerson.gender || !$scope.naturalPerson.gender.id) {
                 return $q.reject();
             }
-            return Gender.get({id : $scope.naturalPerson.gender.id}).$promise;
+             return Gender.get({name : $scope.naturalPerson.gender.name}).$promise;
         }).then(function(gender) {
             $scope.genders.push(gender);
-        });
+             });*/
         $scope.appusers = AppUser.query({filter: 'naturalperson-is-null'});
         $q.all([$scope.naturalPerson.$promise, $scope.appusers.$promise]).then(function() {
             if (!$scope.naturalPerson.appUser || !$scope.naturalPerson.appUser.id) {
@@ -23,6 +24,15 @@ angular.module('volunteercrowdApp').controller('NaturalPersonDialogController',
         }).then(function(appUser) {
             $scope.appusers.push(appUser);
         });
+            $scope.curriculums = Curriculum.query({filter: 'curriculum-is-null'});
+            $q.all([$scope.naturalPerson.$promise, $scope.curriculums.$promise]).then(function () {
+                if (!$scope.naturalPerson.curriculum || !$scope.naturalPerson.curriculum.id) {
+                    return $q.reject();
+                }
+                return Curriculum.get({id: $scope.naturalPerson.curriculum.id}).$promise;
+            }).then(function (curriculum) {
+                $scope.curriculums.push(curriculum);
+            });
         $scope.load = function(id) {
             NaturalPerson.get({id : id}, function(result) {
                 $scope.naturalPerson = result;

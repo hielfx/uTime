@@ -15,7 +15,7 @@
                     <span translate="volunteercrowdApp.naturalPerson.birthDate">BirthDate</span>
                 </td>
                 <td>
-                    <span class="form-control-static">{{naturalPerson.birthDate | date:'mediumDate'}}</span>
+                    <span class="form-control-static">{{naturalPerson.birthDate | date:'medium'}}</span>
                 </td>
             </tr>
             <tr>
@@ -32,6 +32,14 @@
                 </td>
                 <td>
                     <a class="form-control-static" ui-sref="appUser.detail({id:naturalPerson.appUser.id})">{{naturalPerson.appUser.id}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="volunteercrowdApp.naturalPerson.curriculum">curriculum</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="curriculum.detail({id:naturalPerson.curriculum.id})">{{naturalPerson.curriculum.id}}</a>
                 </td>
             </tr>
             </tbody>

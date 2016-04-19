@@ -1,7 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.hielfsoft.volunteercrowd.validator.Past;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -9,9 +8,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -28,40 +26,28 @@ public class NaturalPerson implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Past
     @NotNull
     @Column(name = "birth_date", nullable = false)
+    @Past
     private ZonedDateTime birthDate;
 
+    @OneToOne
     @NotNull
-    @ManyToOne
-    @JoinColumn(name="gender")
-//    @OneToOne
-//    @JoinTable(
-//        name = "natural_person_gender",
-//        joinColumns = {@JoinColumn(name = "natural_person_id", referencedColumnName = "id")},
-//        inverseJoinColumns = {@JoinColumn(name = "gender_name", referencedColumnName = "name")})
-//    @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Valid
+    @JoinColumn(name = "gender", nullable = false)
     private Gender gender;
 
-    @NotNull
     @OneToOne
     @Valid
-    @JoinColumn(name="app_user_id") //Added because the liquibase configuration was using appUser_id
+    @NotNull
+    @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
 
     @OneToOne
     @Valid
-    @JoinColumn(name = "curriculum_id")
+//    @JsonBackReference
+    @JsonManagedReference
     private Curriculum curriculum;
-
-    public Curriculum getCurriculum() {
-        return curriculum;
-    }
-
-    public void setCurriculum(Curriculum curriculum) {
-        this.curriculum = curriculum;
-    }
 
     public Long getId() {
         return id;
@@ -93,6 +79,14 @@ public class NaturalPerson implements Serializable {
 
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
+    }
+
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
     }
 
     @Override

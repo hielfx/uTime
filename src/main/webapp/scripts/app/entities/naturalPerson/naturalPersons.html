@@ -6,7 +6,7 @@
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="naturalPerson.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span 
+                    <span
 class="hidden-xs"                        translate="volunteercrowdApp.naturalPerson.home.createLabel">Create new NaturalPerson
                     </span>
                 </button>
@@ -34,24 +34,29 @@ class="hidden-xs"                        translate="volunteercrowdApp.naturalPer
                     <th jh-sort-by="birthDate"><span translate="volunteercrowdApp.naturalPerson.birthDate">BirthDate</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="gender.name"><span translate="volunteercrowdApp.naturalPerson.gender">gender</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="appUser.id"><span translate="volunteercrowdApp.naturalPerson.appUser">appUser</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="curriculum.id"><span translate="volunteercrowdApp.naturalPerson.curriculum">curriculum</span>
+                        <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="naturalPerson in naturalPersons track by naturalPerson.id">
                     <td><a ui-sref="naturalPerson.detail({id:naturalPerson.id})">{{naturalPerson.id}}</a></td>
-                        <td>{{naturalPerson.birthDate | date:'mediumDate'}}</td>
+                    <td>{{naturalPerson.birthDate | date:'medium'}}</td>
                     <td>
                         <a ui-sref="gender.detail({id:naturalPerson.gender.id})">{{naturalPerson.gender.name}}</a>
                     </td>
                     <td>
                         <a ui-sref="appUser.detail({id:naturalPerson.appUser.id})">{{naturalPerson.appUser.id}}</a>
                     </td>
+                    <td>
+                        <a ui-sref="curriculum.detail({id:naturalPerson.curriculum.id})">{{naturalPerson.curriculum.id}}</a>
+                    </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
                                     ui-sref="naturalPerson.detail({id:naturalPerson.id})"
-                                    class="btn btn-info btn-sm"> 
+                                    class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                             </button>
@@ -63,7 +68,7 @@ class="hidden-xs"                        translate="volunteercrowdApp.naturalPer
                             </button>
                             <button type="submit"
                                     ui-sref="naturalPerson.delete({id:naturalPerson.id})"
-                                    class="btn btn-danger btn-sm">                                    
+                                    class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
                             </button>

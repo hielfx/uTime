@@ -2,7 +2,7 @@
 
 angular.module('volunteercrowdApp')
     .factory('Gender', function ($resource, DateUtils) {
-        return $resource('api/genders/:id', {}, {
+        return $resource('api/genders', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
@@ -10,7 +10,7 @@ angular.module('volunteercrowdApp')
                     data = angular.fromJson(data);
                     return data;
                 }
-            },
-            'update': { method:'PUT' }
+            }/*,
+             'update': { method:'PUT' }*/
         });
     });

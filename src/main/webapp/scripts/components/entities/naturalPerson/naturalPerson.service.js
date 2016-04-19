@@ -8,23 +8,10 @@ angular.module('volunteercrowdApp')
                 method: 'GET',
                 transformResponse: function (data) {
                     data = angular.fromJson(data);
-                    data.birthDate = DateUtils.convertLocaleDateFromServer(data.birthDate);
+                    data.birthDate = DateUtils.convertDateTimeFromServer(data.birthDate);
                     return data;
                 }
             },
-            'update': {
-                method: 'PUT',
-                transformRequest: function (data) {
-                    data.birthDate = DateUtils.convertLocaleDateToServer(data.birthDate);
-                    return angular.toJson(data);
-                }
-            },
-            'save': {
-                method: 'POST',
-                transformRequest: function (data) {
-                    data.birthDate = DateUtils.convertLocaleDateToServer(data.birthDate);
-                    return angular.toJson(data);
-                }
-            }
+            'update': {method: 'PUT'}
         });
     });

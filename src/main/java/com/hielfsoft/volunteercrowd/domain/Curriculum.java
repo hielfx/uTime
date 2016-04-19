@@ -1,5 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -8,6 +9,7 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -58,7 +60,12 @@ public class Curriculum implements Serializable {
     @Column(name="vision", nullable = false)
     private String vision;
 
-    @OneToOne(mappedBy = "curriculum")
+    @OneToOne(mappedBy = "curriculum", optional = false)
+    @Valid
+    @JoinColumn(name = "natural_person_id", nullable = false)
+    @NotNull
+//    @JsonManagedReference //Added to break infinite cycle but keeping the value in the JSON
+    @JsonBackReference
     private NaturalPerson naturalPerson;
 
     public byte[] getFile() {

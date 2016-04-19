@@ -1,15 +1,9 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.Application;
-import com.hielfsoft.volunteercrowd.domain.Address;
-import com.hielfsoft.volunteercrowd.domain.AppUser;
 import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
-import com.hielfsoft.volunteercrowd.domain.User;
-import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
-import com.hielfsoft.volunteercrowd.repository.GenderRepository;
 import com.hielfsoft.volunteercrowd.repository.NaturalPersonRepository;
 import com.hielfsoft.volunteercrowd.repository.search.NaturalPersonSearchRepository;
-import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.ZoneOffset;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,18 +45,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class NaturalPersonResourceIntTest {
 
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.of("Z"));
 
-    private static final ZonedDateTime DEFAULT_BIRTH_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusYears(1);
-    private static final ZonedDateTime UPDATED_BIRTH_DATE = ZonedDateTime.now(ZoneOffset.UTC).minusYears(2);
 
-    @Inject
-    private UserService userService; //Added manually
-
-    @Inject //TODO:Delete repository and use service
-    private AppUserRepository appUserRepository; //Added manually
-
-    @Inject //TODO:Delete repository and use service
-    private GenderRepository genderRepository; //Added manually
+    private static final ZonedDateTime DEFAULT_BIRTH_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
+    private static final ZonedDateTime UPDATED_BIRTH_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final String DEFAULT_BIRTH_DATE_STR = dateTimeFormatter.format(DEFAULT_BIRTH_DATE);
 
     @Inject
     private NaturalPersonRepository naturalPersonRepository;
@@ -94,31 +83,6 @@ public class NaturalPersonResourceIntTest {
     public void initTest() {
         naturalPerson = new NaturalPerson();
         naturalPerson.setBirthDate(DEFAULT_BIRTH_DATE);
-        //Added manually
-        AppUser appUser = new AppUser();
-        Address address = new Address();
-        User user = userService.getUserWithAuthoritiesByLogin("user").get();
-
-        address.setAddress("AAAAAA");
-        address.setCity("AAAAAA");
-        address.setCountry("AAAAAA");
-        address.setProvince("AAAAAAA");
-        address.setShowAddress(true);
-        address.setShowCity(true);
-        address.setZipCode("AAAAAA");
-        address.setShowCountry(true);
-        address.setShowProvince(true);
-        address.setShowZipCode(true);
-
-        appUser.setAddress(address);
-        appUser.setFollowers(new HashSet<AppUser>());
-        appUser.setUser(user);
-        appUser.setFollowing(new HashSet<AppUser>());
-        appUser.setIsOnline(false);
-        appUser.setTokens(0);
-
-        naturalPerson.setGender(genderRepository.findAll().get(0));
-        naturalPerson.setAppUser(appUser);
     }
 
     @Test
@@ -126,7 +90,6 @@ public class NaturalPersonResourceIntTest {
     public void createNaturalPerson() throws Exception {
         int databaseSizeBeforeCreate = naturalPersonRepository.findAll().size();
 
-        appUserRepository.saveAndFlush(naturalPerson.getAppUser());
         // Create the NaturalPerson
 
         restNaturalPersonMockMvc.perform(post("/api/naturalPersons")
@@ -163,7 +126,6 @@ public class NaturalPersonResourceIntTest {
     @Transactional
     public void getAllNaturalPersons() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(naturalPerson.getAppUser());
         naturalPersonRepository.saveAndFlush(naturalPerson);
 
         // Get all the naturalPersons
@@ -171,14 +133,13 @@ public class NaturalPersonResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(naturalPerson.getId().intValue())))
-                .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE.toString())));
+            .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE_STR)));
     }
 
     @Test
     @Transactional
     public void getNaturalPerson() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(naturalPerson.getAppUser());
         naturalPersonRepository.saveAndFlush(naturalPerson);
 
         // Get the naturalPerson
@@ -186,7 +147,7 @@ public class NaturalPersonResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(naturalPerson.getId().intValue()))
-            .andExpect(jsonPath("$.birthDate").value(DEFAULT_BIRTH_DATE.toString()));
+            .andExpect(jsonPath("$.birthDate").value(DEFAULT_BIRTH_DATE_STR));
     }
 
     @Test
@@ -201,8 +162,6 @@ public class NaturalPersonResourceIntTest {
     @Transactional
     public void updateNaturalPerson() throws Exception {
         // Initialize the database
-
-        appUserRepository.saveAndFlush(naturalPerson.getAppUser()); //Added manually
         naturalPersonRepository.saveAndFlush(naturalPerson);
 
 		int databaseSizeBeforeUpdate = naturalPersonRepository.findAll().size();
@@ -226,7 +185,6 @@ public class NaturalPersonResourceIntTest {
     @Transactional
     public void deleteNaturalPerson() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(naturalPerson.getAppUser()); //Added manually
         naturalPersonRepository.saveAndFlush(naturalPerson);
 
 		int databaseSizeBeforeDelete = naturalPersonRepository.findAll().size();
