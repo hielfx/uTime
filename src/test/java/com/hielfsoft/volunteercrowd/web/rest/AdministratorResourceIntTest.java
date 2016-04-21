@@ -1,20 +1,19 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Administrator;
 import com.hielfsoft.volunteercrowd.repository.AdministratorRepository;
+import com.hielfsoft.volunteercrowd.repository.search.AdministratorSearchRepository;
 import com.hielfsoft.volunteercrowd.service.AdministratorService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -27,6 +26,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see AdministratorResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class AdministratorResourceIntTest {
@@ -48,6 +48,9 @@ public class AdministratorResourceIntTest {
 
     @Inject
     private AdministratorService administratorService;
+
+    @Inject
+    private AdministratorSearchRepository administratorSearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -71,6 +74,7 @@ public class AdministratorResourceIntTest {
 
     @Before
     public void initTest() {
+        administratorSearchRepository.deleteAll();
         administrator = new Administrator();
     }
 
@@ -90,6 +94,10 @@ public class AdministratorResourceIntTest {
         List<Administrator> administrators = administratorRepository.findAll();
         assertThat(administrators).hasSize(databaseSizeBeforeCreate + 1);
         Administrator testAdministrator = administrators.get(administrators.size() - 1);
+
+        // Validate the Administrator in ElasticSearch
+        Administrator administratorEs = administratorSearchRepository.findOne(testAdministrator.getId());
+        assertThat(administratorEs).isEqualToComparingFieldByField(testAdministrator);
     }
 
     @Test
@@ -130,38 +138,61 @@ public class AdministratorResourceIntTest {
     @Transactional
     public void updateAdministrator() throws Exception {
         // Initialize the database
-        administratorRepository.saveAndFlush(administrator);
+        administratorService.save(administrator);
 
-		int databaseSizeBeforeUpdate = administratorRepository.findAll().size();
+        int databaseSizeBeforeUpdate = administratorRepository.findAll().size();
 
         // Update the administrator
+        Administrator updatedAdministrator = new Administrator();
+        updatedAdministrator.setId(administrator.getId());
 
         restAdministratorMockMvc.perform(put("/api/administrators")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(administrator)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAdministrator)))
                 .andExpect(status().isOk());
 
         // Validate the Administrator in the database
         List<Administrator> administrators = administratorRepository.findAll();
         assertThat(administrators).hasSize(databaseSizeBeforeUpdate);
         Administrator testAdministrator = administrators.get(administrators.size() - 1);
+
+        // Validate the Administrator in ElasticSearch
+        Administrator administratorEs = administratorSearchRepository.findOne(testAdministrator.getId());
+        assertThat(administratorEs).isEqualToComparingFieldByField(testAdministrator);
     }
 
     @Test
     @Transactional
     public void deleteAdministrator() throws Exception {
         // Initialize the database
-        administratorRepository.saveAndFlush(administrator);
+        administratorService.save(administrator);
 
-		int databaseSizeBeforeDelete = administratorRepository.findAll().size();
+        int databaseSizeBeforeDelete = administratorRepository.findAll().size();
 
         // Get the administrator
         restAdministratorMockMvc.perform(delete("/api/administrators/{id}", administrator.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean administratorExistsInEs = administratorSearchRepository.exists(administrator.getId());
+        assertThat(administratorExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Administrator> administrators = administratorRepository.findAll();
         assertThat(administrators).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchAdministrator() throws Exception {
+        // Initialize the database
+        administratorService.save(administrator);
+
+        // Search the administrator
+        restAdministratorMockMvc.perform(get("/api/_search/administrators?query=id:" + administrator.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(administrator.getId().intValue())));
     }
 }

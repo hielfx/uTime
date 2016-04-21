@@ -1,20 +1,19 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Ability;
 import com.hielfsoft.volunteercrowd.repository.AbilityRepository;
+import com.hielfsoft.volunteercrowd.repository.search.AbilitySearchRepository;
 import com.hielfsoft.volunteercrowd.service.AbilityService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -27,6 +26,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see AbilityResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class AbilityResourceIntTest {
@@ -53,6 +53,9 @@ public class AbilityResourceIntTest {
 
     @Inject
     private AbilityService abilityService;
+
+    @Inject
+    private AbilitySearchRepository abilitySearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -76,6 +79,7 @@ public class AbilityResourceIntTest {
 
     @Before
     public void initTest() {
+        abilitySearchRepository.deleteAll();
         ability = new Ability();
         ability.setName(DEFAULT_NAME);
         ability.setHidden(DEFAULT_HIDDEN);
@@ -88,17 +92,21 @@ public class AbilityResourceIntTest {
 
         // Create the Ability
 
-        restAbilityMockMvc.perform(post("/api/abilitys")
+        restAbilityMockMvc.perform(post("/api/abilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(ability)))
                 .andExpect(status().isCreated());
 
         // Validate the Ability in the database
-        List<Ability> abilitys = abilityRepository.findAll();
-        assertThat(abilitys).hasSize(databaseSizeBeforeCreate + 1);
-        Ability testAbility = abilitys.get(abilitys.size() - 1);
+        List<Ability> abilities = abilityRepository.findAll();
+        assertThat(abilities).hasSize(databaseSizeBeforeCreate + 1);
+        Ability testAbility = abilities.get(abilities.size() - 1);
         assertThat(testAbility.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testAbility.getHidden()).isEqualTo(DEFAULT_HIDDEN);
+        assertThat(testAbility.isHidden()).isEqualTo(DEFAULT_HIDDEN);
+
+        // Validate the Ability in ElasticSearch
+        Ability abilityEs = abilitySearchRepository.findOne(testAbility.getId());
+        assertThat(abilityEs).isEqualToComparingFieldByField(testAbility);
     }
 
     @Test
@@ -110,23 +118,41 @@ public class AbilityResourceIntTest {
 
         // Create the Ability, which fails.
 
-        restAbilityMockMvc.perform(post("/api/abilitys")
+        restAbilityMockMvc.perform(post("/api/abilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(ability)))
                 .andExpect(status().isBadRequest());
 
-        List<Ability> abilitys = abilityRepository.findAll();
-        assertThat(abilitys).hasSize(databaseSizeBeforeTest);
+        List<Ability> abilities = abilityRepository.findAll();
+        assertThat(abilities).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
-    public void getAllAbilitys() throws Exception {
+    public void checkHiddenIsRequired() throws Exception {
+        int databaseSizeBeforeTest = abilityRepository.findAll().size();
+        // set the field null
+        ability.setHidden(null);
+
+        // Create the Ability, which fails.
+
+        restAbilityMockMvc.perform(post("/api/abilities")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(ability)))
+                .andExpect(status().isBadRequest());
+
+        List<Ability> abilities = abilityRepository.findAll();
+        assertThat(abilities).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAbilities() throws Exception {
         // Initialize the database
         abilityRepository.saveAndFlush(ability);
 
-        // Get all the abilitys
-        restAbilityMockMvc.perform(get("/api/abilitys?sort=id,desc"))
+        // Get all the abilities
+        restAbilityMockMvc.perform(get("/api/abilities?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(ability.getId().intValue())))
@@ -141,7 +167,7 @@ public class AbilityResourceIntTest {
         abilityRepository.saveAndFlush(ability);
 
         // Get the ability
-        restAbilityMockMvc.perform(get("/api/abilitys/{id}", ability.getId()))
+        restAbilityMockMvc.perform(get("/api/abilities/{id}", ability.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(ability.getId().intValue()))
@@ -153,7 +179,7 @@ public class AbilityResourceIntTest {
     @Transactional
     public void getNonExistingAbility() throws Exception {
         // Get the ability
-        restAbilityMockMvc.perform(get("/api/abilitys/{id}", Long.MAX_VALUE))
+        restAbilityMockMvc.perform(get("/api/abilities/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -161,42 +187,67 @@ public class AbilityResourceIntTest {
     @Transactional
     public void updateAbility() throws Exception {
         // Initialize the database
-        abilityRepository.saveAndFlush(ability);
+        abilityService.save(ability);
 
-		int databaseSizeBeforeUpdate = abilityRepository.findAll().size();
+        int databaseSizeBeforeUpdate = abilityRepository.findAll().size();
 
         // Update the ability
-        ability.setName(UPDATED_NAME);
-        ability.setHidden(UPDATED_HIDDEN);
+        Ability updatedAbility = new Ability();
+        updatedAbility.setId(ability.getId());
+        updatedAbility.setName(UPDATED_NAME);
+        updatedAbility.setHidden(UPDATED_HIDDEN);
 
-        restAbilityMockMvc.perform(put("/api/abilitys")
+        restAbilityMockMvc.perform(put("/api/abilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(ability)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedAbility)))
                 .andExpect(status().isOk());
 
         // Validate the Ability in the database
-        List<Ability> abilitys = abilityRepository.findAll();
-        assertThat(abilitys).hasSize(databaseSizeBeforeUpdate);
-        Ability testAbility = abilitys.get(abilitys.size() - 1);
+        List<Ability> abilities = abilityRepository.findAll();
+        assertThat(abilities).hasSize(databaseSizeBeforeUpdate);
+        Ability testAbility = abilities.get(abilities.size() - 1);
         assertThat(testAbility.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testAbility.getHidden()).isEqualTo(UPDATED_HIDDEN);
+        assertThat(testAbility.isHidden()).isEqualTo(UPDATED_HIDDEN);
+
+        // Validate the Ability in ElasticSearch
+        Ability abilityEs = abilitySearchRepository.findOne(testAbility.getId());
+        assertThat(abilityEs).isEqualToComparingFieldByField(testAbility);
     }
 
     @Test
     @Transactional
     public void deleteAbility() throws Exception {
         // Initialize the database
-        abilityRepository.saveAndFlush(ability);
+        abilityService.save(ability);
 
-		int databaseSizeBeforeDelete = abilityRepository.findAll().size();
+        int databaseSizeBeforeDelete = abilityRepository.findAll().size();
 
         // Get the ability
-        restAbilityMockMvc.perform(delete("/api/abilitys/{id}", ability.getId())
+        restAbilityMockMvc.perform(delete("/api/abilities/{id}", ability.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean abilityExistsInEs = abilitySearchRepository.exists(ability.getId());
+        assertThat(abilityExistsInEs).isFalse();
+
         // Validate the database is empty
-        List<Ability> abilitys = abilityRepository.findAll();
-        assertThat(abilitys).hasSize(databaseSizeBeforeDelete - 1);
+        List<Ability> abilities = abilityRepository.findAll();
+        assertThat(abilities).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchAbility() throws Exception {
+        // Initialize the database
+        abilityService.save(ability);
+
+        // Search the ability
+        restAbilityMockMvc.perform(get("/api/_search/abilities?query=id:" + ability.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(ability.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].hidden").value(hasItem(DEFAULT_HIDDEN.booleanValue())));
     }
 }

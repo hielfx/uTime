@@ -1,8 +1,9 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Availability;
 import com.hielfsoft.volunteercrowd.repository.AvailabilityRepository;
+import com.hielfsoft.volunteercrowd.repository.search.AvailabilitySearchRepository;
 import com.hielfsoft.volunteercrowd.service.AvailabilityService;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,12 +41,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see AvailabilityResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class AvailabilityResourceIntTest {
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.of("Z"));
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));
 
 
     private static final ZonedDateTime DEFAULT_START_MOMENT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
@@ -61,6 +62,9 @@ public class AvailabilityResourceIntTest {
 
     @Inject
     private AvailabilityService availabilityService;
+
+    @Inject
+    private AvailabilitySearchRepository availabilitySearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -84,6 +88,7 @@ public class AvailabilityResourceIntTest {
 
     @Before
     public void initTest() {
+        availabilitySearchRepository.deleteAll();
         availability = new Availability();
         availability.setStartMoment(DEFAULT_START_MOMENT);
         availability.setEndMoment(DEFAULT_END_MOMENT);
@@ -107,6 +112,10 @@ public class AvailabilityResourceIntTest {
         Availability testAvailability = availabilities.get(availabilities.size() - 1);
         assertThat(testAvailability.getStartMoment()).isEqualTo(DEFAULT_START_MOMENT);
         assertThat(testAvailability.getEndMoment()).isEqualTo(DEFAULT_END_MOMENT);
+
+        // Validate the Availability in ElasticSearch
+        Availability availabilityEs = availabilitySearchRepository.findOne(testAvailability.getId());
+        assertThat(availabilityEs).isEqualToComparingFieldByField(testAvailability);
     }
 
     @Test
@@ -147,12 +156,12 @@ public class AvailabilityResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllAvailabilitys() throws Exception {
+    public void getAllAvailabilities() throws Exception {
         // Initialize the database
         availabilityRepository.saveAndFlush(availability);
 
-        // Get all the availabilitys
-        restAvailabilityMockMvc.perform(get("/api/availabilitys?sort=id,desc"))
+        // Get all the availabilities
+        restAvailabilityMockMvc.perform(get("/api/availabilities?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(availability.getId().intValue())))
@@ -167,7 +176,7 @@ public class AvailabilityResourceIntTest {
         availabilityRepository.saveAndFlush(availability);
 
         // Get the availability
-        restAvailabilityMockMvc.perform(get("/api/availabilitys/{id}", availability.getId()))
+        restAvailabilityMockMvc.perform(get("/api/availabilities/{id}", availability.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(availability.getId().intValue()))
@@ -179,7 +188,7 @@ public class AvailabilityResourceIntTest {
     @Transactional
     public void getNonExistingAvailability() throws Exception {
         // Get the availability
-        restAvailabilityMockMvc.perform(get("/api/availabilitys/{id}", Long.MAX_VALUE))
+        restAvailabilityMockMvc.perform(get("/api/availabilities/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -187,17 +196,19 @@ public class AvailabilityResourceIntTest {
     @Transactional
     public void updateAvailability() throws Exception {
         // Initialize the database
-        availabilityRepository.saveAndFlush(availability);
+        availabilityService.save(availability);
 
         int databaseSizeBeforeUpdate = availabilityRepository.findAll().size();
 
         // Update the availability
-        availability.setStartMoment(UPDATED_START_MOMENT);
-        availability.setEndMoment(UPDATED_END_MOMENT);
+        Availability updatedAvailability = new Availability();
+        updatedAvailability.setId(availability.getId());
+        updatedAvailability.setStartMoment(UPDATED_START_MOMENT);
+        updatedAvailability.setEndMoment(UPDATED_END_MOMENT);
 
         restAvailabilityMockMvc.perform(put("/api/availabilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(availability)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAvailability)))
                 .andExpect(status().isOk());
 
         // Validate the Availability in the database
@@ -206,13 +217,17 @@ public class AvailabilityResourceIntTest {
         Availability testAvailability = availabilities.get(availabilities.size() - 1);
         assertThat(testAvailability.getStartMoment()).isEqualTo(UPDATED_START_MOMENT);
         assertThat(testAvailability.getEndMoment()).isEqualTo(UPDATED_END_MOMENT);
+
+        // Validate the Availability in ElasticSearch
+        Availability availabilityEs = availabilitySearchRepository.findOne(testAvailability.getId());
+        assertThat(availabilityEs).isEqualToComparingFieldByField(testAvailability);
     }
 
     @Test
     @Transactional
     public void deleteAvailability() throws Exception {
         // Initialize the database
-        availabilityRepository.saveAndFlush(availability);
+        availabilityService.save(availability);
 
         int databaseSizeBeforeDelete = availabilityRepository.findAll().size();
 
@@ -221,8 +236,27 @@ public class AvailabilityResourceIntTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean availabilityExistsInEs = availabilitySearchRepository.exists(availability.getId());
+        assertThat(availabilityExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Availability> availabilities = availabilityRepository.findAll();
         assertThat(availabilities).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchAvailability() throws Exception {
+        // Initialize the database
+        availabilityService.save(availability);
+
+        // Search the availability
+        restAvailabilityMockMvc.perform(get("/api/_search/availabilities?query=id:" + availability.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(availability.getId().intValue())))
+            .andExpect(jsonPath("$.[*].startMoment").value(hasItem(DEFAULT_START_MOMENT_STR)))
+            .andExpect(jsonPath("$.[*].endMoment").value(hasItem(DEFAULT_END_MOMENT_STR)));
     }
 }

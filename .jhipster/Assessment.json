@@ -20,7 +20,8 @@
             "otherEntityName": "payment",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
-            "ownerSide": true
+            "ownerSide": true,
+            "otherRelationshipName": "assessment"
         }
     ],
     "fields": [
@@ -28,7 +29,9 @@
             "fieldId": 1,
             "fieldName": "creationMoment",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": []
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 2,

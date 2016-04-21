@@ -1,15 +1,15 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentation;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,7 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
 import springfox.documentation.staticdocs.SwaggerResultHandler;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.io.IOException;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -29,9 +28,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
+@ActiveProfiles("dev")
 public class Swagger2MarkupIntTest {
 
     @Rule
@@ -59,7 +59,8 @@ public class Swagger2MarkupIntTest {
     public void convertSwaggerToAsciiDoc() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
             .accept(MediaType.APPLICATION_JSON))
-            .andDo(SwaggerResultHandler.outputDirectory("build/swagger")            .build())
+            .andDo(SwaggerResultHandler.outputDirectory("build/swagger")
+            .build())
             .andExpect(status().isOk());
     }
 }

@@ -4,10 +4,8 @@
             "relationshipId": 1,
             "relationshipName": "gender",
             "otherEntityName": "gender",
-            "relationshipType": "one-to-one",
-            "otherEntityField": "name",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "naturalPerson"
+            "relationshipType": "Many-to-one",
+            "otherEntityField": "name"
         },
         {
             "relationshipId": 2,

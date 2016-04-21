@@ -12,7 +12,6 @@
 
 spring:
     datasource:
-        driver-class-name: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:Volunteercrowd;DB_CLOSE_DELAY=-1
         name:
         username:
@@ -67,7 +66,7 @@ jhipster:
         maxPoolSize: 50
         queueCapacity: 10000
     security:
-        rememberme:
+        rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: 99a73e2edb1d2d5b000636fd0f7d3ad47ad66d65
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
@@ -77,6 +76,8 @@ jhipster:
         description: Volunteercrowd API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:

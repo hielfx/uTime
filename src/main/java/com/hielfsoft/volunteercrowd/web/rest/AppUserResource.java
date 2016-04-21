@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing AppUser.
@@ -34,14 +30,18 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class AppUserResource {
 
     private final Logger log = LoggerFactory.getLogger(AppUserResource.class);
-        
+
     @Inject
     private AppUserService appUserService;
-    
+
     /**
-     * POST  /appUsers -> Create a new appUser.
+     * POST  /app-users : Create a new appUser.
+     *
+     * @param appUser the appUser to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new appUser, or with status 400 (Bad Request) if the appUser has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/appUsers",
+    @RequestMapping(value = "/app-users",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -51,15 +51,21 @@ public class AppUserResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("appUser", "idexists", "A new appUser cannot already have an ID")).body(null);
         }
         AppUser result = appUserService.save(appUser);
-        return ResponseEntity.created(new URI("/api/appUsers/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/app-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("appUser", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /appUsers -> Updates an existing appUser.
+     * PUT  /app-users : Updates an existing appUser.
+     *
+     * @param appUser the appUser to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated appUser,
+     * or with status 400 (Bad Request) if the appUser is not valid,
+     * or with status 500 (Internal Server Error) if the appUser couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/appUsers",
+    @RequestMapping(value = "/app-users",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -75,24 +81,42 @@ public class AppUserResource {
     }
 
     /**
-     * GET  /appUsers -> get all the appUsers.
+     * GET  /app-users : get all the appUsers.
+     *
+     * @param pageable the pagination information
+     * @param filter the filter of the request
+     * @return the ResponseEntity with status 200 (OK) and the list of appUsers in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
-    @RequestMapping(value = "/appUsers",
+    @RequestMapping(value = "/app-users",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<AppUser>> getAllAppUsers(Pageable pageable)
+    public ResponseEntity<List<AppUser>> getAllAppUsers(Pageable pageable, @RequestParam(required = false) String filter)
         throws URISyntaxException {
+        if ("naturalperson-is-null".equals(filter)) {
+            log.debug("REST request to get all AppUsers where naturalPerson is null");
+            return new ResponseEntity<>(appUserService.findAllWhereNaturalPersonIsNull(),
+                    HttpStatus.OK);
+        }
+        if ("legalentity-is-null".equals(filter)) {
+            log.debug("REST request to get all AppUsers where legalEntity is null");
+            return new ResponseEntity<>(appUserService.findAllWhereLegalEntityIsNull(),
+                    HttpStatus.OK);
+        }
         log.debug("REST request to get a page of AppUsers");
-        Page<AppUser> page = appUserService.findAll(pageable); 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/appUsers");
+        Page<AppUser> page = appUserService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/app-users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /appUsers/:id -> get the "id" appUser.
+     * GET  /app-users/:id : get the "id" appUser.
+     *
+     * @param id the id of the appUser to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the appUser, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/appUsers/{id}",
+    @RequestMapping(value = "/app-users/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -107,9 +131,12 @@ public class AppUserResource {
     }
 
     /**
-     * DELETE  /appUsers/:id -> delete the "id" appUser.
+     * DELETE  /app-users/:id : delete the "id" appUser.
+     *
+     * @param id the id of the appUser to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/appUsers/{id}",
+    @RequestMapping(value = "/app-users/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -120,15 +147,22 @@ public class AppUserResource {
     }
 
     /**
-     * SEARCH  /_search/appUsers/:query -> search for the appUser corresponding
+     * SEARCH  /_search/app-users?query=:query : search for the appUser corresponding
      * to the query.
+     *
+     * @param query the query of the appUser search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/appUsers/{query:.+}",
+    @RequestMapping(value = "/_search/app-users",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<AppUser> searchAppUsers(@PathVariable String query) {
-        log.debug("Request to search AppUsers for query {}", query);
-        return appUserService.search(query);
+    public ResponseEntity<List<AppUser>> searchAppUsers(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of AppUsers for query {}", query);
+        Page<AppUser> page = appUserService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/app-users");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

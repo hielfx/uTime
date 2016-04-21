@@ -15,7 +15,9 @@
             },
             "detail": {
                 "title": "Administrator"
-            }
+            },
+            "user": "User",
+            "incidence": "Incidence"
         }
     }
 }

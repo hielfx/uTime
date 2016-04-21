@@ -1,0 +1,38 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.legalEntity.detail.title">LegalEntity</span> {{vm.legalEntity.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span translate="volunteercrowdApp.legalEntity.mission">Mission</dt></dt>
+        <dd>
+            <span>{{vm.legalEntity.mission}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.legalEntity.vision">Vision</dt></dt>
+        <dd>
+            <span>{{vm.legalEntity.vision}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.legalEntity.website">Website</dt></dt>
+        <dd>
+            <span>{{vm.legalEntity.website}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.legalEntity.description">Description</dt></dt>
+        <dd>
+            <span>{{vm.legalEntity.description}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.legalEntity.appUser">appUser</span></dt>
+        <dd>
+            <a ui-sref="app-user-detail({id:vm.legalEntity.appUser.id})">{{vm.legalEntity.appUser.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

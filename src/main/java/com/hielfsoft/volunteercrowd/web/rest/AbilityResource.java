@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Ability.
@@ -34,14 +30,18 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class AbilityResource {
 
     private final Logger log = LoggerFactory.getLogger(AbilityResource.class);
-        
+
     @Inject
     private AbilityService abilityService;
-    
+
     /**
-     * POST  /abilitys -> Create a new ability.
+     * POST  /abilities : Create a new ability.
+     *
+     * @param ability the ability to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new ability, or with status 400 (Bad Request) if the ability has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/abilitys",
+    @RequestMapping(value = "/abilities",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -51,15 +51,21 @@ public class AbilityResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("ability", "idexists", "A new ability cannot already have an ID")).body(null);
         }
         Ability result = abilityService.save(ability);
-        return ResponseEntity.created(new URI("/api/abilitys/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/abilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("ability", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /abilitys -> Updates an existing ability.
+     * PUT  /abilities : Updates an existing ability.
+     *
+     * @param ability the ability to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated ability,
+     * or with status 400 (Bad Request) if the ability is not valid,
+     * or with status 500 (Internal Server Error) if the ability couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/abilitys",
+    @RequestMapping(value = "/abilities",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -75,24 +81,31 @@ public class AbilityResource {
     }
 
     /**
-     * GET  /abilitys -> get all the abilitys.
+     * GET  /abilities : get all the abilities.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of abilities in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
-    @RequestMapping(value = "/abilitys",
+    @RequestMapping(value = "/abilities",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Ability>> getAllAbilitys(Pageable pageable)
+    public ResponseEntity<List<Ability>> getAllAbilities(Pageable pageable)
         throws URISyntaxException {
-        log.debug("REST request to get a page of Abilitys");
-        Page<Ability> page = abilityService.findAll(pageable); 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/abilitys");
+        log.debug("REST request to get a page of Abilities");
+        Page<Ability> page = abilityService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/abilities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /abilitys/:id -> get the "id" ability.
+     * GET  /abilities/:id : get the "id" ability.
+     *
+     * @param id the id of the ability to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the ability, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/abilitys/{id}",
+    @RequestMapping(value = "/abilities/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -107,9 +120,12 @@ public class AbilityResource {
     }
 
     /**
-     * DELETE  /abilitys/:id -> delete the "id" ability.
+     * DELETE  /abilities/:id : delete the "id" ability.
+     *
+     * @param id the id of the ability to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/abilitys/{id}",
+    @RequestMapping(value = "/abilities/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -120,15 +136,22 @@ public class AbilityResource {
     }
 
     /**
-     * SEARCH  /_search/abilitys/:query -> search for the ability corresponding
+     * SEARCH  /_search/abilities?query=:query : search for the ability corresponding
      * to the query.
+     *
+     * @param query the query of the ability search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/abilitys/{query:.+}",
+    @RequestMapping(value = "/_search/abilities",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Ability> searchAbilitys(@PathVariable String query) {
-        log.debug("Request to search Abilitys for query {}", query);
-        return abilityService.search(query);
+    public ResponseEntity<List<Ability>> searchAbilities(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Abilities for query {}", query);
+        Page<Ability> page = abilityService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/abilities");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

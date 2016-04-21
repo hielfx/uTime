@@ -1,0 +1,43 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.assessment.detail.title">Assessment</span> {{vm.assessment.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span translate="volunteercrowdApp.assessment.creationMoment">CreationMoment</dt></dt>
+        <dd>
+            <span>{{vm.assessment.creationMoment | date:'medium'}}</span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.assessment.rating">Rating</dt></dt>
+        <dd>
+            <span>{{vm.assessment.rating}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.assessment.comment">Comment</dt></dt>
+        <dd>
+            <span>{{vm.assessment.comment}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.assessment.creator">creator</span></dt>
+        <dd>
+            <a ui-sref="app-user-detail({id:vm.assessment.creator.id})">{{vm.assessment.creator.id}}</a>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.assessment.recipient">recipient</span></dt>
+        <dd>
+            <a ui-sref="app-user-detail({id:vm.assessment.recipient.id})">{{vm.assessment.recipient.id}}</a>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.assessment.payment">payment</span></dt>
+        <dd>
+            <a ui-sref="payment-detail({id:vm.assessment.payment.id})">{{vm.assessment.payment.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

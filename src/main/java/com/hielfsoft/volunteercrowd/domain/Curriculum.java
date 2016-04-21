@@ -1,6 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -24,65 +24,50 @@ import java.util.Objects;
 @Document(indexName = "curriculum")
 public class Curriculum implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    @URL
     @Column(name = "website")
+    @URL
     private String website;
 
     @NotNull
-    @Past
     @Column(name = "creation_date", nullable = false)
+    @Past
     private ZonedDateTime creationDate;
 
     @NotNull
-    @Past
     @Column(name = "modification_date", nullable = false)
+    @Past
     private ZonedDateTime modificationDate;
 
-    @NotNull
-    @NotBlank
-    @Column(name="statement", nullable = false)
-    private String statement;
-
     @Lob
-    @Column(name="file")
+    @Column(name = "file")
     private byte[] file;
 
-    @NotNull
-    @Column(name="mission", nullable = false)
-    private String mission;
+    @Column(name = "file_content_type")
+    private String fileContentType;
 
     @NotNull
-    @Column(name="vision", nullable = false)
+    @Column(name = "statement", nullable = false)
+    @NotBlank
+    private String statement;
+
+    @Column(name = "vision")
     private String vision;
 
+    @Column(name = "mission")
+    private String mission;
+
     @OneToOne(mappedBy = "curriculum", optional = false)
-    @Valid
-    @JoinColumn(name = "natural_person_id", nullable = false)
+    @JsonIgnore
     @NotNull
-//    @JsonManagedReference //Added to break infinite cycle but keeping the value in the JSON
-    @JsonBackReference
+    @Valid
+    @JoinColumn(nullable = false)
     private NaturalPerson naturalPerson;
-
-    public byte[] getFile() {
-        return file;
-    }
-
-    public void setFile(byte[] file) {
-        this.file = file;
-    }
-
-    public String getStatement() {
-        return statement;
-    }
-
-    public void setStatement(String statement) {
-        this.statement = statement;
-    }
 
     public Long getId() {
         return id;
@@ -114,6 +99,46 @@ public class Curriculum implements Serializable {
 
     public void setModificationDate(ZonedDateTime modificationDate) {
         this.modificationDate = modificationDate;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileContentType() {
+        return fileContentType;
+    }
+
+    public void setFileContentType(String fileContentType) {
+        this.fileContentType = fileContentType;
+    }
+
+    public String getStatement() {
+        return statement;
+    }
+
+    public void setStatement(String statement) {
+        this.statement = statement;
+    }
+
+    public String getVision() {
+        return vision;
+    }
+
+    public void setVision(String vision) {
+        this.vision = vision;
+    }
+
+    public String getMission() {
+        return mission;
+    }
+
+    public void setMission(String mission) {
+        this.mission = mission;
     }
 
     public NaturalPerson getNaturalPerson() {
@@ -151,6 +176,11 @@ public class Curriculum implements Serializable {
             ", website='" + website + "'" +
             ", creationDate='" + creationDate + "'" +
             ", modificationDate='" + modificationDate + "'" +
+            ", file='" + file + "'" +
+            ", fileContentType='" + fileContentType + "'" +
+            ", statement='" + statement + "'" +
+            ", vision='" + vision + "'" +
+            ", mission='" + mission + "'" +
             '}';
     }
 }

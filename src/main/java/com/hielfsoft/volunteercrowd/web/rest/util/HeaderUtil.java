@@ -3,7 +3,7 @@ package com.hielfsoft.volunteercrowd.web.rest.util;
 import org.springframework.http.HttpHeaders;
 
 /**
- * Utility class for http header creation.
+ * Utility class for HTTP headers creation.
  *
  */
 public class HeaderUtil {

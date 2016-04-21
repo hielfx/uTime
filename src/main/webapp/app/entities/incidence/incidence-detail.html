@@ -1,0 +1,51 @@
+<div>
+    <h2><span translate="volunteercrowdApp.incidence.detail.title">Incidence</span> {{vm.incidence.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span translate="volunteercrowdApp.incidence.creationDate">CreationDate</dt>
+        </dt>
+        <dd>
+            <span>{{vm.incidence.creationDate | date:'medium'}}</span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.incidence.closed">Closed</dt>
+        </dt>
+        <dd>
+            <span>{{vm.incidence.closed}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.incidence.description">Description</dt>
+        </dt>
+        <dd>
+            <span>{{vm.incidence.description}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.incidence.adminComment">AdminComment</dt>
+        </dt>
+        <dd>
+            <span>{{vm.incidence.adminComment}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.incidence.administrator">administrator</span></dt>
+        <dd>
+            <a ui-sref="administrator-detail({id:vm.incidence.administrator.id})">{{vm.incidence.administrator.id}}</a>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.incidence.request">request</span></dt>
+        <dd>
+            <a ui-sref="request-detail({id:vm.incidence.request.id})">{{vm.incidence.request.id}}</a>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.incidence.creator">creator</span></dt>
+        <dd>
+            <a ui-sref="app-user-detail({id:vm.incidence.creator.id})">{{vm.incidence.creator.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

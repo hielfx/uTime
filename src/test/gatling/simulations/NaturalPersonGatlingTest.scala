@@ -42,7 +42,7 @@ class NaturalPersonGatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token")))
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
         .post("/api/authentication")
@@ -50,7 +50,7 @@ class NaturalPersonGatlingTest extends Simulation {
         .formParam("j_username", "admin")
         .formParam("j_password", "admin")
         .formParam("remember-me", "true")
-        .formParam("submit", "Login"))
+        .formParam("submit", "Login")).exitHereIfFailed
         .pause(1)
         .exec(http("Authenticated request")
         .get("/api/account")
@@ -59,17 +59,17 @@ class NaturalPersonGatlingTest extends Simulation {
         .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token")))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all naturalPersons")
-            .get("/api/naturalPersons")
+            exec(http("Get all naturalPeople")
+            .get("/api/natural-people")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new naturalPerson")
-            .post("/api/naturalPersons")
+            .post("/api/natural-people")
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null, "birthDate":"2020-01-01T00:00:00.000Z"}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_naturalPerson_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_naturalPerson_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
                 exec(http("Get created naturalPerson")

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,20 +22,31 @@ import java.util.Set;
 @Document(indexName = "administrator")
 public class Administrator implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne(optional = false)
+    @JoinColumn(unique = true, nullable = false)
     @NotNull
     @Valid
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "administrator")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Incidence> incidences;
+    @Valid
+    private Set<Incidence> incidences = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;
@@ -44,12 +56,12 @@ public class Administrator implements Serializable {
         this.user = user;
     }
 
-    public Long getId() {
-        return id;
+    public Set<Incidence> getIncidences() {
+        return incidences;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIncidences(Set<Incidence> incidences) {
+        this.incidences = incidences;
     }
 
     @Override

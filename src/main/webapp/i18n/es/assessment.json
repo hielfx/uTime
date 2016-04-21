@@ -20,7 +20,8 @@
             "rating": "Rating",
             "comment": "Comment",
             "creator": "Creator",
-            "recipient": "Recipient"
+            "recipient": "Recipient",
+            "payment": "Payment"
         }
     }
 }

@@ -1,23 +1,19 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
-import com.hielfsoft.volunteercrowd.domain.*;
-import com.hielfsoft.volunteercrowd.repository.AbilityRepository;
-import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
+import com.hielfsoft.volunteercrowd.domain.Tag;
 import com.hielfsoft.volunteercrowd.repository.TagRepository;
+import com.hielfsoft.volunteercrowd.repository.search.TagSearchRepository;
 import com.hielfsoft.volunteercrowd.service.TagService;
-
-import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -30,6 +26,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see TagResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class TagResourceIntTest {
@@ -55,13 +52,7 @@ public class TagResourceIntTest {
     private TagService tagService;
 
     @Inject
-    private UserService userService;
-
-    @Inject //TODO: Delete repository and use service
-    private AbilityRepository abilityRepository;
-
-    @Inject //TODO: Delete repository and use service
-    private AppUserRepository appUserRepository;
+    private TagSearchRepository tagSearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -85,48 +76,15 @@ public class TagResourceIntTest {
 
     @Before
     public void initTest() {
+        tagSearchRepository.deleteAll();
         tag = new Tag();
         tag.setText(DEFAULT_TEXT);
-
-        //Added manually
-        User user = userService.getUserWithAuthoritiesByLogin("user").get();
-
-        Ability ability = new Ability();
-        AppUser appUser = new AppUser();
-        appUser.setPhoneNumber("696378275");
-        appUser.setIsOnline(false);
-
-        //Added manually
-        Address address = new Address();
-        address.setAddress("AAAAAA");
-        address.setCity("AAAAAA");
-        address.setCountry("AAAAAA");
-        address.setProvince("AAAAAAA");
-        address.setShowAddress(true);
-        address.setShowCity(true);
-        address.setZipCode("AAAAAA");
-        address.setShowCountry(true);
-        address.setShowProvince(true);
-        address.setShowZipCode(true);
-
-        appUser.setAddress(address);
-        appUser.setUser(user);
-        appUser.setTokens(0);
-        ability.setName("Ability");
-        ability.setHidden(false);
-        ability.setAppUser(appUser);
-        tag.setAbility(ability);
     }
 
     @Test
     @Transactional
     public void createTag() throws Exception {
-
-        appUserRepository.save(tag.getAbility().getAppUser());
-        abilityRepository.save(tag.getAbility());
-
         int databaseSizeBeforeCreate = tagRepository.findAll().size();
-
 
         // Create the Tag
 
@@ -140,6 +98,10 @@ public class TagResourceIntTest {
         assertThat(tags).hasSize(databaseSizeBeforeCreate + 1);
         Tag testTag = tags.get(tags.size() - 1);
         assertThat(testTag.getText()).isEqualTo(DEFAULT_TEXT);
+
+        // Validate the Tag in ElasticSearch
+        Tag tagEs = tagSearchRepository.findOne(testTag.getId());
+        assertThat(tagEs).isEqualToComparingFieldByField(testTag);
     }
 
     @Test
@@ -164,9 +126,6 @@ public class TagResourceIntTest {
     @Transactional
     public void getAllTags() throws Exception {
         // Initialize the database
-        appUserRepository.save(tag.getAbility().getAppUser());
-        abilityRepository.save(tag.getAbility());
-
         tagRepository.saveAndFlush(tag);
 
         // Get all the tags
@@ -181,9 +140,6 @@ public class TagResourceIntTest {
     @Transactional
     public void getTag() throws Exception {
         // Initialize the database
-        appUserRepository.save(tag.getAbility().getAppUser());
-        abilityRepository.save(tag.getAbility());
-
         tagRepository.saveAndFlush(tag);
 
         // Get the tag
@@ -206,19 +162,18 @@ public class TagResourceIntTest {
     @Transactional
     public void updateTag() throws Exception {
         // Initialize the database
-        appUserRepository.save(tag.getAbility().getAppUser());
-        abilityRepository.save(tag.getAbility());
+        tagService.save(tag);
 
-        tagRepository.saveAndFlush(tag);
-
-		int databaseSizeBeforeUpdate = tagRepository.findAll().size();
+        int databaseSizeBeforeUpdate = tagRepository.findAll().size();
 
         // Update the tag
-        tag.setText(UPDATED_TEXT);
+        Tag updatedTag = new Tag();
+        updatedTag.setId(tag.getId());
+        updatedTag.setText(UPDATED_TEXT);
 
         restTagMockMvc.perform(put("/api/tags")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(tag)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedTag)))
                 .andExpect(status().isOk());
 
         // Validate the Tag in the database
@@ -226,26 +181,45 @@ public class TagResourceIntTest {
         assertThat(tags).hasSize(databaseSizeBeforeUpdate);
         Tag testTag = tags.get(tags.size() - 1);
         assertThat(testTag.getText()).isEqualTo(UPDATED_TEXT);
+
+        // Validate the Tag in ElasticSearch
+        Tag tagEs = tagSearchRepository.findOne(testTag.getId());
+        assertThat(tagEs).isEqualToComparingFieldByField(testTag);
     }
 
     @Test
     @Transactional
     public void deleteTag() throws Exception {
         // Initialize the database
-        appUserRepository.save(tag.getAbility().getAppUser());
-        abilityRepository.save(tag.getAbility());
+        tagService.save(tag);
 
-        tagRepository.saveAndFlush(tag);
-
-		int databaseSizeBeforeDelete = tagRepository.findAll().size();
+        int databaseSizeBeforeDelete = tagRepository.findAll().size();
 
         // Get the tag
         restTagMockMvc.perform(delete("/api/tags/{id}", tag.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean tagExistsInEs = tagSearchRepository.exists(tag.getId());
+        assertThat(tagExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Tag> tags = tagRepository.findAll();
         assertThat(tags).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchTag() throws Exception {
+        // Initialize the database
+        tagService.save(tag);
+
+        // Search the tag
+        restTagMockMvc.perform(get("/api/_search/tags?query=id:" + tag.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(tag.getId().intValue())))
+            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())));
     }
 }

@@ -6,15 +6,17 @@
             "otherEntityName": "user",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
-            "ownerSide": true
+            "ownerSide": true,
+            "otherRelationshipName": "appUser"
         },
         {
             "relationshipId": 3,
-            "relationshipName": "followers",
+            "relationshipName": "follower",
             "otherEntityName": "appUser",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
-            "ownerSide": true
+            "ownerSide": true,
+            "otherEntityRelationshipName": "following"
         },
         {
             "relationshipId": 4,
@@ -23,7 +25,7 @@
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": false,
-            "otherEntityRelationshipName": "followers"
+            "otherEntityRelationshipName": "follower"
         },
         {
             "relationshipId": 5,
@@ -45,7 +47,7 @@
         },
         {
             "relationshipId": 7,
-            "relationshipName": "abilities",
+            "relationshipName": "abilitie",
             "otherEntityName": "ability",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -54,7 +56,7 @@
         },
         {
             "relationshipId": 8,
-            "relationshipName": "requests",
+            "relationshipName": "request",
             "otherEntityName": "request",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -63,7 +65,7 @@
         },
         {
             "relationshipId": 9,
-            "relationshipName": "needs",
+            "relationshipName": "need",
             "otherEntityName": "need",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -72,7 +74,7 @@
         },
         {
             "relationshipId": 10,
-            "relationshipName": "createdAssessments",
+            "relationshipName": "createdAssessment",
             "otherEntityName": "assessment",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -81,7 +83,7 @@
         },
         {
             "relationshipId": 11,
-            "relationshipName": "relatedAssessments",
+            "relationshipName": "relatedAssessment",
             "otherEntityName": "assessment",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -90,7 +92,7 @@
         },
         {
             "relationshipId": 12,
-            "relationshipName": "payments",
+            "relationshipName": "payment",
             "otherEntityName": "payment",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -99,7 +101,7 @@
         },
         {
             "relationshipId": 13,
-            "relationshipName": "incidences",
+            "relationshipName": "incidence",
             "otherEntityName": "incidence",
             "relationshipType": "one-to-many",
             "otherEntityField": "id",
@@ -113,7 +115,8 @@
             "fieldName": "phoneNumber",
             "fieldType": "String",
             "fieldValidateRules": [
-                "pattern"
+                "pattern",
+                "required"
             ],
             "fieldValidateRulesPattern": "([+]\\d{2})?\\d{9}",
             "fieldValidateRulesPatternJava": "([+]\\\\d{2})?\\\\d{9}"
@@ -121,14 +124,18 @@
         {
             "fieldId": 2,
             "fieldName": "isOnline",
-            "fieldType": "Boolean"
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 3,
             "fieldName": "tokens",
-            "fieldType": "Intger",
+            "fieldType": "Integer",
             "fieldValidateRules": [
-                "min"
+                "min",
+                "required"
             ],
             "fieldValidateRulesMin": 0
         },
@@ -137,12 +144,6 @@
             "fieldName": "image",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": []
-        },
-        {
-            "fieldId": 5,
-            "fieldName": "address",
-            "fieldType": "String",
             "fieldValidateRules": []
         }
     ],

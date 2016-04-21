@@ -19,7 +19,8 @@
             "amount": "Amount",
             "paymentMoment": "PaymentMoment",
             "request": "Request",
-            "payer": "Payer"
+            "payer": "Payer",
+            "assessment": "Assessment"
         }
     }
 }

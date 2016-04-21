@@ -1,0 +1,109 @@
+<div>
+    <h2 translate="volunteercrowdApp.incidence.home.title">Incidences</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="incidence.new">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs" translate="volunteercrowdApp.incidence.home.createLabel">
+                        Create new Incidence
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right">
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery"
+                               placeholder="{{ 'volunteercrowdApp.incidence.home.search' | translate }}">
+                        <span class="input-group-btn width-min">
+                            <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn width-min" ng-if="vm.currentSearch">
+                            <button class="btn btn-info" ng-click="vm.clear()">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="creationDate"><span
+                    translate="volunteercrowdApp.incidence.creationDate">CreationDate</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="closed"><span translate="volunteercrowdApp.incidence.closed">Closed</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="description"><span
+                    translate="volunteercrowdApp.incidence.description">Description</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="adminComment"><span
+                    translate="volunteercrowdApp.incidence.adminComment">AdminComment</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="administrator.id"><span translate="volunteercrowdApp.incidence.administrator">administrator</span>
+                    <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="request.id"><span translate="volunteercrowdApp.incidence.request">request</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="creator.id"><span translate="volunteercrowdApp.incidence.creator">creator</span> <span
+                    class="glyphicon glyphicon-sort"></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="incidence in vm.incidences track by incidence.id">
+                <td><a ui-sref="incidence-detail({id:incidence.id})">{{incidence.id}}</a></td>
+                <td>{{incidence.creationDate | date:'medium'}}</td>
+                <td>{{incidence.closed}}</td>
+                <td>{{incidence.description}}</td>
+                <td>{{incidence.adminComment}}</td>
+                <td>
+                    <a ui-sref="administrator-detail({id:incidence.administrator.id})">{{incidence.administrator.id}}</a>
+                </td>
+                <td>
+                    <a ui-sref="request-detail({id:incidence.request.id})">{{incidence.request.id}}</a>
+                </td>
+                <td>
+                    <a ui-sref="app-user-detail({id:incidence.creator.id})">{{incidence.creator.id}}</a>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                ui-sref="incidence-detail({id:incidence.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="incidence.edit({id:incidence.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="incidence.delete({id:incidence.id})"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page"
+                        ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>

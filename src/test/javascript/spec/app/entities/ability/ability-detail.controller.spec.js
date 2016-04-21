@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function() {
 
-    describe('Ability Detail Controller', function() {
+    describe('Ability Management Detail Controller', function() {
         var $scope, $rootScope;
         var MockEntity, MockAbility, MockTag, MockAppUser;
         var createController;

@@ -20,10 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Administrator.
@@ -33,12 +29,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class AdministratorResource {
 
     private final Logger log = LoggerFactory.getLogger(AdministratorResource.class);
-        
+
     @Inject
     private AdministratorService administratorService;
-    
+
     /**
-     * POST  /administrators -> Create a new administrator.
+     * POST  /administrators : Create a new administrator.
+     *
+     * @param administrator the administrator to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new administrator, or with status 400 (Bad Request) if the administrator has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/administrators",
         method = RequestMethod.POST,
@@ -56,7 +56,13 @@ public class AdministratorResource {
     }
 
     /**
-     * PUT  /administrators -> Updates an existing administrator.
+     * PUT  /administrators : Updates an existing administrator.
+     *
+     * @param administrator the administrator to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated administrator,
+     * or with status 400 (Bad Request) if the administrator is not valid,
+     * or with status 500 (Internal Server Error) if the administrator couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/administrators",
         method = RequestMethod.PUT,
@@ -74,7 +80,11 @@ public class AdministratorResource {
     }
 
     /**
-     * GET  /administrators -> get all the administrators.
+     * GET  /administrators : get all the administrators.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of administrators in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/administrators",
         method = RequestMethod.GET,
@@ -83,13 +93,16 @@ public class AdministratorResource {
     public ResponseEntity<List<Administrator>> getAllAdministrators(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Administrators");
-        Page<Administrator> page = administratorService.findAll(pageable); 
+        Page<Administrator> page = administratorService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/administrators");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /administrators/:id -> get the "id" administrator.
+     * GET  /administrators/:id : get the "id" administrator.
+     *
+     * @param id the id of the administrator to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the administrator, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/administrators/{id}",
         method = RequestMethod.GET,
@@ -106,7 +119,10 @@ public class AdministratorResource {
     }
 
     /**
-     * DELETE  /administrators/:id -> delete the "id" administrator.
+     * DELETE  /administrators/:id : delete the "id" administrator.
+     *
+     * @param id the id of the administrator to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/administrators/{id}",
         method = RequestMethod.DELETE,
@@ -119,15 +135,22 @@ public class AdministratorResource {
     }
 
     /**
-     * SEARCH  /_search/administrators/:query -> search for the administrator corresponding
+     * SEARCH  /_search/administrators?query=:query : search for the administrator corresponding
      * to the query.
+     *
+     * @param query the query of the administrator search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/administrators/{query:.+}",
+    @RequestMapping(value = "/_search/administrators",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Administrator> searchAdministrators(@PathVariable String query) {
-        log.debug("Request to search Administrators for query {}", query);
-        return administratorService.search(query);
+    public ResponseEntity<List<Administrator>> searchAdministrators(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Administrators for query {}", query);
+        Page<Administrator> page = administratorService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/administrators");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

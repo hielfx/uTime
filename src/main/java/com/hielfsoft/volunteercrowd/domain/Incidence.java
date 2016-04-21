@@ -1,6 +1,5 @@
 package com.hielfsoft.volunteercrowd.domain;
 
-import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotBlank;
@@ -22,50 +21,44 @@ import java.util.Objects;
 @Document(indexName = "incidence")
 public class Incidence implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Past
-    @Column(name = "creation_date")
+    @NotNull
+    @Column(name = "creation_date", nullable = false)
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime creationDate;
 
-    @Column(name = "closed")
+    @NotNull
+    @Column(name = "closed", nullable = false)
     private Boolean closed;
 
     @NotNull
-    @NotBlank
     @Column(name = "description", nullable = false)
+    @NotBlank
     private String description;
 
-    //    @NotNull
-    @Column(name = "admin_comment"/*, nullable = false*/)//When the incidence is created there is no admin comment yet.
-    private String adminComment;                         //When the admin reviews the incidence is when the comment is set
+    @Column(name = "admin_comment")
+    private String adminComment;
 
     @ManyToOne
     @Valid
-    @JoinColumn(name = "administrator_id")
     private Administrator administrator;
 
-    @ManyToOne
-    @JoinColumn(name = "request_id", nullable = false)
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
+    @JoinColumn(nullable = false)
     private Request request;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "creator_id", nullable = false)
     @NotNull
     @Valid
+    @JoinColumn(nullable = false)
     private AppUser creator;
-
-    public AppUser getCreator() {
-        return creator;
-    }
-
-    public void setCreator(AppUser creator) {
-        this.creator = creator;
-    }
 
     public Long getId() {
         return id;
@@ -83,7 +76,7 @@ public class Incidence implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public Boolean getClosed() {
+    public Boolean isClosed() {
         return closed;
     }
 
@@ -121,6 +114,14 @@ public class Incidence implements Serializable {
 
     public void setRequest(Request request) {
         this.request = request;
+    }
+
+    public AppUser getCreator() {
+        return creator;
+    }
+
+    public void setCreator(AppUser appUser) {
+        this.creator = appUser;
     }
 
     @Override

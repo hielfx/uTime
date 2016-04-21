@@ -1,15 +1,10 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
-import com.hielfsoft.volunteercrowd.domain.Address;
-import com.hielfsoft.volunteercrowd.domain.AppUser;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.LegalEntity;
-import com.hielfsoft.volunteercrowd.domain.User;
-import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
 import com.hielfsoft.volunteercrowd.repository.LegalEntityRepository;
-import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.repository.search.LegalEntitySearchRepository;
 import com.hielfsoft.volunteercrowd.service.LegalEntityService;
-import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see LegalEntityResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class LegalEntityResourceIntTest {
@@ -53,8 +46,8 @@ public class LegalEntityResourceIntTest {
     private static final String UPDATED_MISSION = "BBBBB";
     private static final String DEFAULT_VISION = "AAAAA";
     private static final String UPDATED_VISION = "BBBBB";
-    private static final String DEFAULT_WEBSITE = "http://www.google.es";
-    private static final String UPDATED_WEBSITE = "http://www.google.com";
+    private static final String DEFAULT_WEBSITE = "AAAAA";
+    private static final String UPDATED_WEBSITE = "BBBBB";
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
 
@@ -65,10 +58,7 @@ public class LegalEntityResourceIntTest {
     private LegalEntityService legalEntityService;
 
     @Inject
-    private UserService userService;
-
-    @Inject //TODO: Delete Repository and use service
-    private AppUserRepository appUserRepository;
+    private LegalEntitySearchRepository legalEntitySearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -92,35 +82,12 @@ public class LegalEntityResourceIntTest {
 
     @Before
     public void initTest() {
+        legalEntitySearchRepository.deleteAll();
         legalEntity = new LegalEntity();
         legalEntity.setMission(DEFAULT_MISSION);
         legalEntity.setVision(DEFAULT_VISION);
         legalEntity.setWebsite(DEFAULT_WEBSITE);
         legalEntity.setDescription(DEFAULT_DESCRIPTION);
-        //Added manually
-        AppUser appUser = new AppUser();
-        Address address = new Address();
-        User user = userService.getUserWithAuthoritiesByLogin("user").get();
-
-        address.setAddress("AAAAAA");
-        address.setCity("AAAAAA");
-        address.setCountry("AAAAAA");
-        address.setProvince("AAAAAAA");
-        address.setShowAddress(true);
-        address.setShowCity(true);
-        address.setZipCode("AAAAAA");
-        address.setShowCountry(true);
-        address.setShowProvince(true);
-        address.setShowZipCode(true);
-
-        appUser.setAddress(address);
-        appUser.setFollowers(new HashSet<AppUser>());
-        appUser.setUser(user);
-        appUser.setFollowing(new HashSet<AppUser>());
-        appUser.setIsOnline(false);
-        appUser.setTokens(0);
-
-        legalEntity.setAppUser(appUser);
     }
 
     @Test
@@ -128,33 +95,53 @@ public class LegalEntityResourceIntTest {
     public void createLegalEntity() throws Exception {
         int databaseSizeBeforeCreate = legalEntityRepository.findAll().size();
 
-        appUserRepository.saveAndFlush(legalEntity.getAppUser()); //Added manually
         // Create the LegalEntity
 
-        restLegalEntityMockMvc.perform(post("/api/legalEntitys")
+        restLegalEntityMockMvc.perform(post("/api/legal-entities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(legalEntity)))
                 .andExpect(status().isCreated());
 
         // Validate the LegalEntity in the database
-        List<LegalEntity> legalEntitys = legalEntityRepository.findAll();
-        assertThat(legalEntitys).hasSize(databaseSizeBeforeCreate + 1);
-        LegalEntity testLegalEntity = legalEntitys.get(legalEntitys.size() - 1);
+        List<LegalEntity> legalEntities = legalEntityRepository.findAll();
+        assertThat(legalEntities).hasSize(databaseSizeBeforeCreate + 1);
+        LegalEntity testLegalEntity = legalEntities.get(legalEntities.size() - 1);
         assertThat(testLegalEntity.getMission()).isEqualTo(DEFAULT_MISSION);
         assertThat(testLegalEntity.getVision()).isEqualTo(DEFAULT_VISION);
         assertThat(testLegalEntity.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
         assertThat(testLegalEntity.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+
+        // Validate the LegalEntity in ElasticSearch
+        LegalEntity legalEntityEs = legalEntitySearchRepository.findOne(testLegalEntity.getId());
+        assertThat(legalEntityEs).isEqualToComparingFieldByField(testLegalEntity);
     }
 
     @Test
     @Transactional
-    public void getAllLegalEntitys() throws Exception {
+    public void checkDescriptionIsRequired() throws Exception {
+        int databaseSizeBeforeTest = legalEntityRepository.findAll().size();
+        // set the field null
+        legalEntity.setDescription(null);
+
+        // Create the LegalEntity, which fails.
+
+        restLegalEntityMockMvc.perform(post("/api/legal-entities")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(legalEntity)))
+                .andExpect(status().isBadRequest());
+
+        List<LegalEntity> legalEntities = legalEntityRepository.findAll();
+        assertThat(legalEntities).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLegalEntities() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(legalEntity.getAppUser()); //Added manually
         legalEntityRepository.saveAndFlush(legalEntity);
 
-        // Get all the legalEntitys
-        restLegalEntityMockMvc.perform(get("/api/legalEntitys?sort=id,desc"))
+        // Get all the legalEntities
+        restLegalEntityMockMvc.perform(get("/api/legal-entities?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(legalEntity.getId().intValue())))
@@ -168,11 +155,10 @@ public class LegalEntityResourceIntTest {
     @Transactional
     public void getLegalEntity() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(legalEntity.getAppUser()); //Added manually
         legalEntityRepository.saveAndFlush(legalEntity);
 
         // Get the legalEntity
-        restLegalEntityMockMvc.perform(get("/api/legalEntitys/{id}", legalEntity.getId()))
+        restLegalEntityMockMvc.perform(get("/api/legal-entities/{id}", legalEntity.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(legalEntity.getId().intValue()))
@@ -186,7 +172,7 @@ public class LegalEntityResourceIntTest {
     @Transactional
     public void getNonExistingLegalEntity() throws Exception {
         // Get the legalEntity
-        restLegalEntityMockMvc.perform(get("/api/legalEntitys/{id}", Long.MAX_VALUE))
+        restLegalEntityMockMvc.perform(get("/api/legal-entities/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -194,48 +180,73 @@ public class LegalEntityResourceIntTest {
     @Transactional
     public void updateLegalEntity() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(legalEntity.getAppUser()); //Added manually
-        legalEntityRepository.saveAndFlush(legalEntity);
+        legalEntityService.save(legalEntity);
 
-		int databaseSizeBeforeUpdate = legalEntityRepository.findAll().size();
+        int databaseSizeBeforeUpdate = legalEntityRepository.findAll().size();
 
         // Update the legalEntity
-        legalEntity.setMission(UPDATED_MISSION);
-        legalEntity.setVision(UPDATED_VISION);
-        legalEntity.setWebsite(UPDATED_WEBSITE);
-        legalEntity.setDescription(UPDATED_DESCRIPTION);
+        LegalEntity updatedLegalEntity = new LegalEntity();
+        updatedLegalEntity.setId(legalEntity.getId());
+        updatedLegalEntity.setMission(UPDATED_MISSION);
+        updatedLegalEntity.setVision(UPDATED_VISION);
+        updatedLegalEntity.setWebsite(UPDATED_WEBSITE);
+        updatedLegalEntity.setDescription(UPDATED_DESCRIPTION);
 
-        restLegalEntityMockMvc.perform(put("/api/legalEntitys")
+        restLegalEntityMockMvc.perform(put("/api/legal-entities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(legalEntity)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedLegalEntity)))
                 .andExpect(status().isOk());
 
         // Validate the LegalEntity in the database
-        List<LegalEntity> legalEntitys = legalEntityRepository.findAll();
-        assertThat(legalEntitys).hasSize(databaseSizeBeforeUpdate);
-        LegalEntity testLegalEntity = legalEntitys.get(legalEntitys.size() - 1);
+        List<LegalEntity> legalEntities = legalEntityRepository.findAll();
+        assertThat(legalEntities).hasSize(databaseSizeBeforeUpdate);
+        LegalEntity testLegalEntity = legalEntities.get(legalEntities.size() - 1);
         assertThat(testLegalEntity.getMission()).isEqualTo(UPDATED_MISSION);
         assertThat(testLegalEntity.getVision()).isEqualTo(UPDATED_VISION);
         assertThat(testLegalEntity.getWebsite()).isEqualTo(UPDATED_WEBSITE);
         assertThat(testLegalEntity.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+
+        // Validate the LegalEntity in ElasticSearch
+        LegalEntity legalEntityEs = legalEntitySearchRepository.findOne(testLegalEntity.getId());
+        assertThat(legalEntityEs).isEqualToComparingFieldByField(testLegalEntity);
     }
 
     @Test
     @Transactional
     public void deleteLegalEntity() throws Exception {
         // Initialize the database
-        appUserRepository.saveAndFlush(legalEntity.getAppUser()); //Added manually
-        legalEntityRepository.saveAndFlush(legalEntity);
+        legalEntityService.save(legalEntity);
 
-		int databaseSizeBeforeDelete = legalEntityRepository.findAll().size();
+        int databaseSizeBeforeDelete = legalEntityRepository.findAll().size();
 
         // Get the legalEntity
-        restLegalEntityMockMvc.perform(delete("/api/legalEntitys/{id}", legalEntity.getId())
+        restLegalEntityMockMvc.perform(delete("/api/legal-entities/{id}", legalEntity.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean legalEntityExistsInEs = legalEntitySearchRepository.exists(legalEntity.getId());
+        assertThat(legalEntityExistsInEs).isFalse();
+
         // Validate the database is empty
-        List<LegalEntity> legalEntitys = legalEntityRepository.findAll();
-        assertThat(legalEntitys).hasSize(databaseSizeBeforeDelete - 1);
+        List<LegalEntity> legalEntities = legalEntityRepository.findAll();
+        assertThat(legalEntities).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchLegalEntity() throws Exception {
+        // Initialize the database
+        legalEntityService.save(legalEntity);
+
+        // Search the legalEntity
+        restLegalEntityMockMvc.perform(get("/api/_search/legal-entities?query=id:" + legalEntity.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(legalEntity.getId().intValue())))
+            .andExpect(jsonPath("$.[*].mission").value(hasItem(DEFAULT_MISSION.toString())))
+            .andExpect(jsonPath("$.[*].vision").value(hasItem(DEFAULT_VISION.toString())))
+            .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
 }

@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function() {
 
-    describe('Curriculum Detail Controller', function() {
+    describe('Curriculum Management Detail Controller', function() {
         var $scope, $rootScope;
         var MockEntity, MockCurriculum, MockNaturalPerson;
         var createController;

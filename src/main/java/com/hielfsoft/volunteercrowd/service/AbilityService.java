@@ -7,16 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Ability.
@@ -26,15 +22,17 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class AbilityService {
 
     private final Logger log = LoggerFactory.getLogger(AbilityService.class);
-    
+
     @Inject
     private AbilityRepository abilityRepository;
-    
+
     @Inject
     private AbilitySearchRepository abilitySearchRepository;
-    
+
     /**
      * Save a ability.
+     *
+     * @param ability the entity to save
      * @return the persisted entity
      */
     public Ability save(Ability ability) {
@@ -45,21 +43,25 @@ public class AbilityService {
     }
 
     /**
-     *  get all the abilitys.
+     *  Get all the abilities.
+     *
+     *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Page<Ability> findAll(Pageable pageable) {
-        log.debug("Request to get all Abilitys");
-        Page<Ability> result = abilityRepository.findAll(pageable); 
+        log.debug("Request to get all Abilities");
+        Page<Ability> result = abilityRepository.findAll(pageable);
         return result;
     }
 
     /**
-     *  get one ability by id.
+     *  Get one ability by id.
+     *
+     *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Ability findOne(Long id) {
         log.debug("Request to get Ability : {}", id);
         Ability ability = abilityRepository.findOne(id);
@@ -67,7 +69,9 @@ public class AbilityService {
     }
 
     /**
-     *  delete the  ability by id.
+     *  Delete the  ability by id.
+     *
+     *  @param id the id of the entity
      */
     public void delete(Long id) {
         log.debug("Request to delete Ability : {}", id);
@@ -76,15 +80,14 @@ public class AbilityService {
     }
 
     /**
-     * search for the ability corresponding
-     * to the query.
+     * Search for the ability corresponding to the query.
+     *
+     *  @param query the query of the search
+     *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
-    public List<Ability> search(String query) {
-        
-        log.debug("REST request to search Abilitys for query {}", query);
-        return StreamSupport
-            .stream(abilitySearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<Ability> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Abilities for query {}", query);
+        return abilitySearchRepository.search(queryStringQuery(query), pageable);
     }
 }

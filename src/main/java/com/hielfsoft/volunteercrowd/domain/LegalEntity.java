@@ -10,8 +10,6 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -23,31 +21,31 @@ import java.util.Objects;
 @Document(indexName = "legalentity")
 public class LegalEntity implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    @Column(name = "mission", nullable = false)
+    @Column(name = "mission")
     private String mission;
 
-    @NotNull
-    @Column(name = "vision", nullable = false)
+    @Column(name = "vision")
     private String vision;
 
-    @NotNull
+    @Column(name = "website")
     @URL
-    @Column(name = "website", nullable = false)
     private String website;
 
+    @NotNull
+    @Column(name = "description", nullable = false)
     @NotBlank
-    @Column(name = "description")
     private String description;
 
+    @OneToOne(optional = false)
+    @JoinColumn(unique = true, nullable = false)
     @NotNull
-    @OneToOne
     @Valid
-    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     public Long getId() {

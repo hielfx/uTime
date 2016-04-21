@@ -1,0 +1,28 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.availability.detail.title">Availability</span> {{vm.availability.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span translate="volunteercrowdApp.availability.startMoment">StartMoment</dt></dt>
+        <dd>
+            <span>{{vm.availability.startMoment | date:'medium'}}</span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.availability.endMoment">EndMoment</dt></dt>
+        <dd>
+            <span>{{vm.availability.endMoment | date:'medium'}}</span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.availability.need">need</span></dt>
+        <dd>
+            <a ui-sref="need-detail({id:vm.availability.need.id})">{{vm.availability.need.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

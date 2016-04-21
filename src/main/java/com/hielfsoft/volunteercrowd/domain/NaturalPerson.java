@@ -1,6 +1,5 @@
 package com.hielfsoft.volunteercrowd.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -8,7 +7,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -22,31 +20,32 @@ import java.util.Objects;
 @Document(indexName = "naturalperson")
 public class NaturalPerson implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
     @Column(name = "birth_date", nullable = false)
-    @Past
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime birthDate;
 
-    @OneToOne
-    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name="gender", nullable = false)
     @Valid
-    @JoinColumn(name = "gender", nullable = false)
+    @NotNull
     private Gender gender;
 
-    @OneToOne
-    @Valid
+    @OneToOne(optional = false)
+    @JoinColumn(unique = true, nullable = false)
     @NotNull
-    @JoinColumn(name = "app_user_id", nullable = false)
+    @Valid
     private AppUser appUser;
 
     @OneToOne
+    @JoinColumn(unique = true)
     @Valid
-//    @JsonBackReference
-    @JsonManagedReference
     private Curriculum curriculum;
 
     public Long getId() {

@@ -1,0 +1,24 @@
+{
+    "volunteercrowdApp": {
+        "availability" : {
+            "home": {
+                "title": "Availabilities",
+                "createLabel": "Crear nuevo Availability",
+                "createOrEditLabel": "Crear o editar Availability",
+                "search": "Search for Availability"
+            },
+            "created": "Un nuevo Availability ha sido creado con el identificador {{ param }}",
+            "updated": "Un Availability ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Availability ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Availability {{ id }}?"
+            },
+            "detail": {
+                "title": "Availability"
+            },
+            "startMoment": "StartMoment",
+            "endMoment": "EndMoment",
+            "need": "Need"
+        }
+    }
+}

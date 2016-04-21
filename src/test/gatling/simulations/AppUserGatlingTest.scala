@@ -42,7 +42,7 @@ class AppUserGatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token")))
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
         .post("/api/authentication")
@@ -50,7 +50,7 @@ class AppUserGatlingTest extends Simulation {
         .formParam("j_username", "admin")
         .formParam("j_password", "admin")
         .formParam("remember-me", "true")
-        .formParam("submit", "Login"))
+        .formParam("submit", "Login")).exitHereIfFailed
         .pause(1)
         .exec(http("Authenticated request")
         .get("/api/account")
@@ -60,16 +60,16 @@ class AppUserGatlingTest extends Simulation {
         .pause(10)
         .repeat(2) {
             exec(http("Get all appUsers")
-            .get("/api/appUsers")
+            .get("/api/app-users")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new appUser")
-            .post("/api/appUsers")
+            .post("/api/app-users")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "phoneNumber":"SAMPLE_TEXT", "isOnline":null}""")).asJSON
+            .body(StringBody("""{"id":null, "phoneNumber":"SAMPLE_TEXT", "isOnline":null, "tokens":"0", "image":null}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_appUser_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_appUser_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
                 exec(http("Get created appUser")

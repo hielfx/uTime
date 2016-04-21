@@ -13,6 +13,30 @@
             "otherEntityName": "need",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "payment",
+            "otherEntityName": "payment",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "request"
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "incidence",
+            "otherEntityName": "incidence",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "request"
+        },
+        {
+            "relationshipId": 5,
+            "relationshipName": "requestStatus",
+            "otherEntityName": "requestStatus",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "fields": [
@@ -28,18 +52,25 @@
             "fieldId": 2,
             "fieldName": "description",
             "fieldType": "String",
-            "fieldValidateRules": []
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 3,
             "fieldName": "code",
             "fieldType": "String",
-            "fieldValidateRules": []
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 4,
             "fieldName": "finishDate",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 5,
@@ -56,7 +87,7 @@
             "fieldValidateRules":[
                 "required"
             ]
-        }
+        },
         {
             "fieldId": 7,
             "fieldName": "modificationDate",

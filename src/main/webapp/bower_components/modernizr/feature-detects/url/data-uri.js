@@ -8,7 +8,7 @@
   "async": true,
   "notes": [{
     "name": "Wikipedia article",
-    "href": "http://en.wikipedia.org/wiki/Data_URI_scheme"
+    "href": "https://en.wikipedia.org/wiki/Data_URI_scheme"
   }],
   "warnings": ["Support in Internet Explorer 8 is limited to images and linked resources like CSS files, not HTML files"]
 }
@@ -60,12 +60,12 @@ define(['Modernizr', 'addTest'], function(Modernizr, addTest) {
 
       datauriBig.onerror = function() {
         addTest('datauri', true);
-        Modernizr.datauri = new Boolean(true);
+        Modernizr.datauri = Boolean(true);
         Modernizr.datauri.over32kb = false;
       };
       datauriBig.onload = function() {
         addTest('datauri', true);
-        Modernizr.datauri = new Boolean(true);
+        Modernizr.datauri = Boolean(true);
         Modernizr.datauri.over32kb = (datauriBig.width == 1 && datauriBig.height == 1);
       };
 

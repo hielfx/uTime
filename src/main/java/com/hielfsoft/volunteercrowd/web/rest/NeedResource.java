@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Need.
@@ -34,12 +30,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class NeedResource {
 
     private final Logger log = LoggerFactory.getLogger(NeedResource.class);
-        
+
     @Inject
     private NeedService needService;
-    
+
     /**
-     * POST  /needs -> Create a new need.
+     * POST  /needs : Create a new need.
+     *
+     * @param need the need to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new need, or with status 400 (Bad Request) if the need has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/needs",
         method = RequestMethod.POST,
@@ -57,7 +57,13 @@ public class NeedResource {
     }
 
     /**
-     * PUT  /needs -> Updates an existing need.
+     * PUT  /needs : Updates an existing need.
+     *
+     * @param need the need to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated need,
+     * or with status 400 (Bad Request) if the need is not valid,
+     * or with status 500 (Internal Server Error) if the need couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/needs",
         method = RequestMethod.PUT,
@@ -75,7 +81,11 @@ public class NeedResource {
     }
 
     /**
-     * GET  /needs -> get all the needs.
+     * GET  /needs : get all the needs.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of needs in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/needs",
         method = RequestMethod.GET,
@@ -84,13 +94,16 @@ public class NeedResource {
     public ResponseEntity<List<Need>> getAllNeeds(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Needs");
-        Page<Need> page = needService.findAll(pageable); 
+        Page<Need> page = needService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/needs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /needs/:id -> get the "id" need.
+     * GET  /needs/:id : get the "id" need.
+     *
+     * @param id the id of the need to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the need, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/needs/{id}",
         method = RequestMethod.GET,
@@ -107,7 +120,10 @@ public class NeedResource {
     }
 
     /**
-     * DELETE  /needs/:id -> delete the "id" need.
+     * DELETE  /needs/:id : delete the "id" need.
+     *
+     * @param id the id of the need to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/needs/{id}",
         method = RequestMethod.DELETE,
@@ -120,15 +136,22 @@ public class NeedResource {
     }
 
     /**
-     * SEARCH  /_search/needs/:query -> search for the need corresponding
+     * SEARCH  /_search/needs?query=:query : search for the need corresponding
      * to the query.
+     *
+     * @param query the query of the need search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/needs/{query:.+}",
+    @RequestMapping(value = "/_search/needs",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Need> searchNeeds(@PathVariable String query) {
-        log.debug("Request to search Needs for query {}", query);
-        return needService.search(query);
+    public ResponseEntity<List<Need>> searchNeeds(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Needs for query {}", query);
+        Page<Need> page = needService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/needs");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

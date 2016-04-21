@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing NeededAbility.
@@ -34,14 +30,18 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class NeededAbilityResource {
 
     private final Logger log = LoggerFactory.getLogger(NeededAbilityResource.class);
-        
+
     @Inject
     private NeededAbilityService neededAbilityService;
-    
+
     /**
-     * POST  /neededAbilitys -> Create a new neededAbility.
+     * POST  /needed-abilities : Create a new neededAbility.
+     *
+     * @param neededAbility the neededAbility to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new neededAbility, or with status 400 (Bad Request) if the neededAbility has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/neededAbilitys",
+    @RequestMapping(value = "/needed-abilities",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -51,15 +51,21 @@ public class NeededAbilityResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("neededAbility", "idexists", "A new neededAbility cannot already have an ID")).body(null);
         }
         NeededAbility result = neededAbilityService.save(neededAbility);
-        return ResponseEntity.created(new URI("/api/neededAbilitys/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/needed-abilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("neededAbility", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /neededAbilitys -> Updates an existing neededAbility.
+     * PUT  /needed-abilities : Updates an existing neededAbility.
+     *
+     * @param neededAbility the neededAbility to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated neededAbility,
+     * or with status 400 (Bad Request) if the neededAbility is not valid,
+     * or with status 500 (Internal Server Error) if the neededAbility couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/neededAbilitys",
+    @RequestMapping(value = "/needed-abilities",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -75,24 +81,31 @@ public class NeededAbilityResource {
     }
 
     /**
-     * GET  /neededAbilitys -> get all the neededAbilitys.
+     * GET  /needed-abilities : get all the neededAbilities.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of neededAbilities in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
-    @RequestMapping(value = "/neededAbilitys",
+    @RequestMapping(value = "/needed-abilities",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<NeededAbility>> getAllNeededAbilitys(Pageable pageable)
+    public ResponseEntity<List<NeededAbility>> getAllNeededAbilities(Pageable pageable)
         throws URISyntaxException {
-        log.debug("REST request to get a page of NeededAbilitys");
-        Page<NeededAbility> page = neededAbilityService.findAll(pageable); 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/neededAbilitys");
+        log.debug("REST request to get a page of NeededAbilities");
+        Page<NeededAbility> page = neededAbilityService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/needed-abilities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /neededAbilitys/:id -> get the "id" neededAbility.
+     * GET  /needed-abilities/:id : get the "id" neededAbility.
+     *
+     * @param id the id of the neededAbility to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the neededAbility, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/neededAbilitys/{id}",
+    @RequestMapping(value = "/needed-abilities/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -107,9 +120,12 @@ public class NeededAbilityResource {
     }
 
     /**
-     * DELETE  /neededAbilitys/:id -> delete the "id" neededAbility.
+     * DELETE  /needed-abilities/:id : delete the "id" neededAbility.
+     *
+     * @param id the id of the neededAbility to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/neededAbilitys/{id}",
+    @RequestMapping(value = "/needed-abilities/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -120,15 +136,22 @@ public class NeededAbilityResource {
     }
 
     /**
-     * SEARCH  /_search/neededAbilitys/:query -> search for the neededAbility corresponding
+     * SEARCH  /_search/needed-abilities?query=:query : search for the neededAbility corresponding
      * to the query.
+     *
+     * @param query the query of the neededAbility search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/neededAbilitys/{query:.+}",
+    @RequestMapping(value = "/_search/needed-abilities",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<NeededAbility> searchNeededAbilitys(@PathVariable String query) {
-        log.debug("Request to search NeededAbilitys for query {}", query);
-        return neededAbilityService.search(query);
+    public ResponseEntity<List<NeededAbility>> searchNeededAbilities(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of NeededAbilities for query {}", query);
+        Page<NeededAbility> page = neededAbilityService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/needed-abilities");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

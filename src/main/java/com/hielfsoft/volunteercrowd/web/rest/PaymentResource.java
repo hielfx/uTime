@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Payment.
@@ -34,12 +30,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class PaymentResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentResource.class);
-        
+
     @Inject
     private PaymentService paymentService;
-    
+
     /**
-     * POST  /payments -> Create a new payment.
+     * POST  /payments : Create a new payment.
+     *
+     * @param payment the payment to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new payment, or with status 400 (Bad Request) if the payment has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/payments",
         method = RequestMethod.POST,
@@ -57,7 +57,13 @@ public class PaymentResource {
     }
 
     /**
-     * PUT  /payments -> Updates an existing payment.
+     * PUT  /payments : Updates an existing payment.
+     *
+     * @param payment the payment to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated payment,
+     * or with status 400 (Bad Request) if the payment is not valid,
+     * or with status 500 (Internal Server Error) if the payment couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/payments",
         method = RequestMethod.PUT,
@@ -75,22 +81,35 @@ public class PaymentResource {
     }
 
     /**
-     * GET  /payments -> get all the payments.
+     * GET  /payments : get all the payments.
+     *
+     * @param pageable the pagination information
+     * @param filter the filter of the request
+     * @return the ResponseEntity with status 200 (OK) and the list of payments in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/payments",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Payment>> getAllPayments(Pageable pageable)
+    public ResponseEntity<List<Payment>> getAllPayments(Pageable pageable, @RequestParam(required = false) String filter)
         throws URISyntaxException {
+        if ("assessment-is-null".equals(filter)) {
+            log.debug("REST request to get all Payments where assessment is null");
+            return new ResponseEntity<>(paymentService.findAllWhereAssessmentIsNull(),
+                    HttpStatus.OK);
+        }
         log.debug("REST request to get a page of Payments");
-        Page<Payment> page = paymentService.findAll(pageable); 
+        Page<Payment> page = paymentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/payments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /payments/:id -> get the "id" payment.
+     * GET  /payments/:id : get the "id" payment.
+     *
+     * @param id the id of the payment to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the payment, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/payments/{id}",
         method = RequestMethod.GET,
@@ -107,7 +126,10 @@ public class PaymentResource {
     }
 
     /**
-     * DELETE  /payments/:id -> delete the "id" payment.
+     * DELETE  /payments/:id : delete the "id" payment.
+     *
+     * @param id the id of the payment to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/payments/{id}",
         method = RequestMethod.DELETE,
@@ -120,15 +142,22 @@ public class PaymentResource {
     }
 
     /**
-     * SEARCH  /_search/payments/:query -> search for the payment corresponding
+     * SEARCH  /_search/payments?query=:query : search for the payment corresponding
      * to the query.
+     *
+     * @param query the query of the payment search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/payments/{query:.+}",
+    @RequestMapping(value = "/_search/payments",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Payment> searchPayments(@PathVariable String query) {
-        log.debug("Request to search Payments for query {}", query);
-        return paymentService.search(query);
+    public ResponseEntity<List<Payment>> searchPayments(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Payments for query {}", query);
+        Page<Payment> page = paymentService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/payments");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

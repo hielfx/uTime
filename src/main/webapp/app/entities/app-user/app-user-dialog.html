@@ -1,0 +1,107 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myAppUserLabel" translate="volunteercrowdApp.appUser.home.createOrEditLabel">Create or edit a AppUser</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.appUser.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.appUser.phoneNumber" for="field_phoneNumber">PhoneNumber</label>
+            <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                    ng-model="vm.appUser.phoneNumber"
+                    required ng-pattern="/([+]\d{2})?\d{9}/" />
+            <div ng-show="editForm.phoneNumber.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.phoneNumber.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.phoneNumber.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="([+]\d{2})?\d{9}">
+                    This field should follow pattern "([+]\d{2})?\d{9}".
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.appUser.isOnline" for="field_isOnline">IsOnline</label>
+            <input type="checkbox" class="form-control" name="isOnline" id="field_isOnline"
+                    ng-model="vm.appUser.isOnline"
+                     />
+            <div ng-show="editForm.isOnline.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.isOnline.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.appUser.tokens" for="field_tokens">Tokens</label>
+            <input type="number" class="form-control" name="tokens" id="field_tokens"
+                    ng-model="vm.appUser.tokens"
+                    required min="0" />
+            <div ng-show="editForm.tokens.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.tokens.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.tokens.$error.min" translate="entity.validation.min" translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.tokens.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group" ngf-drop ngf-change="vm.setImage($file, vm.appUser)" ngf-pattern="'image/*'">
+            <label class="control-label" translate="volunteercrowdApp.appUser.image" for="field_image">Image</label>
+            <div>
+                <img data-ng-src="{{'data:' + vm.appUser.imageContentType + ';base64,' + vm.appUser.image}}" style="max-height: 100px;" ng-if="vm.appUser.image"/>
+                <div class="help-block clearfix">
+                    <span class="pull-left">{{vm.appUser.imageContentType}}, {{byteSize(vm.appUser.image)}}</span>
+                    <button ng-click="vm.appUser.image=null;vm.appUser.imageContentType=null;"
+                            ng-if="vm.appUser.image"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <button type="file" ngf-select class="btn btn-default btn-block"
+                        ngf-change="vm.setImage($file, vm.appUser)" accept="image/*" translate="entity.action.addimage">
+                    Add image
+                </button>
+            </div>
+            <input type="hidden" class="form-control" name="image" id="field_image"
+                    ng-model="vm.appUser.image"
+                     />
+            <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType"
+                    ng-model="vm.appUser.imageContentType" />
+        </div>
+
+        <div class="form-group">
+            <label translate="volunteercrowdApp.appUser.user" for="field_user">user</label>
+            <select class="form-control" id="field_user" name="user" ng-model="vm.appUser.user" ng-options="user as user.id for user in vm.users track by user.id">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label translate="volunteercrowdApp.appUser.follower" for="field_follower">follower</label>
+            <select class="form-control" id="field_follower" multiple name="follower" ng-model="vm.appUser.followers" ng-options="appUser as appUser.id for appUser in vm.appusers track by appUser.id"></select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

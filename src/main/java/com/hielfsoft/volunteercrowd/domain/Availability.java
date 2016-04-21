@@ -20,6 +20,8 @@ import java.util.Objects;
 @Document(indexName = "availability")
 public class Availability implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,10 +34,10 @@ public class Availability implements Serializable {
     @Column(name = "end_moment", nullable = false)
     private ZonedDateTime endMoment;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
-    @JoinColumn(name = "need_id")
+    @JoinColumn(nullable = false)
     private Need need;
 
     public Long getId() {
@@ -79,7 +81,7 @@ public class Availability implements Serializable {
             return false;
         }
         Availability availability = (Availability) o;
-        if (availability.id == null || id == null) {
+        if(availability.id == null || id == null) {
             return false;
         }
         return Objects.equals(id, availability.id);

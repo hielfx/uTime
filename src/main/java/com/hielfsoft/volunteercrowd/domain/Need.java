@@ -3,12 +3,12 @@ package com.hielfsoft.volunteercrowd.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -24,44 +24,54 @@ import java.util.Set;
 @Document(indexName = "need")
 public class Need implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
     @Column(name = "title", nullable = false)
+    @NotBlank
     private String title;
 
     @NotNull
     @Column(name = "description", nullable = false)
+    @NotBlank
     private String description;
 
     @NotNull
     @Column(name = "category", nullable = false)
+    @NotBlank
     private String category;
 
-    @Column(name = "deleted", nullable = false)
-    private boolean deleted;
+    @Column(name = "deleted",nullable = false)
+    @NotNull
+    private Boolean deleted;
 
     @NotNull
     @Column(name = "location", nullable = false)
+    @NotBlank
     private String location;
 
-    @Past
-    @Column(name = "creation_date")
+    @NotNull
+    @Column(name = "creation_date", nullable = false)
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime creationDate;
 
-    @Past
-    @Column(name = "modification_date")
+    @NotNull
+    @Column(name = "modification_date", nullable = false)
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime modificationDate;
 
     @Column(name = "completed", nullable = false)
-    private boolean completed;
+    @NotNull
+    private Boolean completed;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     @NotNull
     @Valid
-    @ManyToOne
-    @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
 
     @OneToMany(mappedBy = "need")
@@ -72,23 +82,12 @@ public class Need implements Serializable {
     @OneToMany(mappedBy = "need")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Availability> availability = new HashSet<>();
+    private Set<Availability> availabilities = new HashSet<>();
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public boolean getCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
+    @OneToMany(mappedBy = "need")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Request> requests = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -114,11 +113,19 @@ public class Need implements Serializable {
         this.description = description;
     }
 
-    public boolean getDeleted() {
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -146,6 +153,14 @@ public class Need implements Serializable {
         this.modificationDate = modificationDate;
     }
 
+    public Boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
     public AppUser getAppUser() {
         return appUser;
     }
@@ -158,16 +173,24 @@ public class Need implements Serializable {
         return neededAbilities;
     }
 
-    public void setNeededAbilities(Set<NeededAbility> neededAbilities) {
-        this.neededAbilities = neededAbilities;
+    public void setNeededAbilities(Set<NeededAbility> neededAbilitys) {
+        this.neededAbilities = neededAbilitys;
     }
 
-    public Set<Availability> getAvailability() {
-        return availability;
+    public Set<Availability> getAvailabilities() {
+        return availabilities;
     }
 
-    public void setAvailability(Set<Availability> availability) {
-        this.availability = availability;
+    public void setAvailabilities(Set<Availability> availabilitys) {
+        this.availabilities = availabilitys;
+    }
+
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
     }
 
     @Override
@@ -179,7 +202,7 @@ public class Need implements Serializable {
             return false;
         }
         Need need = (Need) o;
-        if (need.id == null || id == null) {
+        if(need.id == null || id == null) {
             return false;
         }
         return Objects.equals(id, need.id);
@@ -201,6 +224,7 @@ public class Need implements Serializable {
             ", location='" + location + "'" +
             ", creationDate='" + creationDate + "'" +
             ", modificationDate='" + modificationDate + "'" +
+            ", completed='" + completed + "'" +
             '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -8,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -22,6 +22,8 @@ import java.util.Objects;
 @Document(indexName = "payment")
 public class Payment implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -31,33 +33,26 @@ public class Payment implements Serializable {
     @Column(name = "amount", nullable = false)
     private Integer amount;
 
-    @Past
-    @Column(name = "payment_moment")
+    @NotNull
+    @Column(name = "payment_moment", nullable = false)
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime paymentMoment;
 
-    @NotNull
-    @Valid
     @OneToOne
+    @JoinColumn(unique = true)
+    @Valid
     private Request request;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
-    @JoinColumn(name = "payer_id")
+    @JoinColumn(nullable = false)
     private AppUser payer;
 
     @OneToOne(mappedBy = "payment")
+    @JsonIgnore
     @Valid
-    @JoinColumn(name = "assessment_id")
     private Assessment assessment;
-
-    public Assessment getAssessment() {
-        return assessment;
-    }
-
-    public void setAssessment(Assessment assessment) {
-        this.assessment = assessment;
-    }
 
     public Long getId() {
         return id;
@@ -97,6 +92,14 @@ public class Payment implements Serializable {
 
     public void setPayer(AppUser appUser) {
         this.payer = appUser;
+    }
+
+    public Assessment getAssessment() {
+        return assessment;
+    }
+
+    public void setAssessment(Assessment assessment) {
+        this.assessment = assessment;
     }
 
     @Override

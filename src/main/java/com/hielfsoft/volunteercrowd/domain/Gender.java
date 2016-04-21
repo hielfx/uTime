@@ -2,6 +2,7 @@ package com.hielfsoft.volunteercrowd.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class Gender implements Serializable{
     @NotNull
     @Size(min=0,max=50)
     @Column(length=50)
+    @NotBlank
     private String name;
 
     public String getName() {

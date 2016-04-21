@@ -1,0 +1,12 @@
+version: '2'
+services:
+    volunteercrowd-postgresql:
+        container_name: volunteercrowd-postgresql
+        image: postgres:9.5.1
+        # volumes:
+        #     - ~/volumes/jhipster/Volunteercrowd/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=Volunteercrowd
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

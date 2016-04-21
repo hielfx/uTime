@@ -1,8 +1,8 @@
 package com.hielfsoft.volunteercrowd.domain;
 
+import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -24,12 +23,15 @@ import java.util.Objects;
 @Document(indexName = "assessment")
 public class Assessment implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    @Column(name = "creation_moment", nullable = false)
     @Past
-    @Column(name = "creation_moment")
     private ZonedDateTime creationMoment;
 
     @NotNull
@@ -39,35 +41,26 @@ public class Assessment implements Serializable {
     private Integer rating;
 
     @NotNull
-    @NotBlank
     @Column(name = "comment", nullable = false)
     private String comment;
 
-    @ManyToOne
-    @NotNull
+    @ManyToOne(optional = false)
     @Valid
-    @JoinColumn(name = "creator_id")
+    @NotNull
+    @JoinColumn(nullable = false)
     private AppUser creator;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
-    @JoinColumn(name = "recipient_id")
+    @JoinColumn(nullable = false)
     private AppUser recipient;
 
     @OneToOne(optional = false)
+    @JoinColumn(unique = true, nullable = false)
     @NotNull
     @Valid
-    @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
 
     public Long getId() {
         return id;
@@ -115,6 +108,14 @@ public class Assessment implements Serializable {
 
     public void setRecipient(AppUser appUser) {
         this.recipient = appUser;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     @Override

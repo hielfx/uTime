@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
@@ -34,6 +31,8 @@ public class AvailabilityService {
 
     /**
      * Save a availability.
+     *
+     * @param availability the entity to save
      * @return the persisted entity
      */
     public Availability save(Availability availability) {
@@ -44,18 +43,22 @@ public class AvailabilityService {
     }
 
     /**
-     *  get all the availabilitys.
+     *  Get all the availabilities.
+     *
+     *  @param pageable the pagination information
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
     public Page<Availability> findAll(Pageable pageable) {
-        log.debug("Request to get all Availabilitys");
+        log.debug("Request to get all Availabilities");
         Page<Availability> result = availabilityRepository.findAll(pageable);
         return result;
     }
 
     /**
-     *  get one availability by id.
+     *  Get one availability by id.
+     *
+     *  @param id the id of the entity
      *  @return the entity
      */
     @Transactional(readOnly = true)
@@ -66,7 +69,9 @@ public class AvailabilityService {
     }
 
     /**
-     *  delete the  availability by id.
+     *  Delete the  availability by id.
+     *
+     *  @param id the id of the entity
      */
     public void delete(Long id) {
         log.debug("Request to delete Availability : {}", id);
@@ -75,15 +80,14 @@ public class AvailabilityService {
     }
 
     /**
-     * search for the availability corresponding
-     * to the query.
+     * Search for the availability corresponding to the query.
+     *
+     *  @param query the query of the search
+     *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public List<Availability> search(String query) {
-
-        log.debug("REST request to search Availabilitys for query {}", query);
-        return StreamSupport
-            .stream(availabilitySearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
+    public Page<Availability> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Availabilities for query {}", query);
+        return availabilitySearchRepository.search(queryStringQuery(query), pageable);
     }
 }

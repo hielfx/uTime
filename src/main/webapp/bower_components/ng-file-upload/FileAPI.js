@@ -275,8 +275,6 @@
 			return attr in input;
 		},
 
-		_support
-
 		/**
 		 * FileAPI (core object)
 		 */
@@ -3477,19 +3475,19 @@
 					}
 					while( (node = node.parentNode) && (node !== document.body) );
 				},
-				
+
 				disableMouseover: false,
 
 				mouseover: function (evt){
 					if (!flash.disableMouseover) {
 						var target = api.event.fix(evt).target;
-	
+
 						if( /input/i.test(target.nodeName) && target.type == 'file' && !target.disabled ){
 							var
 								  state = target.getAttribute(_attr)
 								, wrapper = flash.getWrapper(target)
 							;
-	
+
 							if( api.multiFlash ){
 								// check state:
 								//   i — published
@@ -3502,14 +3500,14 @@
 								else if( state != 'p' ){
 									// set "init" state
 									target.setAttribute(_attr, 'i');
-	
+
 									var dummy = document.createElement('div');
-	
+
 									if( !wrapper ){
 										api.log('[err] FlashAPI.mouseover: js-fileapi-wrapper not found');
 										return;
 									}
-	
+
 									_css(dummy, {
 										  top:    0
 										, left:   0
@@ -3518,21 +3516,21 @@
 										, zIndex: 1e6+'' // set max zIndex
 										, position: 'absolute'
 									});
-	
+
 									wrapper.appendChild(dummy);
 									flash.publish(dummy, api.uid());
-	
+
 									// set "publish" state
 									target.setAttribute(_attr, 'p');
 								}
-	
+
 								return	true;
 							}
 							else if( wrapper ){
 								// Use one flash element
 								var box = _getDimensions(wrapper);
 								_css(flash.getEl(), box);
-	
+
 								// Set current input
 								flash.curInp = target;
 							}
@@ -3545,7 +3543,7 @@
 
 				onEvent: function (evt){
 					var type = evt.type;
-					
+
 					if( type == 'ready' ){
 						try {
 							// set "ready" state
@@ -3634,9 +3632,9 @@
 						_each(files, function (file){
 							api.checkFileObj(file);
 						});
-	
+
 						_files[uid] = files;
-	
+
 						if( document.createEvent ){
 							event = document.createEvent('Event');
 							event.files = files;
@@ -3666,7 +3664,7 @@
 						this.cmdFn(id, name, data, last);
 					}
 				},
-				
+
 				cmdFn: function(id, name, data, last) {
 					try {
 						api.log('(js -> flash).'+name+':', data);
@@ -3729,7 +3727,7 @@
 								callback(evt);
 							});
 						},
-						
+
 						getFiles: function (input, filter, callback){
 							if( callback ){
 								api.filterFiles(api.getFiles(input), filter, callback);
@@ -4041,7 +4039,7 @@
 					}
 					try { el.style[key] = val; } catch (e) {}
 				}
-				
+
 			}
 		}
 
@@ -4163,7 +4161,7 @@
 				, body = document.body
 				, docEl = (el && el.ownerDocument).documentElement
 			;
-			
+
 			function getOffset(obj) {
 			    var left, top;
 			    left = top = 0;
@@ -4177,9 +4175,8 @@
 			        left : left,
 			        top : top
 			    };
-			};
-			
-			return {
+            }
+            return {
 				  top:		getOffset(el).top
 				, left:		getOffset(el).left
 				, width:	el.offsetWidth

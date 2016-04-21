@@ -9,21 +9,21 @@
         },
         {
             "relationshipId": 2,
-            "relationshipName": "neededAbilities",
+            "relationshipName": "neededAbilitie",
             "otherEntityName": "neededAbility",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "need"
         },
         {
             "relationshipId": 3,
-            "relationshipName": "availabilities",
+            "relationshipName": "availabilitie",
             "otherEntityName": "availability",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "need"
         },
         {
             "relationshipId": 4,
-            "relationshipName": "requests",
+            "relationshipName": "request",
             "otherEntityName": "request",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "need"
@@ -48,7 +48,7 @@
         },
         {
             "fieldId": 3,
-            "fieldName": "cathegory",
+            "fieldName": "category",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
@@ -57,7 +57,10 @@
         {
             "fieldId": 4,
             "fieldName": "deleted",
-            "fieldType": "Boolean"
+            "fieldType": "Boolean",
+            "fieldValidaRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 5,
@@ -71,18 +74,25 @@
             "fieldId": 6,
             "fieldName": "creationDate",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": []
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 7,
             "fieldName": "modificationDate",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 8,
             "fieldName": "completed",
-            "fieldType": "boolean",
-            "fieldValidationRules": []
+            "fieldType": "Boolean",
+            "fieldValidationRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20160330090908",

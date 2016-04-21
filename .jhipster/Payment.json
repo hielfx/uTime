@@ -40,7 +40,10 @@
         {
             "fieldId": 2,
             "fieldName": "paymentMoment",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20160330110624",

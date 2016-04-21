@@ -1,7 +1,6 @@
 package com.hielfsoft.volunteercrowd.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hielfsoft.volunteercrowd.validator.Past;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotBlank;
@@ -10,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -26,81 +24,71 @@ import java.util.Set;
 @Document(indexName = "request")
 public class Request implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Past
     @Column(name = "creation_date", nullable = false)
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime creationDate;
 
-    @Column(name = "description")
+    @NotNull
+    @Column(name = "description", nullable = false)
+    @NotBlank
     private String description;
 
     @NotNull
+    @Column(name = "code", nullable = false, unique = true)
     @NotBlank
-    @Size(max=50)
-    @Column(name = "code", nullable = false, unique = true, length = 50)
     private String code;
 
-    @Column(name = "finish_date")
+    @NotNull
+    @Column(name = "finish_date", nullable = false)
     private ZonedDateTime finishDate;
 
+    @NotNull
     @Column(name = "deleted", nullable = false)
-    private boolean deleted=false;
+    private Boolean deleted;
 
+    @NotNull
     @Column(name = "paid", nullable = false)
-    private boolean paid=false;
+    private Boolean paid;
 
-    @Past
     @NotNull
     @Column(name = "modification_date", nullable = false)
+    @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime modificationDate;
 
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
-    @ManyToOne
-    @JoinColumn(name = "applicant_id")
+    @JoinColumn(nullable = false)
     private AppUser applicant;
 
+    @ManyToOne(optional = false)
     @NotNull
-    @ManyToOne
     @Valid
-    @JoinColumn(name="status")
-    private RequestStatus status;
+    @JoinColumn(nullable = false)
+    private Need need;
+
+    @OneToOne(mappedBy = "request")
+    @JsonIgnore
+    @Valid
+    private Payment payment;
 
     @OneToMany(mappedBy = "request")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Incidence> incidences = new HashSet<Incidence>();
+    private Set<Incidence> incidences = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
-    @JoinColumn(name="need_id")
-    private Need need;
-
-    @OneToOne(mappedBy = "request")
-    @Valid
-    @JoinColumn(name="payment_id")
-    private Payment payment;
-
-    public Need getNeed() {
-        return need;
-    }
-
-    public void setNeed(Need need) {
-        this.need = need;
-    }
-
-    public RequestStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(RequestStatus status) {
-        this.status = status;
-    }
+    @JoinColumn(name="status", nullable = false)
+    private RequestStatus requestStatus;
 
     public Long getId() {
         return id;
@@ -142,12 +130,28 @@ public class Request implements Serializable {
         this.finishDate = finishDate;
     }
 
-    public boolean getDeleted() {
+    public Boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
+    }
+
+    public ZonedDateTime getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(ZonedDateTime modificationDate) {
+        this.modificationDate = modificationDate;
     }
 
     public AppUser getApplicant() {
@@ -156,6 +160,38 @@ public class Request implements Serializable {
 
     public void setApplicant(AppUser appUser) {
         this.applicant = appUser;
+    }
+
+    public Need getNeed() {
+        return need;
+    }
+
+    public void setNeed(Need need) {
+        this.need = need;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public Set<Incidence> getIncidences() {
+        return incidences;
+    }
+
+    public void setIncidences(Set<Incidence> incidences) {
+        this.incidences = incidences;
+    }
+
+    public RequestStatus getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(RequestStatus requestStatus) {
+        this.requestStatus = requestStatus;
     }
 
     @Override
@@ -187,6 +223,8 @@ public class Request implements Serializable {
             ", code='" + code + "'" +
             ", finishDate='" + finishDate + "'" +
             ", deleted='" + deleted + "'" +
+            ", paid='" + paid + "'" +
+            ", modificationDate='" + modificationDate + "'" +
             '}';
     }
 }

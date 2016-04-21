@@ -29,7 +29,10 @@
         {
             "fieldId": 4,
             "fieldName": "description",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20160325102836",

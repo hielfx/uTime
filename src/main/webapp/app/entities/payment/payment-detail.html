@@ -1,0 +1,33 @@
+
+<div>
+    <h2><span translate="volunteercrowdApp.payment.detail.title">Payment</span> {{vm.payment.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span translate="volunteercrowdApp.payment.amount">Amount</dt></dt>
+        <dd>
+            <span>{{vm.payment.amount}}<span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.payment.paymentMoment">PaymentMoment</dt></dt>
+        <dd>
+            <span>{{vm.payment.paymentMoment | date:'medium'}}</span>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.payment.request">request</span></dt>
+        <dd>
+            <a ui-sref="request-detail({id:vm.payment.request.id})">{{vm.payment.request.id}}</a>
+        </dd>
+        <hr>
+        <dt><span translate="volunteercrowdApp.payment.payer">payer</span></dt>
+        <dd>
+            <a ui-sref="app-user-detail({id:vm.payment.payer.id})">{{vm.payment.payer.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

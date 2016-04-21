@@ -6,7 +6,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -22,197 +24,99 @@ import java.util.Set;
 @Document(indexName = "appuser")
 public class AppUser implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Pattern(regexp = "([+]\\d{2})?\\d{9}")
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "is_online")
+    @NotNull
+    @Column(name = "is_online", nullable = false)
     private Boolean isOnline;
 
-    @Min(0)
-    @Column(name="tokens")
-    private int tokens;
+    @NotNull
+    @Min(value = 0)
+    @Column(name = "tokens", nullable = false)
+    private Integer tokens;
 
-    // Data types
     @Lob
-    @Column(name="image")
+    @Column(name = "image")
     private byte[] image;
 
-    @AttributeOverrides({
-        @AttributeOverride(name = "showAddress", column = @Column(name = "show_address")),
-        @AttributeOverride(name = "showCity", column = @Column(name = "show_city")),
-        @AttributeOverride(name = "showZipCode", column = @Column(name = "show_zip_code")),
-        @AttributeOverride(name = "showCountry", column = @Column(name = "show_country")),
-        @AttributeOverride(name = "zipCode", column = @Column(name = "zip_code")),
-        @AttributeOverride(name = "showProvince", column = @Column(name = "show_province"))})
+    @Column(name = "image_content_type")
+    private String imageContentType;
+
+    @NotNull
+    @Valid
     private Address address;
 
-    //Relationships
-    @OneToOne
+    @OneToOne(optional = false)
+    @JoinColumn(unique = true, nullable = false)
+    @NotNull
+    @Valid
     private User user;
 
-    @JsonIgnore
     @ManyToMany
-    @JoinTable(
-        name = "following_follower",
-        joinColumns = {@JoinColumn(name = "app_user_following_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "app_user_follower_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AppUser> followers = new HashSet<AppUser>();
+    @JoinTable(name = "app_user_follower",
+               joinColumns = @JoinColumn(name="app_users_id", referencedColumnName="ID"),
+               inverseJoinColumns = @JoinColumn(name="followers_id", referencedColumnName="ID"))
+    private Set<AppUser> followers = new HashSet<>();
 
+    @ManyToMany(mappedBy = "followers")
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-        name = "following_follower",
-        joinColumns = {@JoinColumn(name = "app_user_follower_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "app_user_following_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AppUser> following = new HashSet<AppUser>();
+    private Set<AppUser> followings = new HashSet<>();
 
     @OneToOne(mappedBy = "appUser")
     @JsonIgnore
+    @Valid
     private NaturalPerson naturalPerson;
 
     @OneToOne(mappedBy = "appUser")
     @JsonIgnore
+    @Valid
     private LegalEntity legalEntity;
 
+    @OneToMany(mappedBy = "appUser")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appUser")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Ability> abilities = new HashSet<Ability>();
+    private Set<Ability> abilities = new HashSet<>();
 
+    @OneToMany(mappedBy = "applicant")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Request> requests = new HashSet<Request>();
+    private Set<Request> requests = new HashSet<>();
 
+    @OneToMany(mappedBy = "appUser")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appUser")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Need> needs = new HashSet<Need>();
+    private Set<Need> needs = new HashSet<>();
 
+    @OneToMany(mappedBy = "creator")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Assessment> createdAssessments = new HashSet<Assessment>();
+    private Set<Assessment> createdAssessments = new HashSet<>();
 
+    @OneToMany(mappedBy = "recipient")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipient")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Assessment> relatedAssessments = new HashSet<Assessment>();
+    private Set<Assessment> relatedAssessments = new HashSet<>();
 
+    @OneToMany(mappedBy = "payer")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payer")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Payment> payments = new HashSet<Payment>();
+    private Set<Payment> payments = new HashSet<>();
 
+    @OneToMany(mappedBy = "creator")
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Incidence> incidences = new HashSet<Incidence>();
-
-    //Getters and Setters
-
-    public Set<Incidence> getIncidences() {
-        return incidences;
-    }
-
-    public void setIncidences(Set<Incidence> incidences) {
-        this.incidences = incidences;
-    }
-
-    public Set<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        this.payments = payments;
-    }
-
-    public Set<Assessment> getCreatedAssessments() {
-        return createdAssessments;
-    }
-
-    public void setCreatedAssessments(Set<Assessment> createdAssessments) {
-        this.createdAssessments = createdAssessments;
-    }
-
-    public Set<Assessment> getRelatedAssessments() {
-        return relatedAssessments;
-    }
-
-    public void setRelatedAssessments(Set<Assessment> relatedAssessments) {
-        this.relatedAssessments = relatedAssessments;
-    }
-
-    public Set<Need> getNeeds() {
-        return needs;
-    }
-
-    public void setNeeds(Set<Need> needs) {
-        this.needs = needs;
-    }
-
-    public Set<Ability> getAbilities() {
-        return abilities;
-    }
-
-    public void setAbilities(Set<Ability> abilities) {
-        this.abilities = abilities;
-    }
-
-    public LegalEntity getLegalEntity() {
-        return legalEntity;
-    }
-
-    public void setLegalEntity(LegalEntity legalEntity) {
-        this.legalEntity = legalEntity;
-    }
-
-    public Set<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(Set<Request> requests) {
-        this.requests = requests;
-    }
-
-    public NaturalPerson getNaturalPerson() {
-        return naturalPerson;
-    }
-
-    public void setNaturalPerson(NaturalPerson naturalPerson) {
-        this.naturalPerson = naturalPerson;
-    }
-
-    public Set<AppUser> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(Set<AppUser> followers) {
-        this.followers = followers;
-    }
-
-    public Set<AppUser> getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(Set<AppUser> following) {
-        this.following = following;
-    }
-
-    public int getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(int tokens) {
-        this.tokens = tokens;
-    }
+    private Set<Incidence> incidences = new HashSet<>();
 
     public Address getAddress() {
         return address;
@@ -220,14 +124,6 @@ public class AppUser implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public Long getId() {
@@ -246,12 +142,36 @@ public class AppUser implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public Boolean getIsOnline() {
+    public Boolean isIsOnline() {
         return isOnline;
     }
 
     public void setIsOnline(Boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public Integer getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Integer tokens) {
+        this.tokens = tokens;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 
     public User getUser() {
@@ -260,6 +180,94 @@ public class AppUser implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<AppUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<AppUser> appUsers) {
+        this.followers = appUsers;
+    }
+
+    public Set<AppUser> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(Set<AppUser> appUsers) {
+        this.followings = appUsers;
+    }
+
+    public NaturalPerson getNaturalPerson() {
+        return naturalPerson;
+    }
+
+    public void setNaturalPerson(NaturalPerson naturalPerson) {
+        this.naturalPerson = naturalPerson;
+    }
+
+    public LegalEntity getLegalEntity() {
+        return legalEntity;
+    }
+
+    public void setLegalEntity(LegalEntity legalEntity) {
+        this.legalEntity = legalEntity;
+    }
+
+    public Set<Ability> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(Set<Ability> abilitys) {
+        this.abilities = abilitys;
+    }
+
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
+    }
+
+    public Set<Need> getNeeds() {
+        return needs;
+    }
+
+    public void setNeeds(Set<Need> needs) {
+        this.needs = needs;
+    }
+
+    public Set<Assessment> getCreatedAssessments() {
+        return createdAssessments;
+    }
+
+    public void setCreatedAssessments(Set<Assessment> assessments) {
+        this.createdAssessments = assessments;
+    }
+
+    public Set<Assessment> getRelatedAssessments() {
+        return relatedAssessments;
+    }
+
+    public void setRelatedAssessments(Set<Assessment> assessments) {
+        this.relatedAssessments = assessments;
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public Set<Incidence> getIncidences() {
+        return incidences;
+    }
+
+    public void setIncidences(Set<Incidence> incidences) {
+        this.incidences = incidences;
     }
 
     @Override
@@ -288,6 +296,9 @@ public class AppUser implements Serializable {
             "id=" + id +
             ", phoneNumber='" + phoneNumber + "'" +
             ", isOnline='" + isOnline + "'" +
+            ", tokens='" + tokens + "'" +
+            ", image='" + image + "'" +
+            ", imageContentType='" + imageContentType + "'" +
             '}';
     }
 }

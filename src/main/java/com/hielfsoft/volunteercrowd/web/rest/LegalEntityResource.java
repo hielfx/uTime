@@ -16,14 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing LegalEntity.
@@ -33,36 +30,46 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class LegalEntityResource {
 
     private final Logger log = LoggerFactory.getLogger(LegalEntityResource.class);
-        
+
     @Inject
     private LegalEntityService legalEntityService;
-    
+
     /**
-     * POST  /legalEntitys -> Create a new legalEntity.
+     * POST  /legal-entities : Create a new legalEntity.
+     *
+     * @param legalEntity the legalEntity to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new legalEntity, or with status 400 (Bad Request) if the legalEntity has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/legalEntitys",
+    @RequestMapping(value = "/legal-entities",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<LegalEntity> createLegalEntity(@RequestBody LegalEntity legalEntity) throws URISyntaxException {
+    public ResponseEntity<LegalEntity> createLegalEntity(@Valid @RequestBody LegalEntity legalEntity) throws URISyntaxException {
         log.debug("REST request to save LegalEntity : {}", legalEntity);
         if (legalEntity.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("legalEntity", "idexists", "A new legalEntity cannot already have an ID")).body(null);
         }
         LegalEntity result = legalEntityService.save(legalEntity);
-        return ResponseEntity.created(new URI("/api/legalEntitys/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/legal-entities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("legalEntity", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /legalEntitys -> Updates an existing legalEntity.
+     * PUT  /legal-entities : Updates an existing legalEntity.
+     *
+     * @param legalEntity the legalEntity to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated legalEntity,
+     * or with status 400 (Bad Request) if the legalEntity is not valid,
+     * or with status 500 (Internal Server Error) if the legalEntity couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/legalEntitys",
+    @RequestMapping(value = "/legal-entities",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<LegalEntity> updateLegalEntity(@RequestBody LegalEntity legalEntity) throws URISyntaxException {
+    public ResponseEntity<LegalEntity> updateLegalEntity(@Valid @RequestBody LegalEntity legalEntity) throws URISyntaxException {
         log.debug("REST request to update LegalEntity : {}", legalEntity);
         if (legalEntity.getId() == null) {
             return createLegalEntity(legalEntity);
@@ -74,24 +81,31 @@ public class LegalEntityResource {
     }
 
     /**
-     * GET  /legalEntitys -> get all the legalEntitys.
+     * GET  /legal-entities : get all the legalEntities.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of legalEntities in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
-    @RequestMapping(value = "/legalEntitys",
+    @RequestMapping(value = "/legal-entities",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<LegalEntity>> getAllLegalEntitys(Pageable pageable)
+    public ResponseEntity<List<LegalEntity>> getAllLegalEntities(Pageable pageable)
         throws URISyntaxException {
-        log.debug("REST request to get a page of LegalEntitys");
-        Page<LegalEntity> page = legalEntityService.findAll(pageable); 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/legalEntitys");
+        log.debug("REST request to get a page of LegalEntities");
+        Page<LegalEntity> page = legalEntityService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/legal-entities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /legalEntitys/:id -> get the "id" legalEntity.
+     * GET  /legal-entities/:id : get the "id" legalEntity.
+     *
+     * @param id the id of the legalEntity to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the legalEntity, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/legalEntitys/{id}",
+    @RequestMapping(value = "/legal-entities/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -106,9 +120,12 @@ public class LegalEntityResource {
     }
 
     /**
-     * DELETE  /legalEntitys/:id -> delete the "id" legalEntity.
+     * DELETE  /legal-entities/:id : delete the "id" legalEntity.
+     *
+     * @param id the id of the legalEntity to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/legalEntitys/{id}",
+    @RequestMapping(value = "/legal-entities/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -119,15 +136,22 @@ public class LegalEntityResource {
     }
 
     /**
-     * SEARCH  /_search/legalEntitys/:query -> search for the legalEntity corresponding
+     * SEARCH  /_search/legal-entities?query=:query : search for the legalEntity corresponding
      * to the query.
+     *
+     * @param query the query of the legalEntity search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/legalEntitys/{query:.+}",
+    @RequestMapping(value = "/_search/legal-entities",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<LegalEntity> searchLegalEntitys(@PathVariable String query) {
-        log.debug("Request to search LegalEntitys for query {}", query);
-        return legalEntityService.search(query);
+    public ResponseEntity<List<LegalEntity>> searchLegalEntities(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of LegalEntities for query {}", query);
+        Page<LegalEntity> page = legalEntityService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/legal-entities");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

@@ -7,11 +7,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Ability.
@@ -22,16 +23,19 @@ import java.util.Objects;
 @Document(indexName = "ability")
 public class Ability implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @NotBlank
     @Column(name = "name", nullable = false)
+    @NotBlank
     private String name;
 
-    @Column(name = "hidden")
+    @NotNull
+    @Column(name = "hidden", nullable = false)
     private Boolean hidden;
 
     @OneToMany(mappedBy = "ability")
@@ -39,8 +43,10 @@ public class Ability implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "app_user_id")
+    @ManyToOne(optional = false)
+    @NotNull
+    @Valid
+    @JoinColumn(nullable = false)
     private AppUser appUser;
 
     public Long getId() {
@@ -59,7 +65,7 @@ public class Ability implements Serializable {
         this.name = name;
     }
 
-    public Boolean getHidden() {
+    public Boolean isHidden() {
         return hidden;
     }
 

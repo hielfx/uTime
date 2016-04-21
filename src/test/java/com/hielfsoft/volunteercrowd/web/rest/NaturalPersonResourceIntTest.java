@@ -1,9 +1,10 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
 import com.hielfsoft.volunteercrowd.repository.NaturalPersonRepository;
 import com.hielfsoft.volunteercrowd.repository.search.NaturalPersonSearchRepository;
+import com.hielfsoft.volunteercrowd.service.NaturalPersonService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,12 +41,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see NaturalPersonResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class NaturalPersonResourceIntTest {
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.of("Z"));
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));
 
 
     private static final ZonedDateTime DEFAULT_BIRTH_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
@@ -54,6 +55,9 @@ public class NaturalPersonResourceIntTest {
 
     @Inject
     private NaturalPersonRepository naturalPersonRepository;
+
+    @Inject
+    private NaturalPersonService naturalPersonService;
 
     @Inject
     private NaturalPersonSearchRepository naturalPersonSearchRepository;
@@ -72,8 +76,7 @@ public class NaturalPersonResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         NaturalPersonResource naturalPersonResource = new NaturalPersonResource();
-        ReflectionTestUtils.setField(naturalPersonResource, "naturalPersonSearchRepository", naturalPersonSearchRepository);
-        ReflectionTestUtils.setField(naturalPersonResource, "naturalPersonRepository", naturalPersonRepository);
+        ReflectionTestUtils.setField(naturalPersonResource, "naturalPersonService", naturalPersonService);
         this.restNaturalPersonMockMvc = MockMvcBuilders.standaloneSetup(naturalPersonResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -81,6 +84,7 @@ public class NaturalPersonResourceIntTest {
 
     @Before
     public void initTest() {
+        naturalPersonSearchRepository.deleteAll();
         naturalPerson = new NaturalPerson();
         naturalPerson.setBirthDate(DEFAULT_BIRTH_DATE);
     }
@@ -92,16 +96,20 @@ public class NaturalPersonResourceIntTest {
 
         // Create the NaturalPerson
 
-        restNaturalPersonMockMvc.perform(post("/api/naturalPersons")
+        restNaturalPersonMockMvc.perform(post("/api/natural-people")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(naturalPerson)))
                 .andExpect(status().isCreated());
 
         // Validate the NaturalPerson in the database
-        List<NaturalPerson> naturalPersons = naturalPersonRepository.findAll();
-        assertThat(naturalPersons).hasSize(databaseSizeBeforeCreate + 1);
-        NaturalPerson testNaturalPerson = naturalPersons.get(naturalPersons.size() - 1);
+        List<NaturalPerson> naturalPeople = naturalPersonRepository.findAll();
+        assertThat(naturalPeople).hasSize(databaseSizeBeforeCreate + 1);
+        NaturalPerson testNaturalPerson = naturalPeople.get(naturalPeople.size() - 1);
         assertThat(testNaturalPerson.getBirthDate()).isEqualTo(DEFAULT_BIRTH_DATE);
+
+        // Validate the NaturalPerson in ElasticSearch
+        NaturalPerson naturalPersonEs = naturalPersonSearchRepository.findOne(testNaturalPerson.getId());
+        assertThat(naturalPersonEs).isEqualToComparingFieldByField(testNaturalPerson);
     }
 
     @Test
@@ -113,23 +121,23 @@ public class NaturalPersonResourceIntTest {
 
         // Create the NaturalPerson, which fails.
 
-        restNaturalPersonMockMvc.perform(post("/api/naturalPersons")
+        restNaturalPersonMockMvc.perform(post("/api/natural-people")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(naturalPerson)))
                 .andExpect(status().isBadRequest());
 
-        List<NaturalPerson> naturalPersons = naturalPersonRepository.findAll();
-        assertThat(naturalPersons).hasSize(databaseSizeBeforeTest);
+        List<NaturalPerson> naturalPeople = naturalPersonRepository.findAll();
+        assertThat(naturalPeople).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
-    public void getAllNaturalPersons() throws Exception {
+    public void getAllNaturalPeople() throws Exception {
         // Initialize the database
         naturalPersonRepository.saveAndFlush(naturalPerson);
 
-        // Get all the naturalPersons
-        restNaturalPersonMockMvc.perform(get("/api/naturalPersons?sort=id,desc"))
+        // Get all the naturalPeople
+        restNaturalPersonMockMvc.perform(get("/api/natural-people?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(naturalPerson.getId().intValue())))
@@ -143,7 +151,7 @@ public class NaturalPersonResourceIntTest {
         naturalPersonRepository.saveAndFlush(naturalPerson);
 
         // Get the naturalPerson
-        restNaturalPersonMockMvc.perform(get("/api/naturalPersons/{id}", naturalPerson.getId()))
+        restNaturalPersonMockMvc.perform(get("/api/natural-people/{id}", naturalPerson.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(naturalPerson.getId().intValue()))
@@ -154,7 +162,7 @@ public class NaturalPersonResourceIntTest {
     @Transactional
     public void getNonExistingNaturalPerson() throws Exception {
         // Get the naturalPerson
-        restNaturalPersonMockMvc.perform(get("/api/naturalPersons/{id}", Long.MAX_VALUE))
+        restNaturalPersonMockMvc.perform(get("/api/natural-people/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -162,40 +170,64 @@ public class NaturalPersonResourceIntTest {
     @Transactional
     public void updateNaturalPerson() throws Exception {
         // Initialize the database
-        naturalPersonRepository.saveAndFlush(naturalPerson);
+        naturalPersonService.save(naturalPerson);
 
-		int databaseSizeBeforeUpdate = naturalPersonRepository.findAll().size();
+        int databaseSizeBeforeUpdate = naturalPersonRepository.findAll().size();
 
         // Update the naturalPerson
-        naturalPerson.setBirthDate(UPDATED_BIRTH_DATE);
+        NaturalPerson updatedNaturalPerson = new NaturalPerson();
+        updatedNaturalPerson.setId(naturalPerson.getId());
+        updatedNaturalPerson.setBirthDate(UPDATED_BIRTH_DATE);
 
-        restNaturalPersonMockMvc.perform(put("/api/naturalPersons")
+        restNaturalPersonMockMvc.perform(put("/api/natural-people")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(naturalPerson)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedNaturalPerson)))
                 .andExpect(status().isOk());
 
         // Validate the NaturalPerson in the database
-        List<NaturalPerson> naturalPersons = naturalPersonRepository.findAll();
-        assertThat(naturalPersons).hasSize(databaseSizeBeforeUpdate);
-        NaturalPerson testNaturalPerson = naturalPersons.get(naturalPersons.size() - 1);
+        List<NaturalPerson> naturalPeople = naturalPersonRepository.findAll();
+        assertThat(naturalPeople).hasSize(databaseSizeBeforeUpdate);
+        NaturalPerson testNaturalPerson = naturalPeople.get(naturalPeople.size() - 1);
         assertThat(testNaturalPerson.getBirthDate()).isEqualTo(UPDATED_BIRTH_DATE);
+
+        // Validate the NaturalPerson in ElasticSearch
+        NaturalPerson naturalPersonEs = naturalPersonSearchRepository.findOne(testNaturalPerson.getId());
+        assertThat(naturalPersonEs).isEqualToComparingFieldByField(testNaturalPerson);
     }
 
     @Test
     @Transactional
     public void deleteNaturalPerson() throws Exception {
         // Initialize the database
-        naturalPersonRepository.saveAndFlush(naturalPerson);
+        naturalPersonService.save(naturalPerson);
 
-		int databaseSizeBeforeDelete = naturalPersonRepository.findAll().size();
+        int databaseSizeBeforeDelete = naturalPersonRepository.findAll().size();
 
         // Get the naturalPerson
-        restNaturalPersonMockMvc.perform(delete("/api/naturalPersons/{id}", naturalPerson.getId())
+        restNaturalPersonMockMvc.perform(delete("/api/natural-people/{id}", naturalPerson.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean naturalPersonExistsInEs = naturalPersonSearchRepository.exists(naturalPerson.getId());
+        assertThat(naturalPersonExistsInEs).isFalse();
+
         // Validate the database is empty
-        List<NaturalPerson> naturalPersons = naturalPersonRepository.findAll();
-        assertThat(naturalPersons).hasSize(databaseSizeBeforeDelete - 1);
+        List<NaturalPerson> naturalPeople = naturalPersonRepository.findAll();
+        assertThat(naturalPeople).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchNaturalPerson() throws Exception {
+        // Initialize the database
+        naturalPersonService.save(naturalPerson);
+
+        // Search the naturalPerson
+        restNaturalPersonMockMvc.perform(get("/api/_search/natural-people?query=id:" + naturalPerson.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(naturalPerson.getId().intValue())))
+            .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE_STR)));
     }
 }

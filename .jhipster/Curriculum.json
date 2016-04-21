@@ -18,12 +18,18 @@
         {
             "fieldId": 2,
             "fieldName": "creationDate",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 3,
             "fieldName": "modificationDate",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 4,

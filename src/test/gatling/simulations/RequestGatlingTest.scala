@@ -42,7 +42,7 @@ class RequestGatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token")))
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
         .post("/api/authentication")
@@ -50,7 +50,7 @@ class RequestGatlingTest extends Simulation {
         .formParam("j_username", "admin")
         .formParam("j_password", "admin")
         .formParam("remember-me", "true")
-        .formParam("submit", "Login"))
+        .formParam("submit", "Login")).exitHereIfFailed
         .pause(1)
         .exec(http("Authenticated request")
         .get("/api/account")
@@ -67,9 +67,9 @@ class RequestGatlingTest extends Simulation {
             .exec(http("Create new request")
             .post("/api/requests")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "creationDate":"2020-01-01T00:00:00.000Z", "description":"SAMPLE_TEXT", "code":"SAMPLE_TEXT", "finishDate":"2020-01-01T00:00:00.000Z", "deleted":null}""")).asJSON
+            .body(StringBody("""{"id":null, "creationDate":"2020-01-01T00:00:00.000Z", "description":"SAMPLE_TEXT", "code":"SAMPLE_TEXT", "finishDate":"2020-01-01T00:00:00.000Z", "deleted":null, "paid":null, "modificationDate":"2020-01-01T00:00:00.000Z"}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_request_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_request_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
                 exec(http("Get created request")

@@ -2,14 +2,13 @@ package com.hielfsoft.volunteercrowd.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -21,18 +20,21 @@ import java.util.Objects;
 @Document(indexName = "tag")
 public class Tag implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
     @Column(name = "text", nullable = false)
+    @NotBlank
     private String text;
 
+    @ManyToOne(optional = false)
     @NotNull
     @Valid
-    @ManyToOne
-    @JoinColumn(name = "ability_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Ability ability;
 
     public Long getId() {

@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Tag.
@@ -34,12 +30,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class TagResource {
 
     private final Logger log = LoggerFactory.getLogger(TagResource.class);
-        
+
     @Inject
     private TagService tagService;
-    
+
     /**
-     * POST  /tags -> Create a new tag.
+     * POST  /tags : Create a new tag.
+     *
+     * @param tag the tag to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new tag, or with status 400 (Bad Request) if the tag has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/tags",
         method = RequestMethod.POST,
@@ -57,7 +57,13 @@ public class TagResource {
     }
 
     /**
-     * PUT  /tags -> Updates an existing tag.
+     * PUT  /tags : Updates an existing tag.
+     *
+     * @param tag the tag to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated tag,
+     * or with status 400 (Bad Request) if the tag is not valid,
+     * or with status 500 (Internal Server Error) if the tag couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/tags",
         method = RequestMethod.PUT,
@@ -75,7 +81,11 @@ public class TagResource {
     }
 
     /**
-     * GET  /tags -> get all the tags.
+     * GET  /tags : get all the tags.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of tags in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/tags",
         method = RequestMethod.GET,
@@ -84,13 +94,16 @@ public class TagResource {
     public ResponseEntity<List<Tag>> getAllTags(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Tags");
-        Page<Tag> page = tagService.findAll(pageable); 
+        Page<Tag> page = tagService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tags");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /tags/:id -> get the "id" tag.
+     * GET  /tags/:id : get the "id" tag.
+     *
+     * @param id the id of the tag to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the tag, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/tags/{id}",
         method = RequestMethod.GET,
@@ -107,7 +120,10 @@ public class TagResource {
     }
 
     /**
-     * DELETE  /tags/:id -> delete the "id" tag.
+     * DELETE  /tags/:id : delete the "id" tag.
+     *
+     * @param id the id of the tag to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/tags/{id}",
         method = RequestMethod.DELETE,
@@ -120,15 +136,22 @@ public class TagResource {
     }
 
     /**
-     * SEARCH  /_search/tags/:query -> search for the tag corresponding
+     * SEARCH  /_search/tags?query=:query : search for the tag corresponding
      * to the query.
+     *
+     * @param query the query of the tag search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/tags/{query:.+}",
+    @RequestMapping(value = "/_search/tags",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Tag> searchTags(@PathVariable String query) {
-        log.debug("Request to search Tags for query {}", query);
-        return tagService.search(query);
+    public ResponseEntity<List<Tag>> searchTags(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Tags for query {}", query);
+        Page<Tag> page = tagService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/tags");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

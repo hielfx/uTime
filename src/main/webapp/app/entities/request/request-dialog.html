@@ -1,0 +1,152 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myRequestLabel" translate="volunteercrowdApp.request.home.createOrEditLabel">Create or edit a Request</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.request.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.creationDate" for="field_creationDate">CreationDate</label>
+                <div class="input-group">
+                    <input id="field_creationDate" type="text" class="form-control" name="creationDate" datetime-picker="{{dateformat}}" ng-model="vm.request.creationDate" is-open="vm.datePickerOpenStatus.creationDate"
+                    required  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creationDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.creationDate.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.creationDate.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.creationDate.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.description" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="vm.request.description"
+                    required />
+            <div ng-show="editForm.description.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.code" for="field_code">Code</label>
+            <input type="text" class="form-control" name="code" id="field_code"
+                    ng-model="vm.request.code"
+                    required />
+            <div ng-show="editForm.code.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.code.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.finishDate" for="field_finishDate">FinishDate</label>
+                <div class="input-group">
+                    <input id="field_finishDate" type="text" class="form-control" name="finishDate" datetime-picker="{{dateformat}}" ng-model="vm.request.finishDate" is-open="vm.datePickerOpenStatus.finishDate"
+                    required  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('finishDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.finishDate.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.finishDate.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.finishDate.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.deleted" for="field_deleted">Deleted</label>
+            <input type="checkbox" class="form-control" name="deleted" id="field_deleted"
+                    ng-model="vm.request.deleted"
+                     />
+            <div ng-show="editForm.deleted.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.deleted.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.paid" for="field_paid">Paid</label>
+            <input type="checkbox" class="form-control" name="paid" id="field_paid"
+                    ng-model="vm.request.paid"
+                     />
+            <div ng-show="editForm.paid.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.paid.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="volunteercrowdApp.request.modificationDate" for="field_modificationDate">ModificationDate</label>
+                <div class="input-group">
+                    <input id="field_modificationDate" type="text" class="form-control" name="modificationDate" datetime-picker="{{dateformat}}" ng-model="vm.request.modificationDate" is-open="vm.datePickerOpenStatus.modificationDate"
+                    required  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('modificationDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.modificationDate.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.modificationDate.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.modificationDate.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label translate="volunteercrowdApp.request.applicant" for="field_applicant">applicant</label>
+            <select class="form-control" id="field_applicant" name="applicant" ng-model="vm.request.applicant" ng-options="appUser as appUser.id for appUser in vm.appusers track by appUser.id">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label translate="volunteercrowdApp.request.need" for="field_need">need</label>
+            <select class="form-control" id="field_need" name="need" ng-model="vm.request.need" ng-options="need as need.id for need in vm.needs track by need.id">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label translate="volunteercrowdApp.request.requestStatus" for="field_requestStatus">requestStatus</label>
+            <select class="form-control" id="field_requestStatus" name="requestStatus" ng-model="vm.request.requestStatus" ng-options="requestStatus as requestStatus.id for requestStatus in vm.requeststatuss track by requestStatus.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

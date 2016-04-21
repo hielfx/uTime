@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Incidence.
@@ -34,12 +30,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class IncidenceResource {
 
     private final Logger log = LoggerFactory.getLogger(IncidenceResource.class);
-        
+
     @Inject
     private IncidenceService incidenceService;
-    
+
     /**
-     * POST  /incidences -> Create a new incidence.
+     * POST  /incidences : Create a new incidence.
+     *
+     * @param incidence the incidence to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new incidence, or with status 400 (Bad Request) if the incidence has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/incidences",
         method = RequestMethod.POST,
@@ -57,7 +57,13 @@ public class IncidenceResource {
     }
 
     /**
-     * PUT  /incidences -> Updates an existing incidence.
+     * PUT  /incidences : Updates an existing incidence.
+     *
+     * @param incidence the incidence to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated incidence,
+     * or with status 400 (Bad Request) if the incidence is not valid,
+     * or with status 500 (Internal Server Error) if the incidence couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/incidences",
         method = RequestMethod.PUT,
@@ -75,7 +81,11 @@ public class IncidenceResource {
     }
 
     /**
-     * GET  /incidences -> get all the incidences.
+     * GET  /incidences : get all the incidences.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of incidences in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/incidences",
         method = RequestMethod.GET,
@@ -84,13 +94,16 @@ public class IncidenceResource {
     public ResponseEntity<List<Incidence>> getAllIncidences(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Incidences");
-        Page<Incidence> page = incidenceService.findAll(pageable); 
+        Page<Incidence> page = incidenceService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/incidences");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /incidences/:id -> get the "id" incidence.
+     * GET  /incidences/:id : get the "id" incidence.
+     *
+     * @param id the id of the incidence to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the incidence, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/incidences/{id}",
         method = RequestMethod.GET,
@@ -107,7 +120,10 @@ public class IncidenceResource {
     }
 
     /**
-     * DELETE  /incidences/:id -> delete the "id" incidence.
+     * DELETE  /incidences/:id : delete the "id" incidence.
+     *
+     * @param id the id of the incidence to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/incidences/{id}",
         method = RequestMethod.DELETE,
@@ -120,15 +136,22 @@ public class IncidenceResource {
     }
 
     /**
-     * SEARCH  /_search/incidences/:query -> search for the incidence corresponding
+     * SEARCH  /_search/incidences?query=:query : search for the incidence corresponding
      * to the query.
+     *
+     * @param query the query of the incidence search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/incidences/{query:.+}",
+    @RequestMapping(value = "/_search/incidences",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Incidence> searchIncidences(@PathVariable String query) {
-        log.debug("Request to search Incidences for query {}", query);
-        return incidenceService.search(query);
+    public ResponseEntity<List<Incidence>> searchIncidences(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Incidences for query {}", query);
+        Page<Incidence> page = incidenceService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/incidences");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

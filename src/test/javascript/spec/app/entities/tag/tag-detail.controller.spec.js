@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function() {
 
-    describe('Tag Detail Controller', function() {
+    describe('Tag Management Detail Controller', function() {
         var $scope, $rootScope;
         var MockEntity, MockTag, MockAbility;
         var createController;

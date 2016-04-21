@@ -27,7 +27,10 @@
         {
             "fieldId": 2,
             "fieldName": "hidden",
-            "fieldType": "Boolean"
+            "fieldType": "Boolean",
+            "fieldValidateRules":[
+                "required"
+            ]
         }
     ],
     "changelogDate": "20160328090047",

@@ -1,20 +1,19 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
-import com.hielfsoft.volunteercrowd.Application;
+import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Assessment;
 import com.hielfsoft.volunteercrowd.repository.AssessmentRepository;
+import com.hielfsoft.volunteercrowd.repository.search.AssessmentSearchRepository;
 import com.hielfsoft.volunteercrowd.service.AssessmentService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -25,12 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,12 +41,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see AssessmentResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = VolunteercrowdApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class AssessmentResourceIntTest {
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.of("Z"));
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));
 
 
     private static final ZonedDateTime DEFAULT_CREATION_MOMENT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
@@ -63,6 +63,9 @@ public class AssessmentResourceIntTest {
 
     @Inject
     private AssessmentService assessmentService;
+
+    @Inject
+    private AssessmentSearchRepository assessmentSearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -86,6 +89,7 @@ public class AssessmentResourceIntTest {
 
     @Before
     public void initTest() {
+        assessmentSearchRepository.deleteAll();
         assessment = new Assessment();
         assessment.setCreationMoment(DEFAULT_CREATION_MOMENT);
         assessment.setRating(DEFAULT_RATING);
@@ -111,6 +115,28 @@ public class AssessmentResourceIntTest {
         assertThat(testAssessment.getCreationMoment()).isEqualTo(DEFAULT_CREATION_MOMENT);
         assertThat(testAssessment.getRating()).isEqualTo(DEFAULT_RATING);
         assertThat(testAssessment.getComment()).isEqualTo(DEFAULT_COMMENT);
+
+        // Validate the Assessment in ElasticSearch
+        Assessment assessmentEs = assessmentSearchRepository.findOne(testAssessment.getId());
+        assertThat(assessmentEs).isEqualToComparingFieldByField(testAssessment);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreationMomentIsRequired() throws Exception {
+        int databaseSizeBeforeTest = assessmentRepository.findAll().size();
+        // set the field null
+        assessment.setCreationMoment(null);
+
+        // Create the Assessment, which fails.
+
+        restAssessmentMockMvc.perform(post("/api/assessments")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(assessment)))
+                .andExpect(status().isBadRequest());
+
+        List<Assessment> assessments = assessmentRepository.findAll();
+        assertThat(assessments).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -193,18 +219,20 @@ public class AssessmentResourceIntTest {
     @Transactional
     public void updateAssessment() throws Exception {
         // Initialize the database
-        assessmentRepository.saveAndFlush(assessment);
+        assessmentService.save(assessment);
 
-		int databaseSizeBeforeUpdate = assessmentRepository.findAll().size();
+        int databaseSizeBeforeUpdate = assessmentRepository.findAll().size();
 
         // Update the assessment
-        assessment.setCreationMoment(UPDATED_CREATION_MOMENT);
-        assessment.setRating(UPDATED_RATING);
-        assessment.setComment(UPDATED_COMMENT);
+        Assessment updatedAssessment = new Assessment();
+        updatedAssessment.setId(assessment.getId());
+        updatedAssessment.setCreationMoment(UPDATED_CREATION_MOMENT);
+        updatedAssessment.setRating(UPDATED_RATING);
+        updatedAssessment.setComment(UPDATED_COMMENT);
 
         restAssessmentMockMvc.perform(put("/api/assessments")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(assessment)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedAssessment)))
                 .andExpect(status().isOk());
 
         // Validate the Assessment in the database
@@ -214,23 +242,47 @@ public class AssessmentResourceIntTest {
         assertThat(testAssessment.getCreationMoment()).isEqualTo(UPDATED_CREATION_MOMENT);
         assertThat(testAssessment.getRating()).isEqualTo(UPDATED_RATING);
         assertThat(testAssessment.getComment()).isEqualTo(UPDATED_COMMENT);
+
+        // Validate the Assessment in ElasticSearch
+        Assessment assessmentEs = assessmentSearchRepository.findOne(testAssessment.getId());
+        assertThat(assessmentEs).isEqualToComparingFieldByField(testAssessment);
     }
 
     @Test
     @Transactional
     public void deleteAssessment() throws Exception {
         // Initialize the database
-        assessmentRepository.saveAndFlush(assessment);
+        assessmentService.save(assessment);
 
-		int databaseSizeBeforeDelete = assessmentRepository.findAll().size();
+        int databaseSizeBeforeDelete = assessmentRepository.findAll().size();
 
         // Get the assessment
         restAssessmentMockMvc.perform(delete("/api/assessments/{id}", assessment.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
+        // Validate ElasticSearch is empty
+        boolean assessmentExistsInEs = assessmentSearchRepository.exists(assessment.getId());
+        assertThat(assessmentExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Assessment> assessments = assessmentRepository.findAll();
         assertThat(assessments).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchAssessment() throws Exception {
+        // Initialize the database
+        assessmentService.save(assessment);
+
+        // Search the assessment
+        restAssessmentMockMvc.perform(get("/api/_search/assessments?query=id:" + assessment.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(assessment.getId().intValue())))
+            .andExpect(jsonPath("$.[*].creationMoment").value(hasItem(DEFAULT_CREATION_MOMENT_STR)))
+            .andExpect(jsonPath("$.[*].rating").value(hasItem(DEFAULT_RATING)))
+            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
     }
 }

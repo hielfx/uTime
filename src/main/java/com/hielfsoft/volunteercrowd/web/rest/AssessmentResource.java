@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Assessment.
@@ -34,12 +30,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class AssessmentResource {
 
     private final Logger log = LoggerFactory.getLogger(AssessmentResource.class);
-        
+
     @Inject
     private AssessmentService assessmentService;
-    
+
     /**
-     * POST  /assessments -> Create a new assessment.
+     * POST  /assessments : Create a new assessment.
+     *
+     * @param assessment the assessment to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new assessment, or with status 400 (Bad Request) if the assessment has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/assessments",
         method = RequestMethod.POST,
@@ -57,7 +57,13 @@ public class AssessmentResource {
     }
 
     /**
-     * PUT  /assessments -> Updates an existing assessment.
+     * PUT  /assessments : Updates an existing assessment.
+     *
+     * @param assessment the assessment to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated assessment,
+     * or with status 400 (Bad Request) if the assessment is not valid,
+     * or with status 500 (Internal Server Error) if the assessment couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/assessments",
         method = RequestMethod.PUT,
@@ -75,7 +81,11 @@ public class AssessmentResource {
     }
 
     /**
-     * GET  /assessments -> get all the assessments.
+     * GET  /assessments : get all the assessments.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of assessments in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/assessments",
         method = RequestMethod.GET,
@@ -84,13 +94,16 @@ public class AssessmentResource {
     public ResponseEntity<List<Assessment>> getAllAssessments(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Assessments");
-        Page<Assessment> page = assessmentService.findAll(pageable); 
+        Page<Assessment> page = assessmentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assessments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /assessments/:id -> get the "id" assessment.
+     * GET  /assessments/:id : get the "id" assessment.
+     *
+     * @param id the id of the assessment to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the assessment, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/assessments/{id}",
         method = RequestMethod.GET,
@@ -107,7 +120,10 @@ public class AssessmentResource {
     }
 
     /**
-     * DELETE  /assessments/:id -> delete the "id" assessment.
+     * DELETE  /assessments/:id : delete the "id" assessment.
+     *
+     * @param id the id of the assessment to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/assessments/{id}",
         method = RequestMethod.DELETE,
@@ -120,15 +136,22 @@ public class AssessmentResource {
     }
 
     /**
-     * SEARCH  /_search/assessments/:query -> search for the assessment corresponding
+     * SEARCH  /_search/assessments?query=:query : search for the assessment corresponding
      * to the query.
+     *
+     * @param query the query of the assessment search
+     * @return the result of the search
      */
-    @RequestMapping(value = "/_search/assessments/{query:.+}",
+    @RequestMapping(value = "/_search/assessments",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Assessment> searchAssessments(@PathVariable String query) {
-        log.debug("Request to search Assessments for query {}", query);
-        return assessmentService.search(query);
+    public ResponseEntity<List<Assessment>> searchAssessments(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Assessments for query {}", query);
+        Page<Assessment> page = assessmentService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/assessments");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

@@ -7,10 +7,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -22,19 +20,21 @@ import java.util.Objects;
 @Document(indexName = "neededability")
 public class NeededAbility implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @NotBlank
     @Column(name = "name", nullable = false)
+    @NotBlank
     private String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
+    @JoinColumn(nullable = false)
     @Valid
-    @JoinColumn(name = "need_id")
     private Need need;
 
     public Long getId() {

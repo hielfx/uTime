@@ -13,20 +13,32 @@
             "otherEntityName": "request",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "creator",
+            "otherEntityName": "appUser",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
+
     ],
     "fields": [
         {
             "fieldId": 1,
             "fieldName": "creationDate",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": []
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 2,
             "fieldName": "closed",
             "fieldType": "Boolean",
-            "fieldValidateRules": []
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldId": 3,
@@ -40,9 +52,7 @@
             "fieldId": 4,
             "fieldName": "adminComment",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": []
         }
     ],
     "changelogDate": "20160328112204",
