@@ -1,8 +1,8 @@
 language: node_js
 node_js:
   - "4.3.2"
-  jdk:
-    - oraclejdk8
+jdk:
+  - oraclejdk8
 sudo: false
 before_install: npm install -g gulp
 install: npm install
