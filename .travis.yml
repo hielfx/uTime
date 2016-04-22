@@ -5,10 +5,12 @@ jdk:
   - oraclejdk8
 sudo: true
 before_install:
+  - sudo npm cache clean -f
+  - sudo npm install -g n
+  - sudo n stable
   - gradle npm_install -g npm
   - gradle npm_update
   - gradle npm_install -g gulp
-  - gradle npm_install -g generator-jhipster-swagger2markup
 install:
   - gradle npm_install
   - gradle npm_install karma-firefox-launcher --save-dev
