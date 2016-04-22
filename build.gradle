@@ -31,7 +31,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
 apply plugin: 'com.moowork.gulp'
-classpath "com.moowork.gradle:gradle-node-plugin:0.12"
+apply plugin: 'com.moowork.node'
 defaultTasks 'bootRun'
 
 bootRepackage {
