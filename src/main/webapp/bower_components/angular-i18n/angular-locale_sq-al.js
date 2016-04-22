@@ -62,20 +62,20 @@ $provide.value("$locale", {
       "N\u00ebn",
       "Dhj"
     ],
-      "STANDALONEMONTH": [
-          "Janar",
-          "Shkurt",
-          "Mars",
-          "Prill",
-          "Maj",
-          "Qershor",
-          "Korrik",
-          "Gusht",
-          "Shtator",
-          "Tetor",
-          "N\u00ebntor",
-          "Dhjetor"
-      ],
+    "STANDALONEMONTH": [
+      "Janar",
+      "Shkurt",
+      "Mars",
+      "Prill",
+      "Maj",
+      "Qershor",
+      "Korrik",
+      "Gusht",
+      "Shtator",
+      "Tetor",
+      "N\u00ebntor",
+      "Dhjetor"
+    ],
     "WEEKENDRANGE": [
       5,
       6
@@ -119,7 +119,7 @@ $provide.value("$locale", {
     ]
   },
   "id": "sq-al",
-    "localeID": "sq_AL",
+  "localeID": "sq_AL",
   "pluralCat": function(n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

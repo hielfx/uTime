@@ -18,14 +18,16 @@
             },
             "title": "Title",
             "description": "Description",
-            "category": "category",
+            "category": "Category",
             "deleted": "Deleted",
             "location": "Location",
             "creationDate": "CreationDate",
             "modificationDate": "ModificationDate",
+            "completed": "Completed",
             "appUser": "AppUser",
-            "neededAbility": "NeededAbility",
-            "availability": "Availability"
+            "neededAbilitie": "NeededAbilitie",
+            "availabilitie": "Availabilitie",
+            "request": "Request"
         }
     }
 }

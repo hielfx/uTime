@@ -16,7 +16,7 @@
 
         <div class="form-group">
             <label translate="volunteercrowdApp.administrator.user" for="field_user">user</label>
-            <select class="form-control" id="field_user" name="user" ng-model="vm.administrator.user" ng-options="appUser as appUser.id for appUser in vm.users | orderBy:'id' track by appUser.id">
+            <select class="form-control" id="field_user" name="user" ng-model="vm.administrator.user" ng-options="user as user.id for user in vm.users track by user.id">
                 <option value=""></option>
             </select>
         </div>

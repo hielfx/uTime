@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Assessment.
@@ -22,16 +25,16 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 public class AssessmentService {
 
     private final Logger log = LoggerFactory.getLogger(AssessmentService.class);
-
+    
     @Inject
     private AssessmentRepository assessmentRepository;
-
+    
     @Inject
     private AssessmentSearchRepository assessmentSearchRepository;
-
+    
     /**
      * Save a assessment.
-     *
+     * 
      * @param assessment the entity to save
      * @return the persisted entity
      */
@@ -44,14 +47,14 @@ public class AssessmentService {
 
     /**
      *  Get all the assessments.
-     *
+     *  
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Page<Assessment> findAll(Pageable pageable) {
         log.debug("Request to get all Assessments");
-        Page<Assessment> result = assessmentRepository.findAll(pageable);
+        Page<Assessment> result = assessmentRepository.findAll(pageable); 
         return result;
     }
 
@@ -61,7 +64,7 @@ public class AssessmentService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Assessment findOne(Long id) {
         log.debug("Request to get Assessment : {}", id);
         Assessment assessment = assessmentRepository.findOne(id);
@@ -70,7 +73,7 @@ public class AssessmentService {
 
     /**
      *  Delete the  assessment by id.
-     *
+     *  
      *  @param id the id of the entity
      */
     public void delete(Long id) {

@@ -3,17 +3,21 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.NeededAbility;
 import com.hielfsoft.volunteercrowd.repository.NeededAbilityRepository;
-import com.hielfsoft.volunteercrowd.repository.search.NeededAbilitySearchRepository;
+import com.hielfsoft.volunteercrowd.service.AbilityService;
+import com.hielfsoft.volunteercrowd.service.NeedService;
 import com.hielfsoft.volunteercrowd.service.NeededAbilityService;
+import com.hielfsoft.volunteercrowd.repository.search.NeededAbilitySearchRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,7 +30,6 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -45,14 +48,19 @@ public class NeededAbilityResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAA";
     private static final String UPDATED_NAME = "BBBBB";
 
+    private static final long NEED_ID = 37;
+
     @Inject
     private NeededAbilityRepository neededAbilityRepository;
+
+    @Inject
+    private NeededAbilitySearchRepository neededAbilitySearchRepository;
 
     @Inject
     private NeededAbilityService neededAbilityService;
 
     @Inject
-    private NeededAbilitySearchRepository neededAbilitySearchRepository;
+    private NeedService needService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -79,6 +87,8 @@ public class NeededAbilityResourceIntTest {
         neededAbilitySearchRepository.deleteAll();
         neededAbility = new NeededAbility();
         neededAbility.setName(DEFAULT_NAME);
+
+        neededAbility.setNeed(needService.findOne(NEED_ID));
     }
 
     @Test
@@ -173,7 +183,7 @@ public class NeededAbilityResourceIntTest {
 
         restNeededAbilityMockMvc.perform(put("/api/needed-abilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedNeededAbility)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedNeededAbility)))
                 .andExpect(status().isOk());
 
         // Validate the NeededAbility in the database

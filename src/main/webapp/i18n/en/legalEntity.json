@@ -2,7 +2,7 @@
     "volunteercrowdApp": {
         "legalEntity" : {
             "home": {
-                "title": "LegalEntitys",
+                "title": "LegalEntities",
                 "createLabel": "Create a new LegalEntity",
                 "createOrEditLabel": "Create or edit a LegalEntity",
                 "search": "Search for LegalEntity"

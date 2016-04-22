@@ -1,54 +1,46 @@
+
 <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myIncidenceLabel" translate="volunteercrowdApp.incidence.home.createOrEditLabel">
-            Create or edit a Incidence</h4>
+        <h4 class="modal-title" id="myIncidenceLabel" translate="volunteercrowdApp.incidence.home.createOrEditLabel">Create or edit a Incidence</h4>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group">
             <label for="id" translate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                   ng-model="vm.incidence.id" readonly/>
+                    ng-model="vm.incidence.id" readonly />
         </div>
         <div class="form-group">
             <label class="control-label" translate="volunteercrowdApp.incidence.creationDate" for="field_creationDate">CreationDate</label>
-
-            <div class="input-group">
-                <input id="field_creationDate" type="text" class="form-control" name="creationDate"
-                       datetime-picker="{{dateformat}}" ng-model="vm.incidence.creationDate"
-                       is-open="vm.datePickerOpenStatus.creationDate"
-                       required/>
+                <div class="input-group">
+                    <input id="field_creationDate" type="text" class="form-control" name="creationDate" datetime-picker="{{dateformat}}" ng-model="vm.incidence.creationDate" is-open="vm.datePickerOpenStatus.creationDate"
+                    required  />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creationDate')"><i
-                            class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creationDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-            </div>
+                </div>
             <div ng-show="editForm.creationDate.$invalid">
                 <p class="help-block"
-                   ng-show="editForm.creationDate.$error.required" translate="entity.validation.required">
+                    ng-show="editForm.creationDate.$error.required" translate="entity.validation.required">
                     This field is required.
                 </p>
-
                 <p class="help-block"
-                   ng-show="editForm.creationDate.$error.ZonedDateTimelocal"
-                   translate="entity.validation.ZonedDateTimelocal">
+                    ng-show="editForm.creationDate.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
                     This field should be a date and time.
                 </p>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" translate="volunteercrowdApp.incidence.closed"
-                   for="field_closed">Closed</label>
+            <label class="control-label" translate="volunteercrowdApp.incidence.closed" for="field_closed">Closed</label>
             <input type="checkbox" class="form-control" name="closed" id="field_closed"
-                   ng-model="vm.incidence.closed"
-                />
-
+                    ng-model="vm.incidence.closed"
+                     />
             <div ng-show="editForm.closed.$invalid">
                 <p class="help-block"
-                   ng-show="editForm.closed.$error.required" translate="entity.validation.required">
+                    ng-show="editForm.closed.$error.required" translate="entity.validation.required">
                     This field is required.
                 </p>
             </div>
@@ -56,12 +48,11 @@
         <div class="form-group">
             <label class="control-label" translate="volunteercrowdApp.incidence.description" for="field_description">Description</label>
             <input type="text" class="form-control" name="description" id="field_description"
-                   ng-model="vm.incidence.description"
-                   required/>
-
+                    ng-model="vm.incidence.description"
+                    required />
             <div ng-show="editForm.description.$invalid">
                 <p class="help-block"
-                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                    ng-show="editForm.description.$error.required" translate="entity.validation.required">
                     This field is required.
                 </p>
             </div>
@@ -69,37 +60,32 @@
         <div class="form-group">
             <label class="control-label" translate="volunteercrowdApp.incidence.adminComment" for="field_adminComment">AdminComment</label>
             <input type="text" class="form-control" name="adminComment" id="field_adminComment"
-                   ng-model="vm.incidence.adminComment"
-                />
+                    ng-model="vm.incidence.adminComment"
+                     />
         </div>
 
         <div class="form-group">
             <label translate="volunteercrowdApp.incidence.administrator" for="field_administrator">administrator</label>
-            <select class="form-control" id="field_administrator" name="administrator"
-                    ng-model="vm.incidence.administrator"
-                    ng-options="administrator as administrator.id for administrator in vm.administrators track by administrator.id">
+            <select class="form-control" id="field_administrator" name="administrator" ng-model="vm.incidence.administrator" ng-options="administrator as administrator.id for administrator in vm.administrators track by administrator.id">
                 <option value=""></option>
             </select>
         </div>
         <div class="form-group">
             <label translate="volunteercrowdApp.incidence.request" for="field_request">request</label>
-            <select class="form-control" id="field_request" name="request" ng-model="vm.incidence.request"
-                    ng-options="request as request.id for request in vm.requests track by request.id">
+            <select class="form-control" id="field_request" name="request" ng-model="vm.incidence.request" ng-options="request as request.id for request in vm.requests track by request.id">
                 <option value=""></option>
             </select>
         </div>
         <div class="form-group">
             <label translate="volunteercrowdApp.incidence.creator" for="field_creator">creator</label>
-            <select class="form-control" id="field_creator" name="creator" ng-model="vm.incidence.creator"
-                    ng-options="appUser as appUser.id for appUser in vm.appusers track by appUser.id">
+            <select class="form-control" id="field_creator" name="creator" ng-model="vm.incidence.creator" ng-options="appUser as appUser.id for appUser in vm.appusers track by appUser.id">
                 <option value=""></option>
             </select>
         </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-            translate="entity.action.cancel">Cancel</span>
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>

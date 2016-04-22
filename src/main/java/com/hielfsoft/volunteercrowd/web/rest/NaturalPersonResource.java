@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing NaturalPerson.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class NaturalPersonResource {
 
     private final Logger log = LoggerFactory.getLogger(NaturalPersonResource.class);
-
+        
     @Inject
     private NaturalPersonService naturalPersonService;
-
+    
     /**
      * POST  /natural-people : Create a new naturalPerson.
      *
@@ -94,7 +98,7 @@ public class NaturalPersonResource {
     public ResponseEntity<List<NaturalPerson>> getAllNaturalPeople(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of NaturalPeople");
-        Page<NaturalPerson> page = naturalPersonService.findAll(pageable);
+        Page<NaturalPerson> page = naturalPersonService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/natural-people");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

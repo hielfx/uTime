@@ -18,7 +18,20 @@
             },
             "phoneNumber": "PhoneNumber",
             "isOnline": "IsOnline",
-            "user": "User"
+            "tokens": "Tokens",
+            "image": "Image",
+            "user": "User",
+            "follower": "Follower",
+            "following": "Following",
+            "naturalPerson": "NaturalPerson",
+            "legalEntity": "LegalEntity",
+            "abilitie": "Abilitie",
+            "request": "Request",
+            "need": "Need",
+            "createdAssessment": "CreatedAssessment",
+            "relatedAssessment": "RelatedAssessment",
+            "payment": "Payment",
+            "incidence": "Incidence"
         }
     }
 }

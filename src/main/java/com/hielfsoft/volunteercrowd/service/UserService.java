@@ -1,6 +1,7 @@
 package com.hielfsoft.volunteercrowd.service;
 
 import com.hielfsoft.volunteercrowd.domain.Authority;
+import com.hielfsoft.volunteercrowd.domain.PersistentToken;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AuthorityRepository;
 import com.hielfsoft.volunteercrowd.repository.PersistentTokenRepository;
@@ -9,6 +10,8 @@ import com.hielfsoft.volunteercrowd.repository.search.UserSearchRepository;
 import com.hielfsoft.volunteercrowd.security.SecurityUtils;
 import com.hielfsoft.volunteercrowd.service.util.RandomUtil;
 import com.hielfsoft.volunteercrowd.web.rest.dto.ManagedUserDTO;
+import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,13 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing users.
@@ -231,5 +230,12 @@ public class UserService {
             userRepository.delete(user);
             userSearchRepository.delete(user);
         }
+    }
+
+    public User save(User user){
+        log.debug("Request to save User : {}", user);
+        User result = userRepository.save(user);
+        userSearchRepository.save(result);
+        return result;
     }
 }

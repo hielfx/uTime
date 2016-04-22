@@ -38,9 +38,10 @@ public class Payment implements Serializable {
     @com.hielfsoft.volunteercrowd.validator.Past
     private ZonedDateTime paymentMoment;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn(unique = true, nullable = false)
     @Valid
+    @NotNull
     private Request request;
 
     @ManyToOne(optional = false)

@@ -1,20 +1,19 @@
 package com.hielfsoft.volunteercrowd.security;
 
-import com.hielfsoft.volunteercrowd.config.JHipsterProperties;
 import com.hielfsoft.volunteercrowd.domain.PersistentToken;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.PersistentTokenRepository;
 import com.hielfsoft.volunteercrowd.repository.UserRepository;
+import com.hielfsoft.volunteercrowd.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
-import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
-import org.springframework.security.web.authentication.rememberme.CookieTheftException;
-import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
-import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationException;
+import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

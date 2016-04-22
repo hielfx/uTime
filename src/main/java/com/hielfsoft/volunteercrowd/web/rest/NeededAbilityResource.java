@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing NeededAbility.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class NeededAbilityResource {
 
     private final Logger log = LoggerFactory.getLogger(NeededAbilityResource.class);
-
+        
     @Inject
     private NeededAbilityService neededAbilityService;
-
+    
     /**
      * POST  /needed-abilities : Create a new neededAbility.
      *
@@ -94,7 +98,7 @@ public class NeededAbilityResource {
     public ResponseEntity<List<NeededAbility>> getAllNeededAbilities(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of NeededAbilities");
-        Page<NeededAbility> page = neededAbilityService.findAll(pageable);
+        Page<NeededAbility> page = neededAbilityService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/needed-abilities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

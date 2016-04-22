@@ -2,11 +2,10 @@ package com.hielfsoft.volunteercrowd.web.rest.dto;
 
 import com.hielfsoft.volunteercrowd.domain.Authority;
 import com.hielfsoft.volunteercrowd.domain.User;
+
 import org.hibernate.validator.constraints.Email;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 /**

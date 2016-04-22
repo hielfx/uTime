@@ -2,18 +2,22 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Availability;
+import com.hielfsoft.volunteercrowd.domain.Need;
 import com.hielfsoft.volunteercrowd.repository.AvailabilityRepository;
-import com.hielfsoft.volunteercrowd.repository.search.AvailabilitySearchRepository;
 import com.hielfsoft.volunteercrowd.service.AvailabilityService;
+import com.hielfsoft.volunteercrowd.repository.search.AvailabilitySearchRepository;
+
+import com.hielfsoft.volunteercrowd.service.NeedService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -24,13 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -57,6 +60,8 @@ public class AvailabilityResourceIntTest {
     private static final ZonedDateTime UPDATED_END_MOMENT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final String DEFAULT_END_MOMENT_STR = dateTimeFormatter.format(DEFAULT_END_MOMENT);
 
+    private static final long NEED_ID = 37;
+
     @Inject
     private AvailabilityRepository availabilityRepository;
 
@@ -65,6 +70,9 @@ public class AvailabilityResourceIntTest {
 
     @Inject
     private AvailabilitySearchRepository availabilitySearchRepository;
+
+    @Inject
+    private NeedService needService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -92,6 +100,8 @@ public class AvailabilityResourceIntTest {
         availability = new Availability();
         availability.setStartMoment(DEFAULT_START_MOMENT);
         availability.setEndMoment(DEFAULT_END_MOMENT);
+
+        availability.setNeed(needService.findOne(NEED_ID));
     }
 
     @Test
@@ -103,7 +113,7 @@ public class AvailabilityResourceIntTest {
 
         restAvailabilityMockMvc.perform(post("/api/availabilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(availability)))
+                .content(TestUtil.convertObjectToJsonBytes(availability)))
                 .andExpect(status().isCreated());
 
         // Validate the Availability in the database
@@ -129,7 +139,7 @@ public class AvailabilityResourceIntTest {
 
         restAvailabilityMockMvc.perform(post("/api/availabilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(availability)))
+                .content(TestUtil.convertObjectToJsonBytes(availability)))
                 .andExpect(status().isBadRequest());
 
         List<Availability> availabilities = availabilityRepository.findAll();
@@ -147,7 +157,7 @@ public class AvailabilityResourceIntTest {
 
         restAvailabilityMockMvc.perform(post("/api/availabilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(availability)))
+                .content(TestUtil.convertObjectToJsonBytes(availability)))
                 .andExpect(status().isBadRequest());
 
         List<Availability> availabilities = availabilityRepository.findAll();
@@ -164,7 +174,7 @@ public class AvailabilityResourceIntTest {
         restAvailabilityMockMvc.perform(get("/api/availabilities?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(availability.getId().intValue())))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(availability.getId().intValue())))
                 .andExpect(jsonPath("$.[*].startMoment").value(hasItem(DEFAULT_START_MOMENT_STR)))
                 .andExpect(jsonPath("$.[*].endMoment").value(hasItem(DEFAULT_END_MOMENT_STR)));
     }
@@ -208,7 +218,7 @@ public class AvailabilityResourceIntTest {
 
         restAvailabilityMockMvc.perform(put("/api/availabilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedAvailability)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedAvailability)))
                 .andExpect(status().isOk());
 
         // Validate the Availability in the database

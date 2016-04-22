@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Payment.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class PaymentResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentResource.class);
-
+        
     @Inject
     private PaymentService paymentService;
-
+    
     /**
      * POST  /payments : Create a new payment.
      *
@@ -100,7 +104,7 @@ public class PaymentResource {
                     HttpStatus.OK);
         }
         log.debug("REST request to get a page of Payments");
-        Page<Payment> page = paymentService.findAll(pageable);
+        Page<Payment> page = paymentService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/payments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

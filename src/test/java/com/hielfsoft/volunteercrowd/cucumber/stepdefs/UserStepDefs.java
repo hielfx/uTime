@@ -1,14 +1,16 @@
 package com.hielfsoft.volunteercrowd.cucumber.stepdefs;
 
-import com.hielfsoft.volunteercrowd.web.rest.UserResource;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
+
+import com.hielfsoft.volunteercrowd.web.rest.UserResource;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,7 +30,7 @@ public class UserStepDefs extends StepDefs {
     @When("^I search user '(.*)'$")
     public void i_search_user_admin(String userId) throws Throwable {
         actions = restUserMockMvc.perform(get("/api/users/" + userId)
-            .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON));
     }
 
     @Then("^the user is found$")

@@ -1,6 +1,7 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.hielfsoft.volunteercrowd.domain.Authority;
 import com.hielfsoft.volunteercrowd.domain.PersistentToken;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.PersistentTokenRepository;
@@ -11,6 +12,7 @@ import com.hielfsoft.volunteercrowd.service.UserService;
 import com.hielfsoft.volunteercrowd.web.rest.dto.KeyAndPasswordDTO;
 import com.hielfsoft.volunteercrowd.web.rest.dto.UserDTO;
 import com.hielfsoft.volunteercrowd.web.rest.util.HeaderUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * REST controller for managing the current user's account.

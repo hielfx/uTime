@@ -37,7 +37,6 @@
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                     <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="birthDate"><span translate="volunteercrowdApp.naturalPerson.birthDate">BirthDate</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="gender.name"><span translate="volunteercrowdApp.naturalPerson.gender">gender</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="appUser.id"><span translate="volunteercrowdApp.naturalPerson.appUser">appUser</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="curriculum.id"><span translate="volunteercrowdApp.naturalPerson.curriculum">curriculum</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
@@ -47,9 +46,6 @@
                 <tr ng-repeat="naturalPerson in vm.naturalPeople track by naturalPerson.id">
                     <td><a ui-sref="natural-person-detail({id:naturalPerson.id})">{{naturalPerson.id}}</a></td>
                     <td>{{naturalPerson.birthDate | date:'medium'}}</td>
-                    <td>
-                        <a ui-sref="gender-detail({id:naturalPerson.gender.id})">{{naturalPerson.gender.name}}</a>
-                    </td>
                     <td>
                         <a ui-sref="app-user-detail({id:naturalPerson.appUser.id})">{{naturalPerson.appUser.id}}</a>
                     </td>

@@ -4,19 +4,18 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="legal-entity.new">
+                <button class="btn btn-primary" ui-sref="legal-entity.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span class="hidden-xs" translate="volunteercrowdApp.legalEntity.home.createLabel">
+                    <span class="hidden-xs"  translate="volunteercrowdApp.legalEntity.home.createLabel">
                         Create new LegalEntity
                     </span>
                 </button>
             </div>
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
-                    <div class="input-group pull-right">
-                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery"
-                               placeholder="{{ 'volunteercrowdApp.legalEntity.home.search' | translate }}">
-                        <span class="input-group-btn width-min">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="{{ 'volunteercrowdApp.legalEntity.home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
                             <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
@@ -32,60 +31,52 @@
         </div>
     </div>
     <br/>
-
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span
-                    class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="mission"><span translate="volunteercrowdApp.legalEntity.mission">Mission</span> <span
-                    class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="vision"><span translate="volunteercrowdApp.legalEntity.vision">Vision</span> <span
-                    class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="website"><span translate="volunteercrowdApp.legalEntity.website">Website</span> <span
-                    class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="description"><span
-                    translate="volunteercrowdApp.legalEntity.description">Description</span> <span
-                    class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="appUser.id"><span translate="volunteercrowdApp.legalEntity.appUser">appUser</span> <span
-                    class="glyphicon glyphicon-sort"></span></th>
-                <th></th>
-            </tr>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="mission"><span translate="volunteercrowdApp.legalEntity.mission">Mission</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="vision"><span translate="volunteercrowdApp.legalEntity.vision">Vision</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="website"><span translate="volunteercrowdApp.legalEntity.website">Website</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="description"><span translate="volunteercrowdApp.legalEntity.description">Description</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="appUser.id"><span translate="volunteercrowdApp.legalEntity.appUser">appUser</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="legalEntity in vm.legalEntities track by legalEntity.id">
-                <td><a ui-sref="legal-entity-detail({id:legalEntity.id})">{{legalEntity.id}}</a></td>
-                <td>{{legalEntity.mission}}</td>
-                <td>{{legalEntity.vision}}</td>
-                <td>{{legalEntity.website}}</td>
-                <td>{{legalEntity.description}}</td>
-                <td>
-                    <a ui-sref="app-user-detail({id:legalEntity.appUser.id})">{{legalEntity.appUser.id}}</a>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                ui-sref="legal-entity-detail({id:legalEntity.id})"
-                                class="btn btn-info btn-sm">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
-                        </button>
-                        <button type="submit"
-                                ui-sref="legal-entity.edit({id:legalEntity.id})"
-                                class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
-                        </button>
-                        <button type="submit"
-                                ui-sref="legal-entity.delete({id:legalEntity.id})"
-                                class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-remove-circle"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
+                <tr ng-repeat="legalEntity in vm.legalEntities track by legalEntity.id">
+                    <td><a ui-sref="legal-entity-detail({id:legalEntity.id})">{{legalEntity.id}}</a></td>
+                    <td>{{legalEntity.mission}}</td>
+                    <td>{{legalEntity.vision}}</td>
+                    <td>{{legalEntity.website}}</td>
+                    <td>{{legalEntity.description}}</td>
+                    <td>
+                        <a ui-sref="app-user-detail({id:legalEntity.appUser.id})">{{legalEntity.appUser.id}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="legal-entity-detail({id:legalEntity.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="legal-entity.edit({id:legalEntity.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="legal-entity.delete({id:legalEntity.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

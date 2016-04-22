@@ -1,19 +1,24 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
+import com.hielfsoft.volunteercrowd.domain.Address;
 import com.hielfsoft.volunteercrowd.domain.AppUser;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
-import com.hielfsoft.volunteercrowd.repository.search.AppUserSearchRepository;
 import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.repository.search.AppUserSearchRepository;
+
+import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -27,7 +32,6 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,8 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class AppUserResourceIntTest {
 
-    private static final String DEFAULT_PHONE_NUMBER = "AAAAA";
-    private static final String UPDATED_PHONE_NUMBER = "BBBBB";
+    private static final String DEFAULT_PHONE_NUMBER = "698745213";
+    private static final String UPDATED_PHONE_NUMBER = "696378275";
 
     private static final Boolean DEFAULT_IS_ONLINE = false;
     private static final Boolean UPDATED_IS_ONLINE = true;
@@ -65,6 +69,9 @@ public class AppUserResourceIntTest {
 
     @Inject
     private AppUserSearchRepository appUserSearchRepository;
+
+    @Inject
+    private UserService userService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -95,6 +102,35 @@ public class AppUserResourceIntTest {
         appUser.setTokens(DEFAULT_TOKENS);
         appUser.setImage(DEFAULT_IMAGE);
         appUser.setImageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+
+        //Create user and address
+        User user;
+        Address address = new Address();
+
+        String login = "newappuser";
+        String password = "new_password";
+        String firstName = "New App User";
+        String lastName = "AppU";
+        String email = "new_app_user@appuser.com";
+        String langKey = "es";
+
+        address.setAddress("AAAAAA");
+        address.setCity("AAAAAA");
+        address.setCountry("AAAAAA");
+        address.setProvince("AAAAAAA");
+        address.setShowAddress(true);
+        address.setShowCity(true);
+        address.setZipCode("AAAAAA");
+        address.setShowCountry(true);
+        address.setShowProvince(true);
+        address.setShowZipCode(true);
+
+        user = userService.createUserInformation(login,password,firstName,lastName,email,langKey);
+
+        appUser.setAddress(address);
+        appUser.setUser(user);
+
+        userService.save(user);
     }
 
     @Test

@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
     angular
         .module('volunteercrowdApp')
@@ -6,11 +6,11 @@
 
     Request.$inject = ['$resource', 'DateUtils'];
 
-    function Request($resource, DateUtils) {
-        var resourceUrl = 'api/requests/:id';
+    function Request ($resource, DateUtils) {
+        var resourceUrl =  'api/requests/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': {method: 'GET', isArray: true},
+            'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -21,7 +21,7 @@
                     return data;
                 }
             },
-            'update': {method: 'PUT'}
+            'update': { method:'PUT' }
         });
     }
 })();

@@ -1,6 +1,7 @@
 package com.hielfsoft.volunteercrowd.config;
 
 import com.hielfsoft.volunteercrowd.config.locale.AngularCookieLocaleResolver;
+
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;

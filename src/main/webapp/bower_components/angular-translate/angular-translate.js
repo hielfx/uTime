@@ -1,6 +1,6 @@
 /*!
  * angular-translate - v2.11.0 - 2016-03-20
- *
+ * 
  * Copyright (c) 2016 The angular-translate team, Pascal Precht; Licensed MIT
  */
 (function (root, factory) {
@@ -532,7 +532,7 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
     }
 
     // If everything fails, return undefined.
-
+    return;
   };
 
   /**

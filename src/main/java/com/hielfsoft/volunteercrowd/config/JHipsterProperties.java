@@ -1,9 +1,9 @@
 package com.hielfsoft.volunteercrowd.config;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -396,7 +396,7 @@ public class JHipsterProperties {
             }
         }
 
-        public static class Logs {
+        public static  class Logs {
 
             private boolean enabled = false;
 
@@ -422,17 +422,13 @@ public class JHipsterProperties {
 
     private final Logging logging = new Logging();
 
-    public Logging getLogging() {
-        return logging;
-    }
+    public Logging getLogging() { return logging; }
 
     public static class Logging {
 
         private final Logstash logstash = new Logstash();
 
-        public Logstash getLogstash() {
-            return logstash;
-        }
+        public Logstash getLogstash() { return logstash; }
 
         public static class Logstash {
 
@@ -444,37 +440,21 @@ public class JHipsterProperties {
 
             private int queueSize = 512;
 
-            public boolean isEnabled() {
-                return enabled;
-            }
+            public boolean isEnabled() { return enabled; }
 
-            public void setEnabled(boolean enabled) {
-                this.enabled = enabled;
-            }
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
 
-            public String getHost() {
-                return host;
-            }
+            public String getHost() { return host; }
 
-            public void setHost(String host) {
-                this.host = host;
-            }
+            public void setHost(String host) { this.host = host; }
 
-            public int getPort() {
-                return port;
-            }
+            public int getPort() { return port; }
 
-            public void setPort(int port) {
-                this.port = port;
-            }
+            public void setPort(int port) { this.port = port; }
 
-            public int getQueueSize() {
-                return queueSize;
-            }
+            public int getQueueSize() { return queueSize; }
 
-            public void setQueueSize(int queueSize) {
-                this.queueSize = queueSize;
-            }
+            public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
     }
 

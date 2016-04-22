@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Curriculum.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class CurriculumResource {
 
     private final Logger log = LoggerFactory.getLogger(CurriculumResource.class);
-
+        
     @Inject
     private CurriculumService curriculumService;
-
+    
     /**
      * POST  /curricula : Create a new curriculum.
      *
@@ -100,7 +104,7 @@ public class CurriculumResource {
                     HttpStatus.OK);
         }
         log.debug("REST request to get a page of Curricula");
-        Page<Curriculum> page = curriculumService.findAll(pageable);
+        Page<Curriculum> page = curriculumService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/curricula");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

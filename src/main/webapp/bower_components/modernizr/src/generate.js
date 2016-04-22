@@ -37,7 +37,7 @@ define(['lodash'], function(_) {
 
     // Load in the rest of the options, excluding special cases
     // (they dont return values, so they aren't declared)
-    _.forEach(_.without(config.options, 'setClasses'), function (option) {
+    _.forEach(_.without(config.options, 'setClasses'), function(option) {
       output += ', "' + option + '"';
     });
 

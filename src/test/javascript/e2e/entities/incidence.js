@@ -23,13 +23,13 @@ describe('Incidence e2e test', function () {
 
     it('should load Incidences', function () {
         entityMenu.click();
-        element(by.css('[ui-sref="incidence"]')).click().then(function () {
+        element(by.css('[ui-sref="incidence"]')).click().then(function() {
             expect(element.all(by.css('h2')).first().getText()).toMatch(/Incidences/);
         });
     });
 
     it('should load create Incidence dialog', function () {
-        element(by.css('[ui-sref="incidence.new"]')).click().then(function () {
+        element(by.css('[ui-sref="incidence.new"]')).click().then(function() {
             expect(element(by.css('h4.modal-title')).getText()).toMatch(/Create or edit a Incidence/);
             element(by.css('button.close')).click();
         });

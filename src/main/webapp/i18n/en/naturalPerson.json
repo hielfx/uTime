@@ -2,7 +2,7 @@
     "volunteercrowdApp": {
         "naturalPerson" : {
             "home": {
-                "title": "NaturalPersons",
+                "title": "NaturalPeople",
                 "createLabel": "Create a new NaturalPerson",
                 "createOrEditLabel": "Create or edit a NaturalPerson",
                 "search": "Search for NaturalPerson"

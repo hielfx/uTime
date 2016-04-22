@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Incidence.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class IncidenceResource {
 
     private final Logger log = LoggerFactory.getLogger(IncidenceResource.class);
-
+        
     @Inject
     private IncidenceService incidenceService;
-
+    
     /**
      * POST  /incidences : Create a new incidence.
      *
@@ -94,7 +98,7 @@ public class IncidenceResource {
     public ResponseEntity<List<Incidence>> getAllIncidences(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Incidences");
-        Page<Incidence> page = incidenceService.findAll(pageable);
+        Page<Incidence> page = incidenceService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/incidences");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

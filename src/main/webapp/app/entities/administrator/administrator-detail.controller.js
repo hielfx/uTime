@@ -5,9 +5,9 @@
         .module('volunteercrowdApp')
         .controller('AdministratorDetailController', AdministratorDetailController);
 
-    AdministratorDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Administrator', 'AppUser', 'Incidence'];
+    AdministratorDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Administrator', 'User', 'Incidence'];
 
-    function AdministratorDetailController($scope, $rootScope, $stateParams, entity, Administrator, AppUser, Incidence) {
+    function AdministratorDetailController($scope, $rootScope, $stateParams, entity, Administrator, User, Incidence) {
         var vm = this;
         vm.administrator = entity;
         vm.load = function (id) {

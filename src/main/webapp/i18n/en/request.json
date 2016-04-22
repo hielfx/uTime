@@ -21,7 +21,13 @@
             "code": "Code",
             "finishDate": "FinishDate",
             "deleted": "Deleted",
-            "applicant": "Applicant"
+            "paid": "Paid",
+            "modificationDate": "ModificationDate",
+            "applicant": "Applicant",
+            "need": "Need",
+            "payment": "Payment",
+            "incidence": "Incidence",
+            "requestStatus": "RequestStatus"
         }
     }
 }

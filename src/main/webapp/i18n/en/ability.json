@@ -2,7 +2,7 @@
     "volunteercrowdApp": {
         "ability" : {
             "home": {
-                "title": "Abilitys",
+                "title": "Abilities",
                 "createLabel": "Create a new Ability",
                 "createOrEditLabel": "Create or edit a Ability",
                 "search": "Search for Ability"

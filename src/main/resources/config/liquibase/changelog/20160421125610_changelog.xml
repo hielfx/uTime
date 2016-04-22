@@ -256,7 +256,9 @@
             <column name="payer_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="request_id" type="BIGINT"/>
+            <column name="request_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="Daniel Sánchez (generated)" id="1461236237761-15">

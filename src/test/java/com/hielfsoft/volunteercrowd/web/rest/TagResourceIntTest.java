@@ -3,17 +3,20 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Tag;
 import com.hielfsoft.volunteercrowd.repository.TagRepository;
-import com.hielfsoft.volunteercrowd.repository.search.TagSearchRepository;
+import com.hielfsoft.volunteercrowd.service.AbilityService;
 import com.hielfsoft.volunteercrowd.service.TagService;
+import com.hielfsoft.volunteercrowd.repository.search.TagSearchRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,7 +29,6 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -45,6 +47,8 @@ public class TagResourceIntTest {
     private static final String DEFAULT_TEXT = "AAAAA";
     private static final String UPDATED_TEXT = "BBBBB";
 
+    private static final long ABILITY_ID = 53;
+
     @Inject
     private TagRepository tagRepository;
 
@@ -53,6 +57,9 @@ public class TagResourceIntTest {
 
     @Inject
     private TagSearchRepository tagSearchRepository;
+
+    @Inject
+    private AbilityService abilityService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -79,6 +86,8 @@ public class TagResourceIntTest {
         tagSearchRepository.deleteAll();
         tag = new Tag();
         tag.setText(DEFAULT_TEXT);
+
+        tag.setAbility(abilityService.findOne(ABILITY_ID));
     }
 
     @Test

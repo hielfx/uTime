@@ -3,17 +3,19 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.LegalEntity;
 import com.hielfsoft.volunteercrowd.repository.LegalEntityRepository;
-import com.hielfsoft.volunteercrowd.repository.search.LegalEntitySearchRepository;
 import com.hielfsoft.volunteercrowd.service.LegalEntityService;
+import com.hielfsoft.volunteercrowd.repository.search.LegalEntitySearchRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,7 +28,6 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,8 +47,8 @@ public class LegalEntityResourceIntTest {
     private static final String UPDATED_MISSION = "BBBBB";
     private static final String DEFAULT_VISION = "AAAAA";
     private static final String UPDATED_VISION = "BBBBB";
-    private static final String DEFAULT_WEBSITE = "AAAAA";
-    private static final String UPDATED_WEBSITE = "BBBBB";
+    private static final String DEFAULT_WEBSITE = "http://www.google.es";
+    private static final String UPDATED_WEBSITE = "http://www.com";
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
 

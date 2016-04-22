@@ -1,12 +1,19 @@
-language: node_js
+language: java
 node_js:
   - "4.3.2"
 jdk:
   - oraclejdk8
 sudo: false
-before_install: npm install -g gulp
-install: npm install
-before_script: gulp build
+before_install:
+  - gradle npm_install -g gulp
+  - gradle npm_install -g generator-jhipster-swagger2markup
+install:
+  - gradle npm_install
+  - gradle npm_install karma-firefox-launcher --save-dev
+  - gradle npm_install
+before_script:
+  - gradle build
+  - gradle gulp_build
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always

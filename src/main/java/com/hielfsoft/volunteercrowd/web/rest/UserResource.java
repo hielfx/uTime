@@ -10,6 +10,7 @@ import com.hielfsoft.volunteercrowd.security.AuthoritiesConstants;
 import com.hielfsoft.volunteercrowd.service.MailService;
 import com.hielfsoft.volunteercrowd.service.UserService;
 import com.hielfsoft.volunteercrowd.web.rest.dto.ManagedUserDTO;
+import com.hielfsoft.volunteercrowd.web.rest.dto.UserDTO;
 import com.hielfsoft.volunteercrowd.web.rest.util.HeaderUtil;
 import com.hielfsoft.volunteercrowd.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -25,16 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing users.
@@ -174,7 +173,7 @@ public class UserResource {
 
     /**
      * GET  /users : get all users.
-     *
+     * 
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
      * @throws URISyntaxException if the pagination headers couldnt be generated

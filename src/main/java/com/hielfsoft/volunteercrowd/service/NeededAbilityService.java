@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing NeededAbility.
@@ -22,16 +25,16 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 public class NeededAbilityService {
 
     private final Logger log = LoggerFactory.getLogger(NeededAbilityService.class);
-
+    
     @Inject
     private NeededAbilityRepository neededAbilityRepository;
-
+    
     @Inject
     private NeededAbilitySearchRepository neededAbilitySearchRepository;
-
+    
     /**
      * Save a neededAbility.
-     *
+     * 
      * @param neededAbility the entity to save
      * @return the persisted entity
      */
@@ -44,14 +47,14 @@ public class NeededAbilityService {
 
     /**
      *  Get all the neededAbilities.
-     *
+     *  
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Page<NeededAbility> findAll(Pageable pageable) {
         log.debug("Request to get all NeededAbilities");
-        Page<NeededAbility> result = neededAbilityRepository.findAll(pageable);
+        Page<NeededAbility> result = neededAbilityRepository.findAll(pageable); 
         return result;
     }
 
@@ -61,7 +64,7 @@ public class NeededAbilityService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public NeededAbility findOne(Long id) {
         log.debug("Request to get NeededAbility : {}", id);
         NeededAbility neededAbility = neededAbilityRepository.findOne(id);
@@ -70,7 +73,7 @@ public class NeededAbilityService {
 
     /**
      *  Delete the  neededAbility by id.
-     *
+     *  
      *  @param id the id of the entity
      */
     public void delete(Long id) {

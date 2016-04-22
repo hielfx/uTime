@@ -7,15 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Payment.
@@ -25,16 +25,16 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 public class PaymentService {
 
     private final Logger log = LoggerFactory.getLogger(PaymentService.class);
-
+    
     @Inject
     private PaymentRepository paymentRepository;
-
+    
     @Inject
     private PaymentSearchRepository paymentSearchRepository;
-
+    
     /**
      * Save a payment.
-     *
+     * 
      * @param payment the entity to save
      * @return the persisted entity
      */
@@ -47,14 +47,14 @@ public class PaymentService {
 
     /**
      *  Get all the payments.
-     *
+     *  
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Page<Payment> findAll(Pageable pageable) {
         log.debug("Request to get all Payments");
-        Page<Payment> result = paymentRepository.findAll(pageable);
+        Page<Payment> result = paymentRepository.findAll(pageable); 
         return result;
     }
 
@@ -63,7 +63,7 @@ public class PaymentService {
      *  get all the payments where Assessment is null.
      *  @return the list of entities
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public List<Payment> findAllWhereAssessmentIsNull() {
         log.debug("Request to get all payments where Assessment is null");
         return StreamSupport
@@ -78,7 +78,7 @@ public class PaymentService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Payment findOne(Long id) {
         log.debug("Request to get Payment : {}", id);
         Payment payment = paymentRepository.findOne(id);
@@ -87,7 +87,7 @@ public class PaymentService {
 
     /**
      *  Delete the  payment by id.
-     *
+     *  
      *  @param id the id of the entity
      */
     public void delete(Long id) {

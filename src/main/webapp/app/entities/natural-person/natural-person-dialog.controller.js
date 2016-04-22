@@ -10,15 +10,7 @@
     function NaturalPersonDialogController ($scope, $stateParams, $uibModalInstance, $q, entity, NaturalPerson, Gender, AppUser, Curriculum) {
         var vm = this;
         vm.naturalPerson = entity;
-        vm.genders = Gender.query({filter: 'naturalperson-is-null'});
-        $q.all([vm.naturalPerson.$promise, vm.genders.$promise]).then(function() {
-            if (!vm.naturalPerson.gender || !vm.naturalPerson.gender.id) {
-                return $q.reject();
-            }
-            return Gender.get({id : vm.naturalPerson.gender.id}).$promise;
-        }).then(function(gender) {
-            vm.genders.push(gender);
-        });
+        vm.genders = Gender.query();
         vm.appusers = AppUser.query({filter: 'naturalperson-is-null'});
         $q.all([vm.naturalPerson.$promise, vm.appusers.$promise]).then(function() {
             if (!vm.naturalPerson.appUser || !vm.naturalPerson.appUser.id) {

@@ -7,15 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Curriculum.
@@ -40,6 +40,10 @@ public class CurriculumService {
      */
     public Curriculum save(Curriculum curriculum) {
         log.debug("Request to save Curriculum : {}", curriculum);
+
+        //We add the curriculum to the NaturalPerson
+        curriculum.getNaturalPerson().setCurriculum(curriculum);
+
         Curriculum result = curriculumRepository.save(curriculum);
         curriculumSearchRepository.save(result);
         return result;

@@ -3,17 +3,20 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Curriculum;
 import com.hielfsoft.volunteercrowd.repository.CurriculumRepository;
-import com.hielfsoft.volunteercrowd.repository.search.CurriculumSearchRepository;
 import com.hielfsoft.volunteercrowd.service.CurriculumService;
+import com.hielfsoft.volunteercrowd.repository.search.CurriculumSearchRepository;
+
+import com.hielfsoft.volunteercrowd.service.NaturalPersonService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -25,13 +28,12 @@ import org.springframework.util.Base64Utils;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,8 +51,8 @@ public class CurriculumResourceIntTest {
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));
 
-    private static final String DEFAULT_WEBSITE = "AAAAA";
-    private static final String UPDATED_WEBSITE = "BBBBB";
+    private static final String DEFAULT_WEBSITE = "http://www.google.es";
+    private static final String UPDATED_WEBSITE = "http://www.google.com";
 
     private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
     private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -71,6 +73,8 @@ public class CurriculumResourceIntTest {
     private static final String DEFAULT_MISSION = "AAAAA";
     private static final String UPDATED_MISSION = "BBBBB";
 
+    private static final long NATURAL_PERSON_ID = 23;
+
     @Inject
     private CurriculumRepository curriculumRepository;
 
@@ -85,6 +89,9 @@ public class CurriculumResourceIntTest {
 
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Inject
+    private NaturalPersonService naturalPersonService;
 
     private MockMvc restCurriculumMockMvc;
 
@@ -112,6 +119,8 @@ public class CurriculumResourceIntTest {
         curriculum.setStatement(DEFAULT_STATEMENT);
         curriculum.setVision(DEFAULT_VISION);
         curriculum.setMission(DEFAULT_MISSION);
+
+        curriculum.setNaturalPerson(naturalPersonService.findOne(NATURAL_PERSON_ID));
     }
 
     @Test

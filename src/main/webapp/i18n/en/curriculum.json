@@ -2,7 +2,7 @@
     "volunteercrowdApp": {
         "curriculum" : {
             "home": {
-                "title": "Curriculums",
+                "title": "Curricula",
                 "createLabel": "Create a new Curriculum",
                 "createOrEditLabel": "Create or edit a Curriculum",
                 "search": "Search for Curriculum"
@@ -19,6 +19,10 @@
             "website": "Website",
             "creationDate": "CreationDate",
             "modificationDate": "ModificationDate",
+            "file": "File",
+            "statement": "Statement",
+            "vision": "Vision",
+            "mission": "Mission",
             "naturalPerson": "NaturalPerson"
         }
     }

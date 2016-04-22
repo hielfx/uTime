@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing NaturalPerson.
@@ -22,16 +25,16 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 public class NaturalPersonService {
 
     private final Logger log = LoggerFactory.getLogger(NaturalPersonService.class);
-
+    
     @Inject
     private NaturalPersonRepository naturalPersonRepository;
-
+    
     @Inject
     private NaturalPersonSearchRepository naturalPersonSearchRepository;
-
+    
     /**
      * Save a naturalPerson.
-     *
+     * 
      * @param naturalPerson the entity to save
      * @return the persisted entity
      */
@@ -44,14 +47,14 @@ public class NaturalPersonService {
 
     /**
      *  Get all the naturalPeople.
-     *
+     *  
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Page<NaturalPerson> findAll(Pageable pageable) {
         log.debug("Request to get all NaturalPeople");
-        Page<NaturalPerson> result = naturalPersonRepository.findAll(pageable);
+        Page<NaturalPerson> result = naturalPersonRepository.findAll(pageable); 
         return result;
     }
 
@@ -61,7 +64,7 @@ public class NaturalPersonService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public NaturalPerson findOne(Long id) {
         log.debug("Request to get NaturalPerson : {}", id);
         NaturalPerson naturalPerson = naturalPersonRepository.findOne(id);
@@ -70,7 +73,7 @@ public class NaturalPersonService {
 
     /**
      *  Delete the  naturalPerson by id.
-     *
+     *  
      *  @param id the id of the entity
      */
     public void delete(Long id) {

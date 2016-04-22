@@ -5,7 +5,7 @@
   "caniuse": "video",
   "tags": ["html5"],
   "knownBugs": [
- "Without QuickTime, `Modernizr.video.h264` will be `undefined`; https://github.com/Modernizr/Modernizr/issues/546"
+    "Without QuickTime, `Modernizr.video.h264` will be `undefined`; https://github.com/Modernizr/Modernizr/issues/546"
   ],
   "polyfills": [
     "html5media",
@@ -43,7 +43,7 @@ define(['Modernizr', 'createElement'], function(Modernizr, createElement) {
     // IE9 Running on Windows Server SKU can cause an exception to be thrown, bug #224
     try {
       if (bool = !!elem.canPlayType) {
-        bool = Boolean(bool);
+        bool = new Boolean(bool);
         bool.ogg = elem.canPlayType('video/ogg; codecs="theora"').replace(/^no$/, '');
 
         // Without QuickTime, this value will be `undefined`. github.com/Modernizr/Modernizr/issues/546

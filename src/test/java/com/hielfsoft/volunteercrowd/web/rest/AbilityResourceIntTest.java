@@ -3,17 +3,20 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Ability;
 import com.hielfsoft.volunteercrowd.repository.AbilityRepository;
-import com.hielfsoft.volunteercrowd.repository.search.AbilitySearchRepository;
 import com.hielfsoft.volunteercrowd.service.AbilityService;
+import com.hielfsoft.volunteercrowd.repository.search.AbilitySearchRepository;
+
+import com.hielfsoft.volunteercrowd.service.AppUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,7 +29,6 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,6 +50,8 @@ public class AbilityResourceIntTest {
     private static final Boolean DEFAULT_HIDDEN = false;
     private static final Boolean UPDATED_HIDDEN = true;
 
+    private static final long APP_USER_ID = 9;
+
     @Inject
     private AbilityRepository abilityRepository;
 
@@ -56,6 +60,9 @@ public class AbilityResourceIntTest {
 
     @Inject
     private AbilitySearchRepository abilitySearchRepository;
+
+    @Inject
+    private AppUserService appUserService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -83,6 +90,8 @@ public class AbilityResourceIntTest {
         ability = new Ability();
         ability.setName(DEFAULT_NAME);
         ability.setHidden(DEFAULT_HIDDEN);
+
+        ability.setAppUser(appUserService.findOne(APP_USER_ID));
     }
 
     @Test

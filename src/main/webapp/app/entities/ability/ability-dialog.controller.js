@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -7,13 +7,13 @@
 
     AbilityDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Ability', 'Tag', 'AppUser'];
 
-    function AbilityDialogController($scope, $stateParams, $uibModalInstance, entity, Ability, Tag, AppUser) {
+    function AbilityDialogController ($scope, $stateParams, $uibModalInstance, entity, Ability, Tag, AppUser) {
         var vm = this;
         vm.ability = entity;
         vm.tags = Tag.query();
         vm.appusers = AppUser.query();
-        vm.load = function (id) {
-            Ability.get({id: id}, function (result) {
+        vm.load = function(id) {
+            Ability.get({id : id}, function(result) {
                 vm.ability = result;
             });
         };
@@ -37,7 +37,7 @@
             }
         };
 
-        vm.clear = function () {
+        vm.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
     }

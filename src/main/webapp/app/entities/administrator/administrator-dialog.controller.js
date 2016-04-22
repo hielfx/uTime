@@ -5,20 +5,12 @@
         .module('volunteercrowdApp')
         .controller('AdministratorDialogController', AdministratorDialogController);
 
-    AdministratorDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Administrator', 'AppUser', 'Incidence'];
+    AdministratorDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Administrator', 'User', 'Incidence'];
 
-    function AdministratorDialogController ($scope, $stateParams, $uibModalInstance, $q, entity, Administrator, AppUser, Incidence) {
+    function AdministratorDialogController ($scope, $stateParams, $uibModalInstance, $q, entity, Administrator, User, Incidence) {
         var vm = this;
         vm.administrator = entity;
-        vm.users = AppUser.query({filter: 'administrator-is-null'});
-        $q.all([vm.administrator.$promise, vm.users.$promise]).then(function() {
-            if (!vm.administrator.user || !vm.administrator.user.id) {
-                return $q.reject();
-            }
-            return AppUser.get({id : vm.administrator.user.id}).$promise;
-        }).then(function(user) {
-            vm.users.push(user);
-        });
+        vm.users = User.query();
         vm.incidences = Incidence.query();
         vm.load = function(id) {
             Administrator.get({id : id}, function(result) {

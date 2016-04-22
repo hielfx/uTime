@@ -1,6 +1,7 @@
 package com.hielfsoft.volunteercrowd.cucumber.stepdefs;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
+
 import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;

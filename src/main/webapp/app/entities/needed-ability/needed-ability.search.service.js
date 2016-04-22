@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -8,10 +8,10 @@
     NeededAbilitySearch.$inject = ['$resource'];
 
     function NeededAbilitySearch($resource) {
-        var resourceUrl = 'api/_search/needed-abilities/:id';
+        var resourceUrl =  'api/_search/needed-abilities/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': {method: 'GET', isArray: true}
+            'query': { method: 'GET', isArray: true}
         });
     }
 })();

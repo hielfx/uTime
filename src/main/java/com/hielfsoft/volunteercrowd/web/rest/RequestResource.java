@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Request.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class RequestResource {
 
     private final Logger log = LoggerFactory.getLogger(RequestResource.class);
-
+        
     @Inject
     private RequestService requestService;
-
+    
     /**
      * POST  /requests : Create a new request.
      *
@@ -100,7 +104,7 @@ public class RequestResource {
                     HttpStatus.OK);
         }
         log.debug("REST request to get a page of Requests");
-        Page<Request> page = requestService.findAll(pageable);
+        Page<Request> page = requestService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/requests");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing LegalEntity.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class LegalEntityResource {
 
     private final Logger log = LoggerFactory.getLogger(LegalEntityResource.class);
-
+        
     @Inject
     private LegalEntityService legalEntityService;
-
+    
     /**
      * POST  /legal-entities : Create a new legalEntity.
      *
@@ -94,7 +98,7 @@ public class LegalEntityResource {
     public ResponseEntity<List<LegalEntity>> getAllLegalEntities(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of LegalEntities");
-        Page<LegalEntity> page = legalEntityService.findAll(pageable);
+        Page<LegalEntity> page = legalEntityService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/legal-entities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

@@ -6,7 +6,7 @@
   "builderAliases": ["dom_microdata"],
   "notes": [{
     "name": "W3 Spec",
- "href": "https://www.w3.org/TR/microdata/"
+    "href": "https://www.w3.org/TR/microdata/"
   }]
 }
 !*/

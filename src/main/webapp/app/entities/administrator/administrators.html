@@ -44,7 +44,7 @@
                 <tr ng-repeat="administrator in vm.administrators track by administrator.id">
                     <td><a ui-sref="administrator-detail({id:administrator.id})">{{administrator.id}}</a></td>
                     <td>
-                        <a ui-sref="app-user-detail({id:administrator.user.id})">{{administrator.user.id}}</a>
+                        {{administrator.user.id}}
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">

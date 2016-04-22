@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -7,7 +7,7 @@
 
     Principal.$inject = ['$q', 'Account', 'JhiTrackerService'];
 
-    function Principal($q, Account, JhiTrackerService) {
+    function Principal ($q, Account, JhiTrackerService) {
         var _identity,
             _authenticated = false;
 
@@ -22,12 +22,12 @@
 
         return service;
 
-        function authenticate(identity) {
+        function authenticate (identity) {
             _identity = identity;
             _authenticated = identity !== null;
         }
 
-        function hasAnyAuthority(authorities) {
+        function hasAnyAuthority (authorities) {
             if (!_authenticated || !_identity || !_identity.authorities) {
                 return false;
             }
@@ -41,19 +41,19 @@
             return false;
         }
 
-        function hasAuthority(authority) {
+        function hasAuthority (authority) {
             if (!_authenticated) {
                 return $q.when(false);
             }
 
-            return this.identity().then(function (_id) {
+            return this.identity().then(function(_id) {
                 return _id.authorities && _id.authorities.indexOf(authority) !== -1;
-            }, function () {
+            }, function(){
                 return false;
             });
         }
 
-        function identity(force) {
+        function identity (force) {
             var deferred = $q.defer();
 
             if (force === true) {
@@ -75,25 +75,25 @@
 
             return deferred.promise;
 
-            function getAccountThen(account) {
+            function getAccountThen (account) {
                 _identity = account.data;
                 _authenticated = true;
                 deferred.resolve(_identity);
                 JhiTrackerService.connect();
             }
 
-            function getAccountCatch() {
+            function getAccountCatch () {
                 _identity = null;
                 _authenticated = false;
                 deferred.resolve(_identity);
             }
         }
 
-        function isAuthenticated() {
+        function isAuthenticated () {
             return _authenticated;
         }
 
-        function isIdentityResolved() {
+        function isIdentityResolved () {
             return angular.isDefined(_identity);
         }
     }

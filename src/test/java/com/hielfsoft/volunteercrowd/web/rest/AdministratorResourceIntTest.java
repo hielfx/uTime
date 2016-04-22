@@ -2,18 +2,24 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Administrator;
+import com.hielfsoft.volunteercrowd.domain.Authority;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AdministratorRepository;
-import com.hielfsoft.volunteercrowd.repository.search.AdministratorSearchRepository;
+import com.hielfsoft.volunteercrowd.security.AuthoritiesConstants;
 import com.hielfsoft.volunteercrowd.service.AdministratorService;
+import com.hielfsoft.volunteercrowd.repository.search.AdministratorSearchRepository;
+
+import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -23,10 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -53,6 +60,9 @@ public class AdministratorResourceIntTest {
     private AdministratorSearchRepository administratorSearchRepository;
 
     @Inject
+    private UserService userService;
+
+    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -76,6 +86,31 @@ public class AdministratorResourceIntTest {
     public void initTest() {
         administratorSearchRepository.deleteAll();
         administrator = new Administrator();
+
+        //Create user
+        User user;
+        String login = "newadmin";
+        String password = "new_password";
+        String firstName = "New Admin";
+        String lastName = "Adm";
+        String email = "new_admin@admins.com";
+        String langKey = "es";
+        Set<Authority> authorities = new HashSet<>();//TODO: Change with create method
+
+        Authority a = new Authority();
+        a.setName(AuthoritiesConstants.ADMIN);
+        authorities.add(a);
+        a = new Authority();
+        a.setName(AuthoritiesConstants.USER);
+        authorities.add(a);
+
+        user = userService.createUserInformation(login,password,firstName,lastName,email,langKey);
+        user.setActivated(true);
+        user.setAuthorities(authorities);
+
+        userService.save(user);
+
+        administrator.setUser(user);
     }
 
     @Test
@@ -104,6 +139,7 @@ public class AdministratorResourceIntTest {
     @Transactional
     public void getAllAdministrators() throws Exception {
         // Initialize the database
+        userService.save(administrator.getUser());
         administratorRepository.saveAndFlush(administrator);
 
         // Get all the administrators
@@ -148,7 +184,7 @@ public class AdministratorResourceIntTest {
 
         restAdministratorMockMvc.perform(put("/api/administrators")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedAdministrator)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedAdministrator)))
                 .andExpect(status().isOk());
 
         // Validate the Administrator in the database

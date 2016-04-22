@@ -3,17 +3,21 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Payment;
 import com.hielfsoft.volunteercrowd.repository.PaymentRepository;
-import com.hielfsoft.volunteercrowd.repository.search.PaymentSearchRepository;
+import com.hielfsoft.volunteercrowd.service.AppUserService;
 import com.hielfsoft.volunteercrowd.service.PaymentService;
+import com.hielfsoft.volunteercrowd.repository.search.PaymentSearchRepository;
+
+import com.hielfsoft.volunteercrowd.service.RequestService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -24,13 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -56,6 +59,9 @@ public class PaymentResourceIntTest {
     private static final ZonedDateTime UPDATED_PAYMENT_MOMENT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final String DEFAULT_PAYMENT_MOMENT_STR = dateTimeFormatter.format(DEFAULT_PAYMENT_MOMENT);
 
+    private static final long REQUEST_ID = 46;
+    private static final long PAYER_ID = 9;
+
     @Inject
     private PaymentRepository paymentRepository;
 
@@ -64,6 +70,12 @@ public class PaymentResourceIntTest {
 
     @Inject
     private PaymentSearchRepository paymentSearchRepository;
+
+    @Inject
+    private AppUserService appUserService;
+
+    @Inject
+    private RequestService requestService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -91,6 +103,9 @@ public class PaymentResourceIntTest {
         payment = new Payment();
         payment.setAmount(DEFAULT_AMOUNT);
         payment.setPaymentMoment(DEFAULT_PAYMENT_MOMENT);
+
+        payment.setRequest(requestService.findOne(REQUEST_ID));
+        payment.setPayer(appUserService.findOne(PAYER_ID));
     }
 
     @Test

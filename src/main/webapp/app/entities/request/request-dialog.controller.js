@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -7,7 +7,7 @@
 
     RequestDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Request', 'AppUser', 'Need', 'Payment', 'Incidence', 'RequestStatus'];
 
-    function RequestDialogController($scope, $stateParams, $uibModalInstance, entity, Request, AppUser, Need, Payment, Incidence, RequestStatus) {
+    function RequestDialogController ($scope, $stateParams, $uibModalInstance, entity, Request, AppUser, Need, Payment, Incidence, RequestStatus) {
         var vm = this;
         vm.request = entity;
         vm.appusers = AppUser.query();
@@ -15,8 +15,8 @@
         vm.payments = Payment.query();
         vm.incidences = Incidence.query();
         vm.requeststatuss = RequestStatus.query();
-        vm.load = function (id) {
-            Request.get({id: id}, function (result) {
+        vm.load = function(id) {
+            Request.get({id : id}, function(result) {
                 vm.request = result;
             });
         };
@@ -40,7 +40,7 @@
             }
         };
 
-        vm.clear = function () {
+        vm.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
 
@@ -49,7 +49,7 @@
         vm.datePickerOpenStatus.finishDate = false;
         vm.datePickerOpenStatus.modificationDate = false;
 
-        vm.openCalendar = function (date) {
+        vm.openCalendar = function(date) {
             vm.datePickerOpenStatus[date] = true;
         };
     }

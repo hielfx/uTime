@@ -51,6 +51,7 @@
         "messageformat": {
             "main": [
                 "messageformat.js",
+                "locale/en.js",
                 "locale/es.js"
             ]
         }

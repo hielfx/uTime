@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Assessment.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class AssessmentResource {
 
     private final Logger log = LoggerFactory.getLogger(AssessmentResource.class);
-
+        
     @Inject
     private AssessmentService assessmentService;
-
+    
     /**
      * POST  /assessments : Create a new assessment.
      *
@@ -94,7 +98,7 @@ public class AssessmentResource {
     public ResponseEntity<List<Assessment>> getAllAssessments(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Assessments");
-        Page<Assessment> page = assessmentService.findAll(pageable);
+        Page<Assessment> page = assessmentService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assessments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

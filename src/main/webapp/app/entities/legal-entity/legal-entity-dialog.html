@@ -1,48 +1,44 @@
+
 <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myLegalEntityLabel"
-            translate="volunteercrowdApp.legalEntity.home.createOrEditLabel">Create or edit a LegalEntity</h4>
+        <h4 class="modal-title" id="myLegalEntityLabel" translate="volunteercrowdApp.legalEntity.home.createOrEditLabel">Create or edit a LegalEntity</h4>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group">
             <label for="id" translate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                   ng-model="vm.legalEntity.id" readonly/>
+                    ng-model="vm.legalEntity.id" readonly />
         </div>
         <div class="form-group">
-            <label class="control-label" translate="volunteercrowdApp.legalEntity.mission"
-                   for="field_mission">Mission</label>
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.mission" for="field_mission">Mission</label>
             <input type="text" class="form-control" name="mission" id="field_mission"
-                   ng-model="vm.legalEntity.mission"
-                />
+                    ng-model="vm.legalEntity.mission"
+                     />
         </div>
         <div class="form-group">
-            <label class="control-label" translate="volunteercrowdApp.legalEntity.vision"
-                   for="field_vision">Vision</label>
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.vision" for="field_vision">Vision</label>
             <input type="text" class="form-control" name="vision" id="field_vision"
-                   ng-model="vm.legalEntity.vision"
-                />
+                    ng-model="vm.legalEntity.vision"
+                     />
         </div>
         <div class="form-group">
-            <label class="control-label" translate="volunteercrowdApp.legalEntity.website"
-                   for="field_website">Website</label>
+            <label class="control-label" translate="volunteercrowdApp.legalEntity.website" for="field_website">Website</label>
             <input type="text" class="form-control" name="website" id="field_website"
-                   ng-model="vm.legalEntity.website"
-                />
+                    ng-model="vm.legalEntity.website"
+                     />
         </div>
         <div class="form-group">
             <label class="control-label" translate="volunteercrowdApp.legalEntity.description" for="field_description">Description</label>
             <input type="text" class="form-control" name="description" id="field_description"
-                   ng-model="vm.legalEntity.description"
-                   required/>
-
+                    ng-model="vm.legalEntity.description"
+                    required />
             <div ng-show="editForm.description.$invalid">
                 <p class="help-block"
-                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                    ng-show="editForm.description.$error.required" translate="entity.validation.required">
                     This field is required.
                 </p>
             </div>
@@ -50,16 +46,14 @@
 
         <div class="form-group">
             <label translate="volunteercrowdApp.legalEntity.appUser" for="field_appUser">appUser</label>
-            <select class="form-control" id="field_appUser" name="appUser" ng-model="vm.legalEntity.appUser"
-                    ng-options="appUser as appUser.id for appUser in vm.appusers | orderBy:'id' track by appUser.id">
+            <select class="form-control" id="field_appUser" name="appUser" ng-model="vm.legalEntity.appUser" ng-options="appUser as appUser.id for appUser in vm.appusers | orderBy:'id' track by appUser.id">
                 <option value=""></option>
             </select>
         </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-            translate="entity.action.cancel">Cancel</span>
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>

@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -7,7 +7,7 @@
 
     AvailabilityController.$inject = ['$scope', '$state', 'Availability', 'AvailabilitySearch', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
 
-    function AvailabilityController($scope, $state, Availability, AvailabilitySearch, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    function AvailabilityController ($scope, $state, Availability, AvailabilitySearch, ParseLinks, AlertService, pagingParams, paginationConstants) {
         var vm = this;
         vm.loadAll = loadAll;
         vm.loadPage = loadPage;
@@ -20,7 +20,7 @@
         vm.currentSearch = pagingParams.search;
         vm.loadAll();
 
-        function loadAll() {
+        function loadAll () {
             if (pagingParams.search) {
                 AvailabilitySearch.query({
                     query: pagingParams.search,
@@ -42,7 +42,6 @@
                 }
                 return result;
             }
-
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
@@ -50,18 +49,17 @@
                 vm.availabilities = data;
                 vm.page = pagingParams.page;
             }
-
             function onError(error) {
                 AlertService.error(error.data.message);
             }
         }
 
-        function loadPage(page) {
+        function loadPage (page) {
             vm.page = page;
             vm.transition();
         }
 
-        function transition() {
+        function transition () {
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
@@ -69,8 +67,8 @@
             });
         }
 
-        function search(searchQuery) {
-            if (!searchQuery) {
+        function search (searchQuery) {
+            if (!searchQuery){
                 return vm.clear();
             }
             vm.links = null;
@@ -81,7 +79,7 @@
             vm.transition();
         }
 
-        function clear() {
+        function clear () {
             vm.links = null;
             vm.page = 1;
             vm.predicate = 'id';

@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Administrator.
@@ -22,16 +25,16 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 public class AdministratorService {
 
     private final Logger log = LoggerFactory.getLogger(AdministratorService.class);
-
+    
     @Inject
     private AdministratorRepository administratorRepository;
-
+    
     @Inject
     private AdministratorSearchRepository administratorSearchRepository;
-
+    
     /**
      * Save a administrator.
-     *
+     * 
      * @param administrator the entity to save
      * @return the persisted entity
      */
@@ -44,14 +47,14 @@ public class AdministratorService {
 
     /**
      *  Get all the administrators.
-     *
+     *  
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Page<Administrator> findAll(Pageable pageable) {
         log.debug("Request to get all Administrators");
-        Page<Administrator> result = administratorRepository.findAll(pageable);
+        Page<Administrator> result = administratorRepository.findAll(pageable); 
         return result;
     }
 
@@ -61,7 +64,7 @@ public class AdministratorService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public Administrator findOne(Long id) {
         log.debug("Request to get Administrator : {}", id);
         Administrator administrator = administratorRepository.findOne(id);
@@ -70,7 +73,7 @@ public class AdministratorService {
 
     /**
      *  Delete the  administrator by id.
-     *
+     *  
      *  @param id the id of the entity
      */
     public void delete(Long id) {

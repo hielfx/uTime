@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -7,14 +7,14 @@
 
     JhiHealthService.$inject = ['$rootScope', '$http'];
 
-    function JhiHealthService($rootScope, $http) {
+    function JhiHealthService ($rootScope, $http) {
         var service = {
             checkHealth: checkHealth
         };
 
         return service;
 
-        function checkHealth() {
+        function checkHealth () {
             return $http.get('health').then(function (response) {
                 return response.data;
             });

@@ -21,6 +21,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Tag.
@@ -30,10 +34,10 @@ import java.util.Optional;
 public class TagResource {
 
     private final Logger log = LoggerFactory.getLogger(TagResource.class);
-
+        
     @Inject
     private TagService tagService;
-
+    
     /**
      * POST  /tags : Create a new tag.
      *
@@ -94,7 +98,7 @@ public class TagResource {
     public ResponseEntity<List<Tag>> getAllTags(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Tags");
-        Page<Tag> page = tagService.findAll(pageable);
+        Page<Tag> page = tagService.findAll(pageable); 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tags");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
