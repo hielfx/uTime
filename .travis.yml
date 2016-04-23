@@ -6,7 +6,7 @@ jdk:
 sudo: true
 before_install:
   - wget -qO- https://deb.nodesource.com/setup_4.x | sudo bash -
-  - apt-get install --yes nodejs
+  - sudo apt-get install --yes nodejs
 install:
   - npm install -g npm
   - npm update
