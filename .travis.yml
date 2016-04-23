@@ -15,8 +15,6 @@ install:
   - npm install
   - bower install
 before_script:
-  - gulp install
-  - gulp build
   - gulp test
 notifications:
   webhooks:
