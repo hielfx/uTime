@@ -5,19 +5,16 @@ jdk:
   - oraclejdk8
 sudo: true
 before_install:
-  - sudo npm cache clean -f
-  - sudo npm install -g n
-  - sudo n stable
-  - gradle npm_install -g npm
-  - gradle npm_update
-  - gradle npm_install -g gulp
+  - wget -qO- https://deb.nodesource.com/setup_4.x | sudo bash -
+  - apt-get install --yes nodejs
 install:
-  - gradle npm_install
-  - gradle npm_install karma-firefox-launcher --save-dev
-  - gradle npm_install
+  - npm install -g npm
+  - npm update
+  - npm install -g gulp
+  - npm install
 before_script:
   - gradle build
-  - gradle gulp_build
+  - gulp build
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
