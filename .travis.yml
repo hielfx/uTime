@@ -13,7 +13,6 @@ install:
   - npm install -g gulp
   - npm install
 before_script:
-  - gradle build
   - gulp build
 notifications:
   webhooks:
