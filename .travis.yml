@@ -1,21 +1,10 @@
-language: java
+language: node_js
 node_js:
   - "4.3.2"
-jdk:
-  - oraclejdk8
-sudo: true
-before_install:
-  - wget -qO- https://deb.nodesource.com/setup_4.x | sudo bash -
-  - sudo apt-get install --yes nodejs
-install:
-  - npm install -g npm
-  - npm update
-  - npm install -g bower
-  - npm install -g gulp
-  - npm install
-  - bower install
-before_script:
-  - gulp test
+sudo: false
+before_install: npm install -g gulp
+install: npm install
+before_script: gulp build
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
