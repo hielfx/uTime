@@ -5,21 +5,19 @@ import com.hielfsoft.volunteercrowd.domain.Administrator;
 import com.hielfsoft.volunteercrowd.domain.Authority;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AdministratorRepository;
+import com.hielfsoft.volunteercrowd.repository.search.AdministratorSearchRepository;
 import com.hielfsoft.volunteercrowd.security.AuthoritiesConstants;
 import com.hielfsoft.volunteercrowd.service.AdministratorService;
-import com.hielfsoft.volunteercrowd.repository.search.AdministratorSearchRepository;
-
 import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -34,6 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -179,12 +178,17 @@ public class AdministratorResourceIntTest {
         int databaseSizeBeforeUpdate = administratorRepository.findAll().size();
 
         // Update the administrator
-        Administrator updatedAdministrator = new Administrator();
-        updatedAdministrator.setId(administrator.getId());
+//        Administrator updatedAdministrator = new Administrator();
+//        updatedAdministrator.setId(administrator.getId());
+
+        administrator.getUser().setEmail("newemail@new.com");
+        User user = userService.save(administrator.getUser());
+        administrator.setUser(user);
+
 
         restAdministratorMockMvc.perform(put("/api/administrators")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedAdministrator)))
+            .content(TestUtil.convertObjectToJsonBytes(/*updatedAdministrator*/administrator)))
                 .andExpect(status().isOk());
 
         // Validate the Administrator in the database

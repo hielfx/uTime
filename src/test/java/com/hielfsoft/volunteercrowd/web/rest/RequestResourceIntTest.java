@@ -2,20 +2,22 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Request;
+import com.hielfsoft.volunteercrowd.domain.RequestStatus;
+import com.hielfsoft.volunteercrowd.domain.RequestStatusConstants;
 import com.hielfsoft.volunteercrowd.repository.RequestRepository;
-import com.hielfsoft.volunteercrowd.service.RequestService;
 import com.hielfsoft.volunteercrowd.repository.search.RequestSearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.service.NeedService;
+import com.hielfsoft.volunteercrowd.service.RequestService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,12 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -72,6 +75,9 @@ public class RequestResourceIntTest {
     private static final ZonedDateTime UPDATED_MODIFICATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final String DEFAULT_MODIFICATION_DATE_STR = dateTimeFormatter.format(DEFAULT_MODIFICATION_DATE);
 
+    private static final long APPLICANT_ID = 12;
+    private static final long NEED_ID = 42;
+
     @Inject
     private RequestRepository requestRepository;
 
@@ -80,6 +86,12 @@ public class RequestResourceIntTest {
 
     @Inject
     private RequestSearchRepository requestSearchRepository;
+
+    @Inject
+    private AppUserService appUserService;
+
+    @Inject
+    private NeedService needService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -112,6 +124,12 @@ public class RequestResourceIntTest {
         request.setDeleted(DEFAULT_DELETED);
         request.setPaid(DEFAULT_PAID);
         request.setModificationDate(DEFAULT_MODIFICATION_DATE);
+
+        request.setApplicant(appUserService.findOne(APPLICANT_ID));
+        request.setNeed(needService.findOne(NEED_ID));
+        RequestStatus rs = new RequestStatus();
+        rs.setName(RequestStatusConstants.PENDING);
+        request.setRequestStatus(rs);
     }
 
     @Test
@@ -326,19 +344,18 @@ public class RequestResourceIntTest {
         int databaseSizeBeforeUpdate = requestRepository.findAll().size();
 
         // Update the request
-        Request updatedRequest = new Request();
-        updatedRequest.setId(request.getId());
-        updatedRequest.setCreationDate(UPDATED_CREATION_DATE);
-        updatedRequest.setDescription(UPDATED_DESCRIPTION);
-        updatedRequest.setCode(UPDATED_CODE);
-        updatedRequest.setFinishDate(UPDATED_FINISH_DATE);
-        updatedRequest.setDeleted(UPDATED_DELETED);
-        updatedRequest.setPaid(UPDATED_PAID);
-        updatedRequest.setModificationDate(UPDATED_MODIFICATION_DATE);
+        request.setId(request.getId());
+        request.setCreationDate(UPDATED_CREATION_DATE);
+        request.setDescription(UPDATED_DESCRIPTION);
+        request.setCode(UPDATED_CODE);
+        request.setFinishDate(UPDATED_FINISH_DATE);
+        request.setDeleted(UPDATED_DELETED);
+        request.setPaid(UPDATED_PAID);
+        request.setModificationDate(UPDATED_MODIFICATION_DATE);
 
         restRequestMockMvc.perform(put("/api/requests")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedRequest)))
+            .content(TestUtil.convertObjectToJsonBytes(request)))
                 .andExpect(status().isOk());
 
         // Validate the Request in the database

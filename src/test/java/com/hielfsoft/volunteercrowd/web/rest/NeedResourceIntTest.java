@@ -3,19 +3,18 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Need;
 import com.hielfsoft.volunteercrowd.repository.NeedRepository;
-import com.hielfsoft.volunteercrowd.service.NeedService;
 import com.hielfsoft.volunteercrowd.repository.search.NeedSearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.service.NeedService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,12 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -72,6 +72,8 @@ public class NeedResourceIntTest {
     private static final Boolean DEFAULT_COMPLETED = false;
     private static final Boolean UPDATED_COMPLETED = true;
 
+    private static final long APPUSER_ID = 21;
+
     @Inject
     private NeedRepository needRepository;
 
@@ -80,6 +82,9 @@ public class NeedResourceIntTest {
 
     @Inject
     private NeedSearchRepository needSearchRepository;
+
+    @Inject
+    private AppUserService appUserService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -113,6 +118,9 @@ public class NeedResourceIntTest {
         need.setCreationDate(DEFAULT_CREATION_DATE);
         need.setModificationDate(DEFAULT_MODIFICATION_DATE);
         need.setCompleted(DEFAULT_COMPLETED);
+
+        need.setAppUser(appUserService.findOne(APPUSER_ID));
+
     }
 
     @Test
@@ -322,6 +330,8 @@ public class NeedResourceIntTest {
         updatedNeed.setCreationDate(UPDATED_CREATION_DATE);
         updatedNeed.setModificationDate(UPDATED_MODIFICATION_DATE);
         updatedNeed.setCompleted(UPDATED_COMPLETED);
+
+        updatedNeed.setAppUser(appUserService.findOne(APPUSER_ID));
 
         restNeedMockMvc.perform(put("/api/needs")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

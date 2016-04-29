@@ -43,7 +43,7 @@ public class NaturalPerson implements Serializable {
     @Valid
     private AppUser appUser;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     @Valid
     private Curriculum curriculum;

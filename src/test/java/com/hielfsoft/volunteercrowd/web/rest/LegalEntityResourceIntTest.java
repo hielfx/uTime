@@ -1,21 +1,24 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
+import com.hielfsoft.volunteercrowd.domain.Address;
+import com.hielfsoft.volunteercrowd.domain.AppUser;
 import com.hielfsoft.volunteercrowd.domain.LegalEntity;
+import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.LegalEntityRepository;
-import com.hielfsoft.volunteercrowd.service.LegalEntityService;
 import com.hielfsoft.volunteercrowd.repository.search.LegalEntitySearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.service.LegalEntityService;
+import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,6 +31,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -62,6 +66,12 @@ public class LegalEntityResourceIntTest {
     private LegalEntitySearchRepository legalEntitySearchRepository;
 
     @Inject
+    private UserService userService;
+
+    @Inject
+    private AppUserService appUserService;
+
+    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -79,6 +89,10 @@ public class LegalEntityResourceIntTest {
         this.restLegalEntityMockMvc = MockMvcBuilders.standaloneSetup(legalEntityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
+
+        if (legalEntity != null && legalEntity.getAppUser() != null) {
+            appUserService.save(legalEntity.getAppUser());
+        }
     }
 
     @Before
@@ -89,6 +103,49 @@ public class LegalEntityResourceIntTest {
         legalEntity.setVision(DEFAULT_VISION);
         legalEntity.setWebsite(DEFAULT_WEBSITE);
         legalEntity.setDescription(DEFAULT_DESCRIPTION);
+
+        //Create appUser
+        AppUser appUser = new AppUser();
+
+        appUser.setIsOnline(false);
+        appUser.setTokens(0);
+        appUser.setPhoneNumber("698741253");
+        appUser.setImage(TestUtil.createByteArray(1, "0"));
+        appUser.setImageContentType("image/jpg");
+
+
+        //Create user and address
+        User user;
+        Address address = new Address();
+
+        String login = "newappuser";
+        String password = "new_password";
+        String firstName = "New App User";
+        String lastName = "AppU";
+        String email = "new_app_user@appuser.com";
+        String langKey = "es";
+
+        address.setAddress("AAAAAA");
+        address.setCity("AAAAAA");
+        address.setCountry("AAAAAA");
+        address.setProvince("AAAAAAA");
+        address.setShowAddress(true);
+        address.setShowCity(true);
+        address.setZipCode("AAAAAA");
+        address.setShowCountry(true);
+        address.setShowProvince(true);
+        address.setShowZipCode(true);
+
+        user = userService.createUserInformation(login, password, firstName, lastName, email, langKey);
+
+        appUser.setAddress(address);
+        appUser.setUser(user);
+
+        userService.save(user);
+
+        appUserService.save(appUser);
+
+        legalEntity.setAppUser(appUser);
     }
 
     @Test
@@ -186,16 +243,15 @@ public class LegalEntityResourceIntTest {
         int databaseSizeBeforeUpdate = legalEntityRepository.findAll().size();
 
         // Update the legalEntity
-        LegalEntity updatedLegalEntity = new LegalEntity();
-        updatedLegalEntity.setId(legalEntity.getId());
-        updatedLegalEntity.setMission(UPDATED_MISSION);
-        updatedLegalEntity.setVision(UPDATED_VISION);
-        updatedLegalEntity.setWebsite(UPDATED_WEBSITE);
-        updatedLegalEntity.setDescription(UPDATED_DESCRIPTION);
+        legalEntity.setId(legalEntity.getId());
+        legalEntity.setMission(UPDATED_MISSION);
+        legalEntity.setVision(UPDATED_VISION);
+        legalEntity.setWebsite(UPDATED_WEBSITE);
+        legalEntity.setDescription(UPDATED_DESCRIPTION);
 
         restLegalEntityMockMvc.perform(put("/api/legal-entities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedLegalEntity)))
+            .content(TestUtil.convertObjectToJsonBytes(legalEntity)))
                 .andExpect(status().isOk());
 
         // Validate the LegalEntity in the database

@@ -58,7 +58,7 @@ public class AppUser implements Serializable {
     @OneToOne(optional = false)
     @JoinColumn(unique = true, nullable = false)
     @NotNull
-    @Valid
+//    @Valid
     private User user;
 
     @ManyToMany
@@ -66,12 +66,12 @@ public class AppUser implements Serializable {
     @JoinTable(name = "app_user_follower",
                joinColumns = @JoinColumn(name="app_users_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="followers_id", referencedColumnName="ID"))
-    private Set<AppUser> followers = new HashSet<>();
+    private Set<AppUser> followers;
 
     @ManyToMany(mappedBy = "followers")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AppUser> followings = new HashSet<>();
+    private Set<AppUser> followings;
 
     @OneToOne(mappedBy = "appUser")
     @JsonIgnore
@@ -86,37 +86,49 @@ public class AppUser implements Serializable {
     @OneToMany(mappedBy = "appUser")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Ability> abilities = new HashSet<>();
+    private Set<Ability> abilities;
 
     @OneToMany(mappedBy = "applicant")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Request> requests = new HashSet<>();
+    private Set<Request> requests;
 
     @OneToMany(mappedBy = "appUser")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Need> needs = new HashSet<>();
+    private Set<Need> needs;
 
     @OneToMany(mappedBy = "creator")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Assessment> createdAssessments = new HashSet<>();
+    private Set<Assessment> createdAssessments;
 
     @OneToMany(mappedBy = "recipient")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Assessment> relatedAssessments = new HashSet<>();
+    private Set<Assessment> relatedAssessments;
 
     @OneToMany(mappedBy = "payer")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Payment> payments = new HashSet<>();
+    private Set<Payment> payments;
 
     @OneToMany(mappedBy = "creator")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Incidence> incidences = new HashSet<>();
+    private Set<Incidence> incidences;
+
+    public AppUser() {
+        followers = new HashSet<>();
+        followings = new HashSet<>();
+        abilities = new HashSet<>();
+        requests = new HashSet<>();
+        needs = new HashSet<>();
+        createdAssessments = new HashSet<>();
+        relatedAssessments = new HashSet<>();
+        payments = new HashSet<>();
+        incidences = new HashSet<>();
+    }
 
     public Address getAddress() {
         return address;

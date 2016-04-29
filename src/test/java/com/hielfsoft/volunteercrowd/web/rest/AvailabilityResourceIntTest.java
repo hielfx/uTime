@@ -2,22 +2,19 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Availability;
-import com.hielfsoft.volunteercrowd.domain.Need;
 import com.hielfsoft.volunteercrowd.repository.AvailabilityRepository;
-import com.hielfsoft.volunteercrowd.service.AvailabilityService;
 import com.hielfsoft.volunteercrowd.repository.search.AvailabilitySearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AvailabilityService;
 import com.hielfsoft.volunteercrowd.service.NeedService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,12 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -215,6 +213,8 @@ public class AvailabilityResourceIntTest {
         updatedAvailability.setId(availability.getId());
         updatedAvailability.setStartMoment(UPDATED_START_MOMENT);
         updatedAvailability.setEndMoment(UPDATED_END_MOMENT);
+
+        updatedAvailability.setNeed(needService.findOne(NEED_ID));
 
         restAvailabilityMockMvc.perform(put("/api/availabilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

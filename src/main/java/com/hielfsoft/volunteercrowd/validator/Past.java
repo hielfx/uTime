@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface Past {
 
-    String message() default "{javax.validation.constraints.Past.message}"; //Default javax Pasr message
+    String message() default "{javax.validation.constraints.Past.message}"; //Default javax Past message
 
     Class<?>[] groups() default {};
 

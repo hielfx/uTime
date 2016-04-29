@@ -82,13 +82,17 @@ public class Request implements Serializable {
     @OneToMany(mappedBy = "request")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Incidence> incidences = new HashSet<>();
+    private Set<Incidence> incidences;
 
     @ManyToOne(optional = false)
     @NotNull
     @Valid
     @JoinColumn(name="status", nullable = false)
     private RequestStatus requestStatus;
+
+    public Request() {
+        incidences = new HashSet<>();
+    }
 
     public Long getId() {
         return id;

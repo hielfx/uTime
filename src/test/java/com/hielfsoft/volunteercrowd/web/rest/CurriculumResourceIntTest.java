@@ -2,21 +2,20 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Curriculum;
+import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
 import com.hielfsoft.volunteercrowd.repository.CurriculumRepository;
-import com.hielfsoft.volunteercrowd.service.CurriculumService;
 import com.hielfsoft.volunteercrowd.repository.search.CurriculumSearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.CurriculumService;
 import com.hielfsoft.volunteercrowd.service.NaturalPersonService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,12 +27,13 @@ import org.springframework.util.Base64Utils;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -120,7 +120,10 @@ public class CurriculumResourceIntTest {
         curriculum.setVision(DEFAULT_VISION);
         curriculum.setMission(DEFAULT_MISSION);
 
-        curriculum.setNaturalPerson(naturalPersonService.findOne(NATURAL_PERSON_ID));
+        NaturalPerson naturalPerson = naturalPersonService.findOne(NATURAL_PERSON_ID);
+        curriculum.setNaturalPerson(naturalPerson);
+        naturalPerson.setCurriculum(curriculum);
+//        naturalPersonService.save(naturalPerson);
     }
 
     @Test
@@ -276,6 +279,11 @@ public class CurriculumResourceIntTest {
         updatedCurriculum.setStatement(UPDATED_STATEMENT);
         updatedCurriculum.setVision(UPDATED_VISION);
         updatedCurriculum.setMission(UPDATED_MISSION);
+
+        NaturalPerson naturalPerson = naturalPersonService.findOne(NATURAL_PERSON_ID);
+        updatedCurriculum.setNaturalPerson(naturalPerson);
+        naturalPerson.setCurriculum(updatedCurriculum);
+        naturalPersonService.save(naturalPerson);
 
         restCurriculumMockMvc.perform(put("/api/curricula")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

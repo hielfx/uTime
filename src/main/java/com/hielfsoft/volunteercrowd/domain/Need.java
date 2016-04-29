@@ -77,17 +77,23 @@ public class Need implements Serializable {
     @OneToMany(mappedBy = "need")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<NeededAbility> neededAbilities = new HashSet<>();
+    private Set<NeededAbility> neededAbilities;
 
     @OneToMany(mappedBy = "need")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Availability> availabilities = new HashSet<>();
+    private Set<Availability> availabilities;
 
     @OneToMany(mappedBy = "need")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Request> requests = new HashSet<>();
+    private Set<Request> requests;
+
+    public Need() {
+        neededAbilities = new HashSet<>();
+        availabilities = new HashSet<>();
+        requests = new HashSet<>();
+    }
 
     public Long getId() {
         return id;

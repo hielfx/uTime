@@ -3,20 +3,18 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Ability;
 import com.hielfsoft.volunteercrowd.repository.AbilityRepository;
-import com.hielfsoft.volunteercrowd.service.AbilityService;
 import com.hielfsoft.volunteercrowd.repository.search.AbilitySearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AbilityService;
 import com.hielfsoft.volunteercrowd.service.AppUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,6 +27,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -205,6 +204,8 @@ public class AbilityResourceIntTest {
         updatedAbility.setId(ability.getId());
         updatedAbility.setName(UPDATED_NAME);
         updatedAbility.setHidden(UPDATED_HIDDEN);
+
+        updatedAbility.setAppUser(appUserService.findOne(APP_USER_ID));
 
         restAbilityMockMvc.perform(put("/api/abilities")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

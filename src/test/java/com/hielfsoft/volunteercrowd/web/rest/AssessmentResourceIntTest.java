@@ -3,19 +3,19 @@ package com.hielfsoft.volunteercrowd.web.rest;
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
 import com.hielfsoft.volunteercrowd.domain.Assessment;
 import com.hielfsoft.volunteercrowd.repository.AssessmentRepository;
-import com.hielfsoft.volunteercrowd.service.AssessmentService;
 import com.hielfsoft.volunteercrowd.repository.search.AssessmentSearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.service.AssessmentService;
+import com.hielfsoft.volunteercrowd.service.PaymentService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,12 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,6 +60,11 @@ public class AssessmentResourceIntTest {
     private static final String DEFAULT_COMMENT = "AAAAA";
     private static final String UPDATED_COMMENT = "BBBBB";
 
+    private static final long PAYMENT_ID = 52;
+    private static final long RECIPIENT_ID = 9;
+    private static final long CREATOR_ID = 21;
+
+
     @Inject
     private AssessmentRepository assessmentRepository;
 
@@ -67,6 +73,12 @@ public class AssessmentResourceIntTest {
 
     @Inject
     private AssessmentSearchRepository assessmentSearchRepository;
+
+    @Inject
+    private PaymentService paymentService;
+
+    @Inject
+    private AppUserService appUserService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -95,6 +107,10 @@ public class AssessmentResourceIntTest {
         assessment.setCreationMoment(DEFAULT_CREATION_MOMENT);
         assessment.setRating(DEFAULT_RATING);
         assessment.setComment(DEFAULT_COMMENT);
+
+        assessment.setCreator(appUserService.findOne(CREATOR_ID));
+        assessment.setPayment(paymentService.findOne(PAYMENT_ID));
+        assessment.setRecipient(appUserService.findOne(RECIPIENT_ID));
     }
 
     @Test
@@ -230,6 +246,10 @@ public class AssessmentResourceIntTest {
         updatedAssessment.setCreationMoment(UPDATED_CREATION_MOMENT);
         updatedAssessment.setRating(UPDATED_RATING);
         updatedAssessment.setComment(UPDATED_COMMENT);
+
+        updatedAssessment.setCreator(appUserService.findOne(CREATOR_ID));
+        updatedAssessment.setPayment(paymentService.findOne(PAYMENT_ID));
+        updatedAssessment.setRecipient(appUserService.findOne(RECIPIENT_ID));
 
         restAssessmentMockMvc.perform(put("/api/assessments")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

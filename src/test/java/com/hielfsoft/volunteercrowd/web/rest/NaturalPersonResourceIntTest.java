@@ -1,21 +1,21 @@
 package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.hielfsoft.volunteercrowd.VolunteercrowdApp;
-import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
+import com.hielfsoft.volunteercrowd.domain.*;
 import com.hielfsoft.volunteercrowd.repository.NaturalPersonRepository;
-import com.hielfsoft.volunteercrowd.service.NaturalPersonService;
 import com.hielfsoft.volunteercrowd.repository.search.NaturalPersonSearchRepository;
-
+import com.hielfsoft.volunteercrowd.service.AppUserService;
+import com.hielfsoft.volunteercrowd.service.NaturalPersonService;
+import com.hielfsoft.volunteercrowd.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -26,12 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -64,6 +65,12 @@ public class NaturalPersonResourceIntTest {
     private NaturalPersonSearchRepository naturalPersonSearchRepository;
 
     @Inject
+    private AppUserService appUserService;
+
+    @Inject
+    private UserService userService;
+
+    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -88,6 +95,53 @@ public class NaturalPersonResourceIntTest {
         naturalPersonSearchRepository.deleteAll();
         naturalPerson = new NaturalPerson();
         naturalPerson.setBirthDate(DEFAULT_BIRTH_DATE);
+
+        //Create appUser
+        AppUser appUser = new AppUser();
+
+        appUser.setIsOnline(false);
+        appUser.setTokens(0);
+        appUser.setPhoneNumber("698741253");
+        appUser.setImage(TestUtil.createByteArray(1, "0"));
+        appUser.setImageContentType("image/jpg");
+
+
+        //Create user and address
+        User user;
+        Address address = new Address();
+
+        String login = "newappuser";
+        String password = "new_password";
+        String firstName = "New App User";
+        String lastName = "AppU";
+        String email = "new_app_user@appuser.com";
+        String langKey = "es";
+
+        address.setAddress("AAAAAA");
+        address.setCity("AAAAAA");
+        address.setCountry("AAAAAA");
+        address.setProvince("AAAAAAA");
+        address.setShowAddress(true);
+        address.setShowCity(true);
+        address.setZipCode("AAAAAA");
+        address.setShowCountry(true);
+        address.setShowProvince(true);
+        address.setShowZipCode(true);
+
+        user = userService.createUserInformation(login, password, firstName, lastName, email, langKey);
+
+        appUser.setAddress(address);
+        appUser.setUser(user);
+
+        userService.save(user);
+
+        appUserService.save(appUser);
+
+        naturalPerson.setAppUser(appUser);
+
+        Gender gender = new Gender();
+        gender.setName(GenderConstants.MALE);
+        naturalPerson.setGender(gender);
     }
 
     @Test
@@ -176,13 +230,12 @@ public class NaturalPersonResourceIntTest {
         int databaseSizeBeforeUpdate = naturalPersonRepository.findAll().size();
 
         // Update the naturalPerson
-        NaturalPerson updatedNaturalPerson = new NaturalPerson();
-        updatedNaturalPerson.setId(naturalPerson.getId());
-        updatedNaturalPerson.setBirthDate(UPDATED_BIRTH_DATE);
+        naturalPerson.setId(naturalPerson.getId());
+        naturalPerson.setBirthDate(UPDATED_BIRTH_DATE);
 
         restNaturalPersonMockMvc.perform(put("/api/natural-people")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedNaturalPerson)))
+            .content(TestUtil.convertObjectToJsonBytes(naturalPerson)))
                 .andExpect(status().isOk());
 
         // Validate the NaturalPerson in the database
