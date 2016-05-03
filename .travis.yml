@@ -1,10 +1,18 @@
 language: node_js
 node_js:
   - "4.3.2"
+jdk:
+  - oraclejdk8
 sudo: false
-before_install: npm install -g gulp
+before_install:
+  - npm install -g npm
+  - npm install -g gulp
 install: npm install
 before_script: gulp build
+script:
+  - gulp test
+  - ./gradlew build
+  - ./gradlew test
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
