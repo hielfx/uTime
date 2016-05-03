@@ -9,7 +9,7 @@ before_install:
   - npm install -g gulp
   - npm install bower
   - chmod +x gradlew
-install: npm install
+install: npm install && bower install
 before_script: gulp build
 script:
   - gulp test
