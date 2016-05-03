@@ -2,7 +2,7 @@ language: java
 
 jdk:
   - oraclejdk8
-sudo: false
+sudo: required
 env:
   - NODE_VERSION=4.3.2
 before_install:
@@ -15,23 +15,23 @@ before_install:
 install: npm install && bower install
 before_script: 
   - gulp build
-  - sudo service mysql stop || true
-  - sudo service memcached stop || true
-  - sudo service bootlogd stop || true
-  - sudo service elasticsearch stop || true
-  - sudo service mongodb stop || true
-  - sudo service neo4j stop || true
-  - sudo service cassandra stop || true
-  - sudo service riak stop || true
-  - sudo service rsync stop || true
-  - sudo service x11-common stop || true
+  - sudo /etc/init.d/mysql stop || true
+  - sudo /etc/init.d/memcached stop || true
+  - sudo /etc/init.d/bootlogd stop || true
+  - sudo /etc/init.d/mongodb stop || true
+  - sudo /etc/init.d/neo4j stop || true
+  - sudo /etc/init.d/cassandra stop || true
+  - sudo /etc/init.d/riak stop || true
+  - sudo /etc/init.d/rsync stop || true
+  - sudo /etc/init.d/x11-common stop || true
 script:
   - gulp test
-  - ./gradlew build --info
-  - ./gradlew test --info
+  - ./gradlew build
+  - ./gradlew test
 
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: false     # default: false
+  email: true
