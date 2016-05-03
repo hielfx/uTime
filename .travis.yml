@@ -7,14 +7,14 @@ sudo: true
 before_install:
   - npm install -g npm
   - npm install -g gulp
-  - npm install bower
+  - npm install -g bower
   - chmod +x gradlew
 install: npm install && bower install
 before_script: gulp build
 script:
   - gulp test
-  - sudo ./gradlew build
-  - sudo ./gradlew test
+  - ./gradlew build
+  - ./gradlew test
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
