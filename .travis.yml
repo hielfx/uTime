@@ -3,7 +3,7 @@ node_js:
   - "4.3.2"
 jdk:
   - oraclejdk8
-sudo: false
+sudo: true
 before_install:
   - npm install -g npm
   - npm install -g gulp
