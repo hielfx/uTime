@@ -21,6 +21,7 @@
                 "availability": "Availability",
                 "assessment": "Assessment",
                 "payment": "Payment",
+                "naturalPersonForm": "NaturalPersonForm",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

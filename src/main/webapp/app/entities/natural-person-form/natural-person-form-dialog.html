@@ -1,0 +1,358 @@
+<div>
+    <div class="row">
+        <div class="col-md8 col-md-offset-2">
+            <h1 translate="register.title">Registration</h1>
+
+            <div class="alert alert-success" ng-show="vm.success" translate="register.messages.success">
+                <strong>Registration saved!</strong> Please check your email for confirmation.
+            </div>
+
+            <div class="alert alert-danger" ng-show="vm.error" translate="register.messages.error.fail">
+                <strong>Registration failed!</strong> Please try again later.
+            </div>
+
+            <div class="alert alert-danger" ng-show="vm.errorUserExists" translate="register.messages.error.userexists">
+                <strong>Login name already registered!</strong> Please choose another one.
+            </div>
+
+            <div class="alert alert-danger" ng-show="vm.errorEmailExists"
+                 translate="register.messages.error.emailexists">
+                <strong>E-mail is already in use!</strong> Please choose another one.
+            </div>
+
+            <div class="alert alert-danger" ng-show="vm.doNotMatch" translate="global.messages.error.dontmatch">
+                The password and its confirmation do not match!
+            </div>
+        </div>
+
+
+        <div class="col-md-8 col-md-offset-2">
+            <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+                <div class="modal-body">
+                    <jhi-alert-error></jhi-alert-error>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.birthDate"
+                               for="field_birthDate">BirthDate</label>
+
+                        <div class="input-group">
+                            <input id="field_birthDate" type="text" class="form-control" name="birthDate"
+                                   datetime-picker="{{dateformat}}" ng-model="vm.naturalPersonForm.birthDate"
+                                   is-open="vm.datePickerOpenStatus.birthDate"
+                                   required/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('birthDate')"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                        </div>
+                        <div ng-show="editForm.birthDate.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.birthDate.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.birthDate.$error.ZonedDateTimelocal"
+                               translate="entity.validation.ZonedDateTimelocal">
+                                This field should be a date and time.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.phoneNumber"
+                               for="field_phoneNumber">PhoneNumber</label>
+                        <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                               ng-model="vm.naturalPersonForm.phoneNumber"
+                               required ng-pattern="/([+]\\d{2})?\\d{9}/"/>
+
+                        <div ng-show="editForm.phoneNumber.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.phoneNumber.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.phoneNumber.$error.pattern" translate="entity.validation.pattern"
+                               translate-value-pattern="([+]\\d{2})?\\d{9}">
+                                This field should follow pattern "([+]\\d{2})?\\d{9}".
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group" ngf-drop ngf-change="vm.setImage($file, vm.naturalPersonForm)"
+                         ngf-pattern="'image/*'">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.image"
+                               for="field_image">Image</label>
+
+                        <div>
+                            <img
+                                data-ng-src="{{'data:' + vm.naturalPersonForm.imageContentType + ';base64,' + vm.naturalPersonForm.image}}"
+                                style="max-height: 100px;" ng-if="vm.naturalPersonForm.image"/>
+
+                            <div class="help-block clearfix">
+                                <span class="pull-left">{{vm.naturalPersonForm.imageContentType}}, {{byteSize(vm.naturalPersonForm.image)}}</span>
+                                <button
+                                    ng-click="vm.naturalPersonForm.image=null;vm.naturalPersonForm.imageContentType=null;"
+                                    ng-if="vm.naturalPersonForm.image"
+                                    class="btn btn-default btn-xs pull-right">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                            <button type="file" ngf-select class="btn btn-default btn-block"
+                                    ngf-change="vm.setImage($file, vm.naturalPersonForm)" accept="image/*"
+                                    translate="entity.action.addimage">
+                                Add image
+                            </button>
+                        </div>
+                        <input type="hidden" class="form-control" name="image" id="field_image"
+                               ng-model="vm.naturalPersonForm.image"
+                            />
+                        <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType"
+                               ng-model="vm.naturalPersonForm.imageContentType"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.address"
+                               for="field_address">Address</label>
+                        <input type="text" class="form-control" name="address" id="field_address"
+                               ng-model="vm.naturalPersonForm.address"
+                            />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.city"
+                               for="field_city">City</label>
+                        <input type="text" class="form-control" name="city" id="field_city"
+                               ng-model="vm.naturalPersonForm.city"
+                               required/>
+
+                        <div ng-show="editForm.city.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.city.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.zipCode"
+                               for="field_zipCode">ZipCode</label>
+                        <input type="text" class="form-control" name="zipCode" id="field_zipCode"
+                               ng-model="vm.naturalPersonForm.zipCode"
+                               required/>
+
+                        <div ng-show="editForm.zipCode.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.zipCode.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.province"
+                               for="field_province">Province</label>
+                        <input type="text" class="form-control" name="province" id="field_province"
+                               ng-model="vm.naturalPersonForm.province"
+                               required/>
+
+                        <div ng-show="editForm.province.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.province.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.country"
+                               for="field_country">Country</label>
+                        <input type="text" class="form-control" name="country" id="field_country"
+                               ng-model="vm.naturalPersonForm.country"
+                               required/>
+
+                        <div ng-show="editForm.country.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.country.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.firstName"
+                               for="field_firstName">FirstName</label>
+                        <input type="text" class="form-control" name="firstName" id="field_firstName"
+                               ng-model="vm.naturalPersonForm.firstName"
+                               required ng-minlength="0" ng-maxlength="50"/>
+
+                        <div ng-show="editForm.firstName.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.firstName.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.firstName.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="0">
+                                This field is required to be at least 0 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.firstName.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.lastName"
+                               for="field_lastName">LastName</label>
+                        <input type="text" class="form-control" name="lastName" id="field_lastName"
+                               ng-model="vm.naturalPersonForm.lastName"
+                               required ng-minlength="0" ng-maxlength="50"/>
+
+                        <div ng-show="editForm.lastName.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.lastName.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.lastName.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="0">
+                                This field is required to be at least 0 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.lastName.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.email"
+                               for="field_email">Email</label>
+                        <input type="text" class="form-control" name="email" id="field_email"
+                               ng-model="vm.naturalPersonForm.email"
+                               required/>
+
+                        <div ng-show="editForm.email.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.email.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.password"
+                               for="field_password">Password</label>
+                        <input type="password" class="form-control" name="password" id="field_password"
+                               ng-model="vm.naturalPersonForm.password"
+                               required/>
+
+                        <div ng-show="form.password.$dirty && form.password.$invalid">
+                            <p class="help-block"
+                               ng-show="form.password.$error.required"
+                               translate="global.messages.validate.newpassword.required">
+                                Your password is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="form.password.$error.minlength"
+                               translate="global.messages.validate.newpassword.minlength">
+                                Your password is required to be at least 5 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="form.password.$error.maxlength"
+                               translate="global.messages.validate.newpassword.maxlength">
+                                Your password cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                        <password-strength-bar
+                            password-to-check="vm.naturalPersonForm.password"></password-strength-bar>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.passwordConfirm"
+                               for="field_passwordConfirm">PasswordConfirm</label>
+                        <input type="password" class="form-control" name="passwordConfirm" id="field_passwordConfirm"
+                               ng-model="vm.naturalPersonForm.passwordConfirm"
+                               required/>
+
+                        <div ng-show="editForm.passwordConfirm.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.passwordConfirm.$error.required"
+                               translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.login"
+                               for="field_login">Login</label>
+                        <input type="text" class="form-control" name="login" id="field_login"
+                               ng-model="vm.naturalPersonForm.login"
+                               required ng-minlength="1" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9]*$/"/>
+
+                        <div ng-show="editForm.login.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="1">
+                                This field is required to be at least 1 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.pattern" translate="entity.validation.pattern"
+                               translate-value-pattern="^[a-zA-Z0-9]*$">
+                                This field should follow pattern "^[a-zA-Z0-9]*$".
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"
+                               translate="volunteercrowdApp.naturalPersonForm.acceptTermsAndConditions"
+                               for="field_acceptTermsAndConditions">AcceptTermsAndConditions</label>
+                        <input type="checkbox" class="form-control" name="acceptTermsAndConditions"
+                               id="field_acceptTermsAndConditions"
+                               ng-model="vm.naturalPersonForm.acceptTermsAndConditions"
+                            />
+
+                        <div ng-show="editForm.acceptTermsAndConditions.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.acceptTermsAndConditions.$error.required"
+                               translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label translate="volunteercrowdApp.naturalPersonForm.gender" for="field_gender">gender</label>
+                        <select class="form-control" id="field_gender" name="gender"
+                                ng-model="vm.naturalPersonForm.gender"
+                                ng-options="gender as gender.name for gender in vm.genders track by gender.id">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                        translate="entity.action.cancel">Cancel</span>
+                    </button>
+                    <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span
+                        translate="entity.action.save">Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

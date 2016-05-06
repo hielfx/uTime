@@ -36,14 +36,14 @@
 
         function convertLocalDateToServer (date) {
             if (date) {
-                return $filter('date')(date, 'yyyy-MM-dd');
+                return $filter('date')(date, 'dd-MM-yyyy mm:ss'); //Changed from yyyy-MM-dd
             } else {
                 return null;
             }
         }
 
         function dateformat () {
-            return 'yyyy-MM-dd';
+            return 'dd-MM-yyyy mm:ss'; //Changed from yyyy-MM-dd
         }
     }
 

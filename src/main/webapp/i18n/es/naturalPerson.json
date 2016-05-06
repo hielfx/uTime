@@ -19,7 +19,9 @@
             "birthDate": "BirthDate",
             "gender": "Gender",
             "appUser": "AppUser",
-            "curriculum": "Curriculum"
+            "curriculum": "Curriculum",
+            "userData": "Datos de usuario",
+            "addressData": "Datos de dirección"
         }
     }
 }

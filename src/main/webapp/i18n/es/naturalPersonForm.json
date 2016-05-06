@@ -1,0 +1,37 @@
+{
+    "volunteercrowdApp": {
+        "naturalPersonForm": {
+            "home": {
+                "title": "NaturalPersonForms",
+                "createLabel": "Crear nuevo NaturalPersonForm",
+                "createOrEditLabel": "Crear o editar NaturalPersonForm",
+                "search": "Search for NaturalPersonForm"
+            },
+            "created": "Un nuevo NaturalPersonForm ha sido creado con el identificador {{ param }}",
+            "updated": "Un NaturalPersonForm ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un NaturalPersonForm ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar NaturalPersonForm {{ id }}?"
+            },
+            "detail": {
+                "title": "NaturalPersonForm"
+            },
+            "birthDate": "BirthDate",
+            "phoneNumber": "PhoneNumber",
+            "image": "Image",
+            "address": "Address",
+            "city": "City",
+            "zipCode": "ZipCode",
+            "province": "Province",
+            "country": "Country",
+            "firstName": "FirstName",
+            "lastName": "LastName",
+            "email": "Email",
+            "password": "Password",
+            "passwordConfirm": "PasswordConfirm",
+            "login": "Login",
+            "acceptTermsAndConditions": "AcceptTermsAndConditions",
+            "gender": "Gender"
+        }
+    }
+}
