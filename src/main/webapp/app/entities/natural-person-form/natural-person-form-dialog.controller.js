@@ -59,7 +59,27 @@
 
         vm.openCalendar = function (date) {
             var _date = new Date();
-            $("#field_birthDate").val("{{_date | date:'dd/MM/yyyy mm:ss'}}").change();
+            var day = _date.getDate();
+            var month = _date.getMonth();
+            var year = _date.getFullYear();
+            var min = _date.getMinutes();
+            var sec = _date.getSeconds();
+
+            if (month < 10) {
+                month = "0" + month;
+            }
+            if (day < 10) {
+                day = "0" + day;
+            }
+            var now_date = year + "-" + month + "-" + day + " " + min + ":" + sec;
+
+            if ($("#field_birthDate").val()) {
+                _date = $("#field_birthDate").val();
+            } else {
+                _date = now_date;
+            }
+
+            $("#field_birthDate").val(_date).change();
             vm.datePickerOpenStatus[date] = true;
         };
     }

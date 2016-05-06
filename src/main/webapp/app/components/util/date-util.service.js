@@ -29,21 +29,21 @@
         function convertLocalDateFromServer (date) {
             if (date) {
                 var dateString = date.split('-');
-                return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+                return new Date(dateString[2], dateString[1] - 1, dateString[0]);
             }
             return null;
         }
 
         function convertLocalDateToServer (date) {
             if (date) {
-                return $filter('date')(date, 'dd-MM-yyyy mm:ss'); //Changed from yyyy-MM-dd
+                return $filter('date')(date, 'yyyy-MM-dd');
             } else {
                 return null;
             }
         }
 
         function dateformat () {
-            return 'dd-MM-yyyy mm:ss'; //Changed from yyyy-MM-dd
+            return 'yyyy-MM-dd';
         }
     }
 

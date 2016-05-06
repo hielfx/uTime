@@ -43,7 +43,10 @@
                 var isAuthenticated = Principal.isAuthenticated();
 
                 // an authenticated user can't access to login and register pages
-                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register')) {
+                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login'
+                    || $rootScope.toState.name === 'register'
+                    || $rootScope.toState.name === 'natural-person-form')
+                ) {
                     $state.go('home');
                 }
 
