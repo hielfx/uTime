@@ -22,10 +22,10 @@
       "cucumber",
       "protractor"
     ],
-      "jhipsterVersion": "3.1.0",
+      "jhipsterVersion": "3.0.0",
     "serverPort": "8080",
     "applicationType": "monolith",
-    "nativeLanguaje": "es",
+      "nativeLanguage": "es",
     "languages": [
       "en",
       "es"
