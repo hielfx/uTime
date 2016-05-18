@@ -89,7 +89,7 @@
                                 style="max-height: 100px;" ng-if="vm.legalEntityForm.image"/>
 
                             <div class="help-block clearfix">
-                                <span class="pull-left">{{vm.legalEntityForm.imageContentType}}, {{byteSize(vm.legalEntityForm.image)}}</span>
+                                <span class="pull-left">{{vm.legalEntityForm.imageContentType}} {{byteSize(vm.legalEntityForm.image)}}</span>
                                 <button
                                     ng-click="vm.legalEntityForm.image=null;vm.legalEntityForm.imageContentType=null;"
                                     ng-if="vm.legalEntityForm.image"
@@ -345,13 +345,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label translate="volunteercrowdApp.legalEntity.website" for="field_website">website</label>
+                        <label translate="volunteercrowdApp.legalEntityForm.website" for="field_website">website</label>
                         <input type="text" class="form-control" name="website" id="field_website"
                                ng-model="vm.legalEntityForm.website"/>
                     </div>
 
                     <div class="form-group">
-                        <label translate="volunteercrowdApp.legalEntity.description"
+                        <label translate="volunteercrowdApp.legalEntityForm.description"
                                for="field_description">description</label>
                         <textarea class="form-control" name="description" id="field_description"
                                   ng-model="vm.legalEntityForm.description" required/>

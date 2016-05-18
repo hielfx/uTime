@@ -18,7 +18,7 @@
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/natural-person-form/legal-entity-form-dialog.html',
+                        templateUrl: 'app/entities/natural-person-form/natural-person-form-dialog.html',
                         controller: 'NaturalPersonFormDialogController',
                         controllerAs: 'vm'
                     }
