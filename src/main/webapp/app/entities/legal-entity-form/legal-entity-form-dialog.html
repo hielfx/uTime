@@ -32,12 +32,12 @@
                 <div class="modal-body">
                     <jhi-alert-error></jhi-alert-error>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.birthDate"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.birthDate"
                                for="field_birthDate">BirthDate</label>
 
                         <div class="input-group">
                             <input id="field_birthDate" type="text" class="form-control" name="birthDate"
-                                   datetime-picker="{{dateformat}}" ng-model="vm.naturalPersonForm.birthDate"
+                                   datetime-picker="{{dateformat}}" ng-model="vm.legalEntityForm.birthDate"
                                    is-open="vm.datePickerOpenStatus.birthDate"
                                    required/>
                     <span class="input-group-btn">
@@ -59,10 +59,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.phoneNumber"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.phoneNumber"
                                for="field_phoneNumber">PhoneNumber</label>
                         <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
-                               ng-model="vm.naturalPersonForm.phoneNumber"
+                               ng-model="vm.legalEntityForm.phoneNumber"
                                required ng-pattern="/([+]\d{2})?\d{9}/"/>
 
                         <div ng-show="editForm.phoneNumber.$invalid">
@@ -78,49 +78,49 @@
                             </p>
                         </div>
                     </div>
-                    <div class="form-group" ngf-drop ngf-change="vm.setImage($file, vm.naturalPersonForm)"
+                    <div class="form-group" ngf-drop ngf-change="vm.setImage($file, vm.legalEntityForm)"
                          ngf-pattern="'image/*'">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.image"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.image"
                                for="field_image">Image</label>
 
                         <div>
                             <img
-                                data-ng-src="{{'data:' + vm.naturalPersonForm.imageContentType + ';base64,' + vm.naturalPersonForm.image}}"
-                                style="max-height: 100px;" ng-if="vm.naturalPersonForm.image"/>
+                                data-ng-src="{{'data:' + vm.legalEntityForm.imageContentType + ';base64,' + vm.legalEntityForm.image}}"
+                                style="max-height: 100px;" ng-if="vm.legalEntityForm.image"/>
 
                             <div class="help-block clearfix">
-                                <span class="pull-left">{{vm.naturalPersonForm.imageContentType}}, {{byteSize(vm.naturalPersonForm.image)}}</span>
+                                <span class="pull-left">{{vm.legalEntityForm.imageContentType}}, {{byteSize(vm.legalEntityForm.image)}}</span>
                                 <button
-                                    ng-click="vm.naturalPersonForm.image=null;vm.naturalPersonForm.imageContentType=null;"
-                                    ng-if="vm.naturalPersonForm.image"
+                                    ng-click="vm.legalEntityForm.image=null;vm.legalEntityForm.imageContentType=null;"
+                                    ng-if="vm.legalEntityForm.image"
                                     class="btn btn-default btn-xs pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button>
                             </div>
                             <button type="file" ngf-select class="btn btn-default btn-block"
-                                    ngf-change="vm.setImage($file, vm.naturalPersonForm)" accept="image/*"
+                                    ngf-change="vm.setImage($file, vm.legalEntityForm)" accept="image/*"
                                     translate="entity.action.addimage">
                                 Add image
                             </button>
                         </div>
                         <input type="hidden" class="form-control" name="image" id="field_image"
-                               ng-model="vm.naturalPersonForm.image"
-                            />
+                               ng-model="vm.legalEntityForm.image"
+                        />
                         <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType"
-                               ng-model="vm.naturalPersonForm.imageContentType"/>
+                               ng-model="vm.legalEntityForm.imageContentType"/>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.address"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.address"
                                for="field_address">Address</label>
                         <input type="text" class="form-control" name="address" id="field_address"
-                               ng-model="vm.naturalPersonForm.address"
-                            />
+                               ng-model="vm.legalEntityForm.address"
+                        />
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.city"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.city"
                                for="field_city">City</label>
                         <input type="text" class="form-control" name="city" id="field_city"
-                               ng-model="vm.naturalPersonForm.city"
+                               ng-model="vm.legalEntityForm.city"
                                required/>
 
                         <div ng-show="editForm.city.$invalid">
@@ -131,10 +131,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.zipCode"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.zipCode"
                                for="field_zipCode">ZipCode</label>
                         <input type="text" class="form-control" name="zipCode" id="field_zipCode"
-                               ng-model="vm.naturalPersonForm.zipCode"
+                               ng-model="vm.legalEntityForm.zipCode"
                                required/>
 
                         <div ng-show="editForm.zipCode.$invalid">
@@ -145,10 +145,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.province"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.province"
                                for="field_province">Province</label>
                         <input type="text" class="form-control" name="province" id="field_province"
-                               ng-model="vm.naturalPersonForm.province"
+                               ng-model="vm.legalEntityForm.province"
                                required/>
 
                         <div ng-show="editForm.province.$invalid">
@@ -159,10 +159,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.country"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.country"
                                for="field_country">Country</label>
                         <input type="text" class="form-control" name="country" id="field_country"
-                               ng-model="vm.naturalPersonForm.country"
+                               ng-model="vm.legalEntityForm.country"
                                required/>
 
                         <div ng-show="editForm.country.$invalid">
@@ -173,10 +173,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.firstName"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.firstName"
                                for="field_firstName">FirstName</label>
                         <input type="text" class="form-control" name="firstName" id="field_firstName"
-                               ng-model="vm.naturalPersonForm.firstName"
+                               ng-model="vm.legalEntityForm.firstName"
                                required ng-minlength="0" ng-maxlength="50"/>
 
                         <div ng-show="editForm.firstName.$invalid">
@@ -199,10 +199,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.lastName"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.lastName"
                                for="field_lastName">LastName</label>
                         <input type="text" class="form-control" name="lastName" id="field_lastName"
-                               ng-model="vm.naturalPersonForm.lastName"
+                               ng-model="vm.legalEntityForm.lastName"
                                required ng-minlength="0" ng-maxlength="50"/>
 
                         <div ng-show="editForm.lastName.$invalid">
@@ -225,10 +225,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.email"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.email"
                                for="field_email">Email</label>
                         <input type="text" class="form-control" name="email" id="field_email"
-                               ng-model="vm.naturalPersonForm.email"
+                               ng-model="vm.legalEntityForm.email"
                                required/>
 
                         <div ng-show="editForm.email.$invalid">
@@ -239,15 +239,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.password"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.password"
                                for="field_password">Password</label>
                         <input type="password" class="form-control" name="password" id="field_password"
-                               ng-model="vm.naturalPersonForm.password"
+                               ng-model="vm.legalEntityForm.password"
                                required/>
 
-                        <div ng-show="form.password.$dirty && form.password.$invalid">
+                        <div ng-show="editForm.password.$dirty && form.password.$invalid">
                             <p class="help-block"
-                               ng-show="form.password.$error.required"
+                               ng-show="editForm.password.$error.required"
                                translate="global.messages.validate.newpassword.required">
                                 Your password is required.
                             </p>
@@ -265,13 +265,13 @@
                             </p>
                         </div>
                         <password-strength-bar
-                            password-to-check="vm.naturalPersonForm.password"></password-strength-bar>
+                            password-to-check="vm.legalEntityForm.password"></password-strength-bar>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.passwordConfirm"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.passwordConfirm"
                                for="field_passwordConfirm">PasswordConfirm</label>
                         <input type="password" class="form-control" name="passwordConfirm" id="field_passwordConfirm"
-                               ng-model="vm.naturalPersonForm.passwordConfirm"
+                               ng-model="vm.legalEntityForm.passwordConfirm"
                                required/>
 
                         <div ng-show="editForm.passwordConfirm.$invalid">
@@ -283,10 +283,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.login"
+                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.login"
                                for="field_login">Login</label>
                         <input type="text" class="form-control" name="login" id="field_login"
-                               ng-model="vm.naturalPersonForm.login"
+                               ng-model="vm.legalEntityForm.login"
                                required ng-minlength="1" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9]*$/"/>
 
                         <div ng-show="editForm.login.$invalid">
@@ -316,12 +316,12 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label"
-                               translate="volunteercrowdApp.naturalPersonForm.acceptTermsAndConditions"
+                               translate="volunteercrowdApp.legalEntityForm.acceptTermsAndConditions"
                                for="field_acceptTermsAndConditions">AcceptTermsAndConditions</label>
                         <input type="checkbox" class="form-control" name="acceptTermsAndConditions"
                                id="field_acceptTermsAndConditions"
-                               ng-model="vm.naturalPersonForm.acceptTermsAndConditions"
-                            />
+                               ng-model="vm.legalEntityForm.acceptTermsAndConditions" required
+                        />
 
                         <div ng-show="editForm.acceptTermsAndConditions.$invalid">
                             <p class="help-block"
@@ -333,13 +333,38 @@
                     </div>
 
                     <div class="form-group">
-                        <label translate="volunteercrowdApp.naturalPersonForm.gender" for="field_gender">gender</label>
-                        <select class="form-control" id="field_gender" name="gender"
-                                ng-model="vm.naturalPersonForm.gender"
-                                ng-options="gender as gender.name for gender in vm.genders track by gender.id">
-                            <option value=""></option>
-                        </select>
+                        <label translate="volunteercrowdApp.legalEntityForm.mission" for="field_mission">mission</label>
+                        <textarea class="form-control" name="mission" id="field_mission"
+                                  ng-model="vm.legalEntityForm.mission"/>
                     </div>
+
+                    <div class="form-group">
+                        <label translate="volunteercrowdApp.legalEntityForm.vision" for="field_vision">vision</label>
+                        <textarea class="form-control" name="vision" id="field_vision"
+                                  ng-model="vm.legalEntityForm.vision"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label translate="volunteercrowdApp.legalEntity.website" for="field_website">website</label>
+                        <input type="text" class="form-control" name="website" id="field_website"
+                               ng-model="vm.legalEntityForm.website"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label translate="volunteercrowdApp.legalEntity.description"
+                               for="field_description">description</label>
+                        <textarea class="form-control" name="description" id="field_description"
+                                  ng-model="vm.legalEntityForm.description" required/>
+
+                        <div ng-show="editForm.description.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.description.$error.required"
+                               translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

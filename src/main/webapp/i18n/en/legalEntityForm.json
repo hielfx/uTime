@@ -1,0 +1,40 @@
+{
+    "volunteercrowdApp": {
+        "legalEntityForm": {
+            "home": {
+                "title": "LegalEntityForms",
+                "createLabel": "Create a new LegalEntityForm",
+                "createOrEditLabel": "Create or edit a LegalEntityForm",
+                "search": "Search for LegalEntityForm"
+            },
+            "created": "A new LegalEntityForm is created with identifier {{ param }}",
+            "updated": "A LegalEntityForm is updated with identifier {{ param }}",
+            "deleted": "A LegalEntityForm is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete LegalEntityForm {{ id }}?"
+            },
+            "detail": {
+                "title": "Register as natural person"
+            },
+            "birthDate": "Birth date",
+            "phoneNumber": "Phone number",
+            "image": "Image",
+            "address": "Address",
+            "city": "City",
+            "zipCode": "Zip code",
+            "province": "Province",
+            "country": "Country",
+            "firstName": "First name",
+            "lastName": "Last name",
+            "email": "Email",
+            "password": "Password",
+            "passwordConfirm": "Confirm password",
+            "login": "User name",
+            "acceptTermsAndConditions": "I accept the terms and conditions",
+            "mission": "Mission",
+            "vision": "Vision",
+            "website": "Website",
+            "description": "Description"
+        }
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "volunteercrowdApp": {
+        "legalEntityForm": {
+            "home": {
+                "title": "LegalEntityForms",
+                "createLabel": "Crear nuevo LegalEntityForm",
+                "createOrEditLabel": "Crear o editar LegalEntityForm",
+                "search": "Search for LegalEntityForm"
+            },
+            "created": "Un nuevo LegalEntityForm ha sido creado con el identificador {{ param }}",
+            "updated": "Un LegalEntityForm ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un LegalEntityForm ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar LegalEntityForm {{ id }}?"
+            },
+            "detail": {
+                "title": "Registro como persona física"
+            },
+            "birthDate": "Fecha de nacimiento",
+            "phoneNumber": "Número de teléfono",
+            "image": "Imagen",
+            "address": "Dirección",
+            "city": "Ciudad",
+            "zipCode": "Código postal",
+            "province": "Provincia",
+            "country": "País",
+            "firstName": "Nombre",
+            "lastName": "Apellidos",
+            "email": "Email",
+            "password": "Contraseña",
+            "passwordConfirm": "Confirmar contraseña",
+            "login": "Nombre de usuario",
+            "acceptTermsAndConditions": "Acepto los términos y condiciones",
+            "mission": "Misión",
+            "vision": "Visión",
+            "website": "Sitio web",
+            "description": "Descripción"
+        }
+    }
+}

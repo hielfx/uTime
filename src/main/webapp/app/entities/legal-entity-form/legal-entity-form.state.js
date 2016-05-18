@@ -9,23 +9,23 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-            .state('natural-person-form', {
+            .state('legal-entity-form', {
                 parent: 'account',
-                url: '/naturalPerson/register',
+                url: '/legalEntity/register',
                 data: {
                     authorities: [],
                     pageTile: "register.title"
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/natural-person-form/legal-entity-form-dialog.html',
-                        controller: 'NaturalPersonFormDialogController',
+                        templateUrl: 'app/entities/legal-entity-form/legal-entity-form-dialog.html',
+                        controller: 'LegalEntityFormDialogController',
                         controllerAs: 'vm'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('naturalPersonForm');
+                        $translatePartialLoader.addPart('legalEntityForm');
                         $translatePartialLoader.addPart('global');
                         $translatePartialLoader.addPart('register');
                         return $translate.refresh();
@@ -47,7 +47,11 @@
                             password: null,
                             passwordConfirm: null,
                             login: null,
-                            acceptTermsAndConditions: false
+                            acceptTermsAndConditions: false,
+                            mission: null,
+                            vision: null,
+                            website: null,
+                            description: null
                         }
                     }
                 }
