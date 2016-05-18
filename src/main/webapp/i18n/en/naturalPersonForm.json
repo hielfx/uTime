@@ -14,24 +14,29 @@
                 "question": "Are you sure you want to delete NaturalPersonForm {{ id }}?"
             },
             "detail": {
-                "title": "NaturalPersonForm"
+                "title": "Register as natural person"
             },
-            "birthDate": "BirthDate",
-            "phoneNumber": "PhoneNumber",
+            "birthDate": "Birth date",
+            "phoneNumber": "Phone number",
             "image": "Image",
             "address": "Address",
             "city": "City",
-            "zipCode": "ZipCode",
+            "zipCode": "Zip code",
             "province": "Province",
             "country": "Country",
-            "firstName": "FirstName",
-            "lastName": "LastName",
+            "firstName": "First name",
+            "lastName": "Last name",
             "email": "Email",
             "password": "Password",
-            "passwordConfirm": "PasswordConfirm",
-            "login": "Login",
-            "acceptTermsAndConditions": "AcceptTermsAndConditions",
-            "gender": "Gender"
+            "passwordConfirm": "Confirm password",
+            "login": "User name",
+            "acceptTermsAndConditions": "I accept the terms and conditions",
+            "gender": "Gender",
+            "genderName": {
+                "GENDER_NOT_SPECIFIED": "Not specify",
+                "GENDER_MALE": "Male",
+                "GENDER_FEMALE": "Female"
+            }
         }
     }
 }

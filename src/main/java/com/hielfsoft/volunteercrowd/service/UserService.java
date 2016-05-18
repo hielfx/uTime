@@ -1,17 +1,15 @@
 package com.hielfsoft.volunteercrowd.service;
 
 import com.hielfsoft.volunteercrowd.domain.Authority;
-import com.hielfsoft.volunteercrowd.domain.PersistentToken;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AuthorityRepository;
 import com.hielfsoft.volunteercrowd.repository.PersistentTokenRepository;
 import com.hielfsoft.volunteercrowd.repository.UserRepository;
 import com.hielfsoft.volunteercrowd.repository.search.UserSearchRepository;
+import com.hielfsoft.volunteercrowd.security.AuthoritiesConstants;
 import com.hielfsoft.volunteercrowd.security.SecurityUtils;
 import com.hielfsoft.volunteercrowd.service.util.RandomUtil;
 import com.hielfsoft.volunteercrowd.web.rest.dto.ManagedUserDTO;
-import java.time.ZonedDateTime;
-import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,9 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
 import javax.inject.Inject;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service class for managing users.
@@ -64,20 +66,20 @@ public class UserService {
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-       log.debug("Reset user password for reset key {}", key);
+        log.debug("Reset user password for reset key {}", key);
 
-       return userRepository.findOneByResetKey(key)
+        return userRepository.findOneByResetKey(key)
             .filter(user -> {
                 ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
                 return user.getResetDate().isAfter(oneDayAgo);
-           })
-           .map(user -> {
+            })
+            .map(user -> {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
                 userRepository.save(user);
                 return user;
-           });
+            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
@@ -92,7 +94,7 @@ public class UserService {
     }
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
-        String langKey) {
+                                      String langKey) {
 
         User newUser = new User();
         Authority authority = authorityRepository.findOne("ROLE_USER");
@@ -124,7 +126,7 @@ public class UserService {
         user.setLastName(managedUserDTO.getLastName());
         user.setEmail(managedUserDTO.getEmail());
         if (managedUserDTO.getLangKey() == null) {
-            user.setLangKey("en"); // default language
+            user.setLangKey("es"); // default language
         } else {
             user.setLangKey(managedUserDTO.getLangKey());
         }
@@ -232,10 +234,71 @@ public class UserService {
         }
     }
 
-    public User save(User user){
+    public User save(User user) {
         log.debug("Request to save User : {}", user);
         User result = userRepository.save(user);
         userSearchRepository.save(result);
         return result;
+    }
+
+    public User create() {
+        return create("single");
+    }
+
+    public User create(String role) {
+        User result;
+        Set<Authority> authorities;
+        Boolean activated;
+        String langKey;
+
+        result = new User();
+        authorities = generateAuthorities(role);
+        activated = false;
+        langKey = "es";//Default language key is spanish
+
+        result.setAuthorities(authorities);
+        result.setActivated(activated);
+        result.setLangKey(langKey);
+
+//        result.setActivationKey(RandomUtil.generateActivationKey());//Generate an activation key
+
+        return result;
+    }
+
+    private Set<Authority> generateAuthorities(String role) {
+        Authority authority;
+        Set<Authority> authorities;
+
+        authorities = new HashSet<Authority>();
+        authority = new Authority();
+        authority.setName(AuthoritiesConstants.USER);
+        authorities.add(authority);
+
+        //We check if the user may be an admin or an app user
+        if (role == "admin") {
+            authority = new Authority();
+            authority.setName(AuthoritiesConstants.ADMIN);
+            authorities.add(authority);
+        } else {
+            authority = new Authority();
+            authority.setName(AuthoritiesConstants.APPUSER);
+            authorities.add(authority);
+
+            //When the user is an app user we have to set the kind of app user
+            authority = new Authority();
+            switch (role) {
+                case "group":
+                    authority.setName(AuthoritiesConstants.GROUP);
+                    break;
+
+                case "single":
+                default:
+                    authority.setName(AuthoritiesConstants.SINGLE);
+                    break;
+            }
+            authorities.add(authority);
+
+        }
+        return authorities;
     }
 }

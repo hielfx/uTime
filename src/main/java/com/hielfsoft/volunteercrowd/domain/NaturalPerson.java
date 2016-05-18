@@ -37,7 +37,7 @@ public class NaturalPerson implements Serializable {
     @NotNull
     private Gender gender;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL) //Related with AppUser table
     @JoinColumn(unique = true, nullable = false)
     @NotNull
     @Valid

@@ -5,9 +5,9 @@
         .module('volunteercrowdApp')
         .controller('NaturalPersonFormDialogController', NaturalPersonFormDialogController);
 
-    NaturalPersonFormDialogController.$inject = ['$scope', '$stateParams', 'DataUtils', 'entity', 'NaturalPersonForm', 'Gender'];
+    NaturalPersonFormDialogController.$inject = ['$scope', '$stateParams', 'DataUtils', 'entity', 'NaturalPersonForm', 'Gender', '$translate'];
 
-    function NaturalPersonFormDialogController($scope, $stateParams, DataUtils, entity, NaturalPersonForm, Gender) {
+    function NaturalPersonFormDialogController($scope, $stateParams, DataUtils, entity, NaturalPersonForm, Gender, $translate) {
         var vm = this;
         vm.naturalPersonForm = entity;
         vm.genders = Gender.query();
@@ -19,17 +19,41 @@
 
         var onSaveSuccess = function (result) {
             $scope.$emit('volunteercrowdApp:naturalPersonFormUpdate', result);
+            vm.success = 'OK';
             //$uibModalInstance.close(result);
             vm.isSaving = false;
         };
 
-        var onSaveError = function () {
+        var onSaveError = function (response) {
             vm.isSaving = false;
+            vm.success = null;
+            if (response.status === 400 && response.data === 'login already in use') {
+                vm.errorUserExists = 'ERROR';
+            } else if (response.status === 400 && response.data === 'e-mail address already in use') {
+                vm.errorEmailExists = 'ERROR';
+            } else {
+                vm.error = 'ERROR';
+            }
         };
 
         vm.save = function () {
             vm.isSaving = true;
-            NaturalPersonForm.save(vm.naturalPersonForm, onSaveSuccess, onSaveError);
+            if (vm.naturalPersonForm.password !== vm.naturalPersonForm.passwordConfirm) {
+                vm.doNotMatch = 'ERROR';
+            } else {
+                vm.naturalPersonForm.langKey = $translate.use();
+                vm.doNotMatch = null;
+                vm.error = null;
+                vm.errorUserExists = null;
+                vm.errorEmailExists = null;
+
+                NaturalPersonForm.save(vm.naturalPersonForm, function (result) {
+                    onSaveSuccess(result);
+                }, function (response) {
+                    onSaveError(response);
+                });
+            }
+
 
         };
 
@@ -62,16 +86,24 @@
             var day = _date.getDate();
             var month = _date.getMonth();
             var year = _date.getFullYear();
+            var hour = _date.getHours();
             var min = _date.getMinutes();
-            var sec = _date.getSeconds();
 
+            //Formatting the numbers when below 10
             if (month < 10) {
                 month = "0" + month;
             }
             if (day < 10) {
                 day = "0" + day;
             }
-            var now_date = year + "-" + month + "-" + day + " " + min + ":" + sec;
+            if (hour < 10) {
+                hour = "0" + hour;
+            }
+            if (min < 10) {
+                min = "0" + min;
+            }
+
+            var now_date = year + "-" + month + "-" + day + " " + hour + ":" + min;
 
             if ($("#field_birthDate").val()) {
                 _date = $("#field_birthDate").val();

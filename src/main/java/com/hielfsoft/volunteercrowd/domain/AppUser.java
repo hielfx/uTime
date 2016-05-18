@@ -55,7 +55,7 @@ public class AppUser implements Serializable {
     @Valid
     private Address address;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)//Related with User
     @JoinColumn(unique = true, nullable = false)
     @NotNull
 //    @Valid

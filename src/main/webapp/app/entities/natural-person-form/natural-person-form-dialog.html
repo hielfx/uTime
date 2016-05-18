@@ -1,9 +1,9 @@
 <div>
     <div class="row">
-        <div class="col-md8 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2">
             <h1 translate="register.title">Registration</h1>
 
-            <!--<div class="alert alert-success" ng-show="vm.success" translate="register.messages.success">
+            <div class="alert alert-success" ng-show="vm.success" translate="register.messages.success">
                 <strong>Registration saved!</strong> Please check your email for confirmation.
             </div>
 
@@ -22,11 +22,11 @@
 
             <div class="alert alert-danger" ng-show="vm.doNotMatch" translate="global.messages.error.dontmatch">
                 The password and its confirmation do not match!
-            </div>-->
+            </div>
         </div>
 
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2" ng-show="!vm.success">
             <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
                 <div class="modal-body">
@@ -63,7 +63,7 @@
                                for="field_phoneNumber">PhoneNumber</label>
                         <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
                                ng-model="vm.naturalPersonForm.phoneNumber"
-                               required ng-pattern="/([+]\\d{2})?\\d{9}/"/>
+                               required ng-pattern="/([+]\d{2})?\d{9}/"/>
 
                         <div ng-show="editForm.phoneNumber.$invalid">
                             <p class="help-block"
@@ -73,8 +73,8 @@
 
                             <p class="help-block"
                                ng-show="editForm.phoneNumber.$error.pattern" translate="entity.validation.pattern"
-                               translate-value-pattern="([+]\\d{2})?\\d{9}">
-                                This field should follow pattern "([+]\\d{2})?\\d{9}".
+                               translate-value-pattern="([+]\d{2})?\d{9}">
+                                This field should follow pattern "([+]\d{2})?\d{9}".
                             </p>
                         </div>
                     </div>

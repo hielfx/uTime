@@ -14,24 +14,29 @@
                 "question": "¿Seguro que quiere eliminar NaturalPersonForm {{ id }}?"
             },
             "detail": {
-                "title": "NaturalPersonForm"
+                "title": "Registro como persona física"
             },
-            "birthDate": "BirthDate",
-            "phoneNumber": "PhoneNumber",
-            "image": "Image",
-            "address": "Address",
-            "city": "City",
-            "zipCode": "ZipCode",
-            "province": "Province",
-            "country": "Country",
-            "firstName": "FirstName",
-            "lastName": "LastName",
+            "birthDate": "Fecha de nacimiento",
+            "phoneNumber": "Número de teléfono",
+            "image": "Imagen",
+            "address": "Dirección",
+            "city": "Ciudad",
+            "zipCode": "Código postal",
+            "province": "Provincia",
+            "country": "País",
+            "firstName": "Nombre",
+            "lastName": "Apellidos",
             "email": "Email",
-            "password": "Password",
-            "passwordConfirm": "PasswordConfirm",
-            "login": "Login",
-            "acceptTermsAndConditions": "AcceptTermsAndConditions",
-            "gender": "Gender"
+            "password": "Contraseña",
+            "passwordConfirm": "Confirmar contraseña",
+            "login": "Nombre de usuario",
+            "acceptTermsAndConditions": "Acepto los términos y condiciones",
+            "gender": "Género",
+            "genderName": {
+                "GENDER_NOT_SPECIFIED": "No especificar",
+                "GENDER_MALE": "Masculino",
+                "GENDER_FEMALE": "Femenino"
+            }
         }
     }
 }

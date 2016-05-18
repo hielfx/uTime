@@ -43,7 +43,7 @@
             <column name="show_province" type="BOOLEAN"/>
             <column name="show_zip_code" type="BOOLEAN"/>
             <column name="zip_code" type="VARCHAR(255)"/>
-            <column name="image" type="OID"/>
+            <column name="image" type="BYTEA"/><!-- Changed from OID to BYTEA -->
             <column name="image_content_type" type="VARCHAR(255)"/>
             <column name="is_online" type="BOOLEAN">
                 <constraints nullable="false"/>
