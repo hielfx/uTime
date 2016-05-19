@@ -80,39 +80,5 @@
 
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
-
-        vm.openCalendar = function (date) {
-            var _date = new Date();
-            var day = _date.getDate();
-            var month = _date.getMonth();
-            var year = _date.getFullYear();
-            var hour = _date.getHours();
-            var min = _date.getMinutes();
-
-            //Formatting the numbers when below 10
-            if (month < 10) {
-                month = "0" + month;
-            }
-            if (day < 10) {
-                day = "0" + day;
-            }
-            if (hour < 10) {
-                hour = "0" + hour;
-            }
-            if (min < 10) {
-                min = "0" + min;
-            }
-
-            var now_date = year + "-" + month + "-" + day + " " + hour + ":" + min;
-
-            if ($("#field_birthDate").val()) {
-                _date = $("#field_birthDate").val();
-            } else {
-                _date = now_date;
-            }
-
-            $("#field_birthDate").val(_date).change();
-            vm.datePickerOpenStatus[date] = true;
-        };
     }
 })();

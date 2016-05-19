@@ -32,7 +32,6 @@
                     }],
                     entity: function () {
                         return {
-                            birthDate: null,
                             phoneNumber: null,
                             image: null,
                             imageContentType: null,

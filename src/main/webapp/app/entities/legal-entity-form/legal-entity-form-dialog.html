@@ -32,33 +32,6 @@
                 <div class="modal-body">
                     <jhi-alert-error></jhi-alert-error>
                     <div class="form-group">
-                        <label class="control-label" translate="volunteercrowdApp.legalEntityForm.birthDate"
-                               for="field_birthDate">BirthDate</label>
-
-                        <div class="input-group">
-                            <input id="field_birthDate" type="text" class="form-control" name="birthDate"
-                                   datetime-picker="{{dateformat}}" ng-model="vm.legalEntityForm.birthDate"
-                                   is-open="vm.datePickerOpenStatus.birthDate"
-                                   required/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('birthDate')"><i
-                            class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                        </div>
-                        <div ng-show="editForm.birthDate.$invalid">
-                            <p class="help-block"
-                               ng-show="editForm.birthDate.$error.required" translate="entity.validation.required">
-                                This field is required.
-                            </p>
-
-                            <p class="help-block"
-                               ng-show="editForm.birthDate.$error.ZonedDateTimelocal"
-                               translate="entity.validation.ZonedDateTimelocal">
-                                This field should be a date and time.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label" translate="volunteercrowdApp.legalEntityForm.phoneNumber"
                                for="field_phoneNumber">PhoneNumber</label>
                         <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
@@ -346,7 +319,7 @@
 
                     <div class="form-group">
                         <label translate="volunteercrowdApp.legalEntityForm.website" for="field_website">website</label>
-                        <input type="text" class="form-control" name="website" id="field_website"
+                        <input type="url" class="form-control" name="website" id="field_website"
                                ng-model="vm.legalEntityForm.website"/>
                     </div>
 

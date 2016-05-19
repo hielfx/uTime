@@ -7,7 +7,7 @@
     LegalEntityForm.$inject = ['$resource', 'DateUtils'];
 
     function LegalEntityForm($resource, DateUtils) {
-        var resourceUrl = 'api/legalEntity-forms/:id';
+        var resourceUrl = 'api/legal-entity-forms/:id';
 
         return $resource(resourceUrl, {}, {
             'query': {method: 'GET', isArray: true},
