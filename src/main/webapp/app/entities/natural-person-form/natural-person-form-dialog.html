@@ -89,7 +89,7 @@
                                 style="max-height: 100px;" ng-if="vm.naturalPersonForm.image"/>
 
                             <div class="help-block clearfix">
-                                <span class="pull-left">{{vm.naturalPersonForm.imageContentType}}, {{byteSize(vm.naturalPersonForm.image)}}</span>
+                                <span class="pull-left">{{vm.naturalPersonForm.imageContentType}} {{byteSize(vm.naturalPersonForm.image)}}</span>
                                 <button
                                     ng-click="vm.naturalPersonForm.image=null;vm.naturalPersonForm.imageContentType=null;"
                                     ng-if="vm.naturalPersonForm.image"
@@ -227,7 +227,7 @@
                     <div class="form-group">
                         <label class="control-label" translate="volunteercrowdApp.naturalPersonForm.email"
                                for="field_email">Email</label>
-                        <input type="text" class="form-control" name="email" id="field_email"
+                        <input type="email" class="form-control" name="email" id="field_email"
                                ng-model="vm.naturalPersonForm.email"
                                required/>
 
@@ -235,6 +235,11 @@
                             <p class="help-block"
                                ng-show="editForm.email.$error.required" translate="entity.validation.required">
                                 This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.email.$error.email" translate="global.messages.validate.email.invalid">
+                                Your e-mail is invalid.
                             </p>
                         </div>
                     </div>

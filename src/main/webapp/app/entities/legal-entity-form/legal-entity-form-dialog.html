@@ -200,7 +200,7 @@
                     <div class="form-group">
                         <label class="control-label" translate="volunteercrowdApp.legalEntityForm.email"
                                for="field_email">Email</label>
-                        <input type="text" class="form-control" name="email" id="field_email"
+                        <input type="email" class="form-control" name="email" id="field_email"
                                ng-model="vm.legalEntityForm.email"
                                required/>
 
@@ -208,6 +208,11 @@
                             <p class="help-block"
                                ng-show="editForm.email.$error.required" translate="entity.validation.required">
                                 This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.email.$error.email" translate="global.messages.validate.email.invalid">
+                                Your e-mail is invalid.
                             </p>
                         </div>
                     </div>
