@@ -2,14 +2,18 @@ package com.hielfsoft.volunteercrowd.service;
 
 import com.hielfsoft.volunteercrowd.domain.Address;
 import com.hielfsoft.volunteercrowd.domain.AppUser;
+import com.hielfsoft.volunteercrowd.domain.Authority;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.AppUserRepository;
 import com.hielfsoft.volunteercrowd.repository.search.AppUserSearchRepository;
+import com.hielfsoft.volunteercrowd.security.SecurityUtils;
 import com.hielfsoft.volunteercrowd.service.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -161,5 +165,9 @@ public class AppUserService {
         result.setAddress(address);
 
         return result;
+    }
+
+    public AppUser findOneByPrincipal(){
+        return appUserRepository.findOneByUsername(SecurityUtils.getCurrentUserLogin());
     }
 }

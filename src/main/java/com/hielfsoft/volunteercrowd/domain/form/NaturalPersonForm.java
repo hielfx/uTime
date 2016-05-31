@@ -1,4 +1,6 @@
-package com.hielfsoft.volunteercrowd.domain;
+package com.hielfsoft.volunteercrowd.domain.form;
+
+import com.hielfsoft.volunteercrowd.domain.Gender;
 
 import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;

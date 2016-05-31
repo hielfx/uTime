@@ -94,11 +94,7 @@
                                 title: null,
                                 description: null,
                                 category: null,
-                                deleted: null,
                                 location: null,
-                                creationDate: null,
-                                modificationDate: null,
-                                completed: null,
                                 id: null
                             };
                         }

@@ -2,7 +2,7 @@ package com.hielfsoft.volunteercrowd.service;
 
 import com.hielfsoft.volunteercrowd.domain.AppUser;
 import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
-import com.hielfsoft.volunteercrowd.domain.NaturalPersonForm;
+import com.hielfsoft.volunteercrowd.domain.form.NaturalPersonForm;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.NaturalPersonRepository;
 import com.hielfsoft.volunteercrowd.repository.search.NaturalPersonSearchRepository;

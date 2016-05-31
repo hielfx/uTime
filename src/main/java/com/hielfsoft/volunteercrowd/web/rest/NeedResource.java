@@ -2,6 +2,7 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.hielfsoft.volunteercrowd.domain.Need;
+import com.hielfsoft.volunteercrowd.domain.form.NeedForm;
 import com.hielfsoft.volunteercrowd.service.NeedService;
 import com.hielfsoft.volunteercrowd.web.rest.util.HeaderUtil;
 import com.hielfsoft.volunteercrowd.web.rest.util.PaginationUtil;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -21,10 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Need.
@@ -34,39 +32,47 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class NeedResource {
 
     private final Logger log = LoggerFactory.getLogger(NeedResource.class);
-        
+
     @Inject
     private NeedService needService;
-    
+
     /**
-     * POST  /needs : Create a new need.
+     * POST  /needs : Create a new need from a needForm
      *
-     * @param need the need to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new need, or with status 400 (Bad Request) if the need has already an ID
+     * @param needForm the needForm to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new needForm, or with status 400 (Bad Request) if the needForm has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/needs",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Need> createNeed(@Valid @RequestBody Need need) throws URISyntaxException {
-        log.debug("REST request to save Need : {}", need);
-        if (need.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("need", "idexists", "A new need cannot already have an ID")).body(null);
+    public ResponseEntity<Need> createNeed(@Valid @RequestBody NeedForm needForm, BindingResult binding) throws URISyntaxException {
+        log.debug("REST request to save Need : {}", needForm);
+        if (binding.hasErrors()) {
+            //TODO: Check this carefully
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("needForm", "idexists", "A new needForm cannot already have an ID")).body(null);
+        }else{
+            try {
+                Need result = needService.reconstruct(needForm);
+                result = needService.save(result);
+                return ResponseEntity.created(new URI("/api/needs/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert("need", result.getId().toString()))
+                    .body(result);
+            }catch(Throwable oops){
+                //TODO: Check this carefully
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("naturalPersonForm", "idexists", "A new naturalPersonForm cannot already have an ID")).body(null);
+            }
         }
-        Need result = needService.save(need);
-        return ResponseEntity.created(new URI("/api/needs/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("need", result.getId().toString()))
-            .body(result);
     }
 
     /**
-     * PUT  /needs : Updates an existing need.
+     * PUT  /needs : Updates an existing needForm.
      *
-     * @param need the need to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated need,
-     * or with status 400 (Bad Request) if the need is not valid,
-     * or with status 500 (Internal Server Error) if the need couldnt be updated
+     * @param need the needForm to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated needForm,
+     * or with status 400 (Bad Request) if the needForm is not valid,
+     * or with status 500 (Internal Server Error) if the needForm couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/needs",
@@ -76,11 +82,11 @@ public class NeedResource {
     public ResponseEntity<Need> updateNeed(@Valid @RequestBody Need need) throws URISyntaxException {
         log.debug("REST request to update Need : {}", need);
         if (need.getId() == null) {
-            return createNeed(need);
+//            return createNeed(need);//TODO: Change with update method
         }
         Need result = needService.save(need);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("need", need.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("needForm", need.getId().toString()))
             .body(result);
     }
 
@@ -98,16 +104,16 @@ public class NeedResource {
     public ResponseEntity<List<Need>> getAllNeeds(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Needs");
-        Page<Need> page = needService.findAll(pageable); 
+        Page<Need> page = needService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/needs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /needs/:id : get the "id" need.
+     * GET  /needs/:id : get the "id" needForm.
      *
-     * @param id the id of the need to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the need, or with status 404 (Not Found)
+     * @param id the id of the needForm to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the needForm, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/needs/{id}",
         method = RequestMethod.GET,
@@ -124,9 +130,9 @@ public class NeedResource {
     }
 
     /**
-     * DELETE  /needs/:id : delete the "id" need.
+     * DELETE  /needs/:id : delete the "id" needForm.
      *
-     * @param id the id of the need to delete
+     * @param id the id of the needForm to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/needs/{id}",
@@ -136,14 +142,14 @@ public class NeedResource {
     public ResponseEntity<Void> deleteNeed(@PathVariable Long id) {
         log.debug("REST request to delete Need : {}", id);
         needService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("need", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("needForm", id.toString())).build();
     }
 
     /**
-     * SEARCH  /_search/needs?query=:query : search for the need corresponding
+     * SEARCH  /_search/needs?query=:query : search for the needForm corresponding
      * to the query.
      *
-     * @param query the query of the need search
+     * @param query the query of the needForm search
      * @return the result of the search
      */
     @RequestMapping(value = "/_search/needs",

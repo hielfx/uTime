@@ -2,7 +2,7 @@ package com.hielfsoft.volunteercrowd.service;
 
 import com.hielfsoft.volunteercrowd.domain.AppUser;
 import com.hielfsoft.volunteercrowd.domain.LegalEntity;
-import com.hielfsoft.volunteercrowd.domain.LegalEntityForm;
+import com.hielfsoft.volunteercrowd.domain.form.LegalEntityForm;
 import com.hielfsoft.volunteercrowd.domain.User;
 import com.hielfsoft.volunteercrowd.repository.LegalEntityRepository;
 import com.hielfsoft.volunteercrowd.repository.search.LegalEntitySearchRepository;

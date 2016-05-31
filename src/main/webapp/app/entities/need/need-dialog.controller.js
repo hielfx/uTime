@@ -10,15 +10,15 @@
     function NeedDialogController ($scope, $stateParams, $uibModalInstance, entity, Need, AppUser, NeededAbility, Availability, Request) {
         var vm = this;
         vm.need = entity;
-        vm.appusers = AppUser.query();
-        vm.neededabilitys = NeededAbility.query();
-        vm.availabilitys = Availability.query();
-        vm.requests = Request.query();
-        vm.load = function(id) {
-            Need.get({id : id}, function(result) {
-                vm.need = result;
-            });
-        };
+        // vm.appusers = AppUser.query();
+        // vm.neededabilitys = NeededAbility.query();
+        // vm.availabilitys = Availability.query();
+        // vm.requests = Request.query();
+        // vm.load = function(id) {
+        //     Need.get({id : id}, function(result) {
+        //         vm.need = result;
+        //     });
+        // };
 
         var onSaveSuccess = function (result) {
             $scope.$emit('volunteercrowdApp:needUpdate', result);
@@ -43,12 +43,12 @@
             $uibModalInstance.dismiss('cancel');
         };
 
-        vm.datePickerOpenStatus = {};
-        vm.datePickerOpenStatus.creationDate = false;
-        vm.datePickerOpenStatus.modificationDate = false;
-
-        vm.openCalendar = function(date) {
-            vm.datePickerOpenStatus[date] = true;
-        };
+        // vm.datePickerOpenStatus = {};
+        // vm.datePickerOpenStatus.creationDate = false;
+        // vm.datePickerOpenStatus.modificationDate = false;
+        //
+        // vm.openCalendar = function(date) {
+        //     vm.datePickerOpenStatus[date] = true;
+        // };
     }
 })();

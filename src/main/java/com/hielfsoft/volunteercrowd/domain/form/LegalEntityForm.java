@@ -1,4 +1,4 @@
-package com.hielfsoft.volunteercrowd.domain;
+package com.hielfsoft.volunteercrowd.domain.form;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;

@@ -2,7 +2,7 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.hielfsoft.volunteercrowd.domain.NaturalPerson;
-import com.hielfsoft.volunteercrowd.domain.NaturalPersonForm;
+import com.hielfsoft.volunteercrowd.domain.form.NaturalPersonForm;
 import com.hielfsoft.volunteercrowd.service.MailService;
 import com.hielfsoft.volunteercrowd.service.NaturalPersonService;
 import com.hielfsoft.volunteercrowd.web.rest.util.HeaderUtil;
@@ -49,6 +49,7 @@ public class NaturalPersonFormResource {
     public ResponseEntity<NaturalPerson> createNaturalPerson(@Valid @RequestBody NaturalPersonForm naturalPersonForm, BindingResult binding, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to create and save NaturalPerson : {}", naturalPersonForm);
         if (binding.hasErrors()) {
+            //TODO: Check this carefully
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("naturalPersonForm", "idexists", "A new naturalPersonForm cannot already have an ID")).body(null);
         } else {
             try {
@@ -64,6 +65,7 @@ public class NaturalPersonFormResource {
                 mailService.sendActivationEmail(result.getAppUser().getUser(), baseUrl);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             } catch (Throwable oops) {
+                //TODO: Check this carefully
                 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("naturalPersonForm", "idexists", "A new naturalPersonForm cannot already have an ID")).body(null);
             }
         }

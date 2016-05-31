@@ -2,7 +2,7 @@ package com.hielfsoft.volunteercrowd.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.hielfsoft.volunteercrowd.domain.LegalEntity;
-import com.hielfsoft.volunteercrowd.domain.LegalEntityForm;
+import com.hielfsoft.volunteercrowd.domain.form.LegalEntityForm;
 import com.hielfsoft.volunteercrowd.service.LegalEntityService;
 import com.hielfsoft.volunteercrowd.service.MailService;
 import com.hielfsoft.volunteercrowd.web.rest.util.HeaderUtil;
@@ -49,6 +49,7 @@ public class LegalEntityFormResource {
     public ResponseEntity<LegalEntity> createLegalEntity(@Valid @RequestBody LegalEntityForm legalEntityForm, BindingResult binding, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to create and save LegalEntity : {}", legalEntityForm);
         if (binding.hasErrors()) {
+            //TODO: Check this carefully
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("legalEntityForm", "idexists", "A new legalEntityForm cannot already have an ID")).body(null);
         } else {
             try {
@@ -64,6 +65,7 @@ public class LegalEntityFormResource {
                 mailService.sendActivationEmail(result.getAppUser().getUser(), baseUrl);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             } catch (Throwable oops) {
+                //TODO: Check this carefully
                 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("legalEntityForm", "idexists", "A new legalEntityForm cannot already have an ID")).body(null);
             }
         }
