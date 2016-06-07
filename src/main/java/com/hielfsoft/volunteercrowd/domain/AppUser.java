@@ -45,7 +45,7 @@ public class AppUser implements Serializable {
     private Integer tokens;
 
     @Lob
-    @Column(name = "image")
+    @Column(name = "image", columnDefinition = "VARBINARY")
     private byte[] image;
 
     @Column(name = "image_content_type")

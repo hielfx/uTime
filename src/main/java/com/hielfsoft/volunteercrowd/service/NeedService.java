@@ -7,24 +7,22 @@ import com.hielfsoft.volunteercrowd.domain.form.NeedForm;
 import com.hielfsoft.volunteercrowd.repository.NeedRepository;
 import com.hielfsoft.volunteercrowd.repository.search.NeedSearchRepository;
 import com.hielfsoft.volunteercrowd.security.AuthoritiesConstants;
+import com.hielfsoft.volunteercrowd.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Need.
@@ -136,6 +134,18 @@ public class NeedService {
         result.setCategory(needForm.getCategory());
         result.setLocation(needForm.getLocation());
         result.setTitle(needForm.getTitle());
+
+        return result;
+    }
+
+    public List<Need> findByPrincipal(){
+        Assert.notNull(SecurityUtils.getCurrentUserLogin());
+
+        List<Need> result;
+        AppUser appUser;
+
+        appUser = appUserService.findOneByPrincipal();
+        result = new ArrayList<Need>(needRepository.findByAppUserId(appUser.getId()));
 
         return result;
     }

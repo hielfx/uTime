@@ -9,6 +9,7 @@ import com.hielfsoft.volunteercrowd.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -106,6 +107,26 @@ public class NeedResource {
         log.debug("REST request to get a page of Needs");
         Page<Need> page = needService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/needs");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /needs : get all the needs from the principal.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of needs in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
+     */
+    @RequestMapping(value = "/appUser/needs",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Need>> getAllNeedsFormPrincipal(Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Needs");
+        List<Need> needs = needService.findByPrincipal();
+        Page<Need> page= new PageImpl<>(needs,pageable,needs.size());
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/appUser/needs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
