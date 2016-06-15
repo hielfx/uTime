@@ -53,14 +53,14 @@ public class NeedResource {
         if (binding.hasErrors()) {
             //TODO: Check this carefully
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("needForm", "idexists", "A new needForm cannot already have an ID")).body(null);
-        }else{
+        } else {
             try {
                 Need result = needService.reconstruct(needForm);
                 result = needService.save(result);
                 return ResponseEntity.created(new URI("/api/needs/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("need", result.getId().toString()))
                     .body(result);
-            }catch(Throwable oops){
+            } catch (Throwable oops) {
                 //TODO: Check this carefully
                 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("naturalPersonForm", "idexists", "A new naturalPersonForm cannot already have an ID")).body(null);
             }
@@ -125,7 +125,7 @@ public class NeedResource {
         throws URISyntaxException {
         log.debug("REST request to get a page of Needs");
         List<Need> needs = needService.findByPrincipal();
-        Page<Need> page= new PageImpl<>(needs,pageable,needs.size());
+        Page<Need> page = new PageImpl<>(needs, pageable, needs.size());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/appUser/needs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -143,10 +143,16 @@ public class NeedResource {
     public ResponseEntity<Need> getNeed(@PathVariable Long id) {
         log.debug("REST request to get Need : {}", id);
         Need need = needService.findOne(id);
+        Optional op = Optional.ofNullable(need);
         return Optional.ofNullable(need)
-            .map(result -> new ResponseEntity<>(
-                result,
-                HttpStatus.OK))
+            .map(result -> {
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("useAppUser",String.valueOf(true)); //Added to check if we are retrieving with its appUser
+                return new ResponseEntity<>(
+                    result,
+                    headers,
+                    HttpStatus.OK);
+            })
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

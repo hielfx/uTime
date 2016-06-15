@@ -51,6 +51,49 @@
                 }]
             }
         })
+        .state('app-user-need', {
+            parent: 'entity',
+            url: '/appUser/need?page&sort&search',
+            data: {
+                authorities: ['ROLE_APPUSER'],
+                pageTitle: 'volunteercrowdApp.need.home.title',
+                useAppUser: true
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/entities/need/needs.html',
+                    controller: 'NeedController',
+                    controllerAs: 'vm'
+                }
+            },
+            params: {
+                page: {
+                    value: '1',
+                    squash: true
+                },
+                sort: {
+                    value: 'id,asc',
+                    squash: true
+                },
+                search: null,
+            },
+            resolve: {
+                pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                    return {
+                        page: PaginationUtil.parsePage($stateParams.page),
+                        sort: $stateParams.sort,
+                        predicate: PaginationUtil.parsePredicate($stateParams.sort),
+                        ascending: PaginationUtil.parseAscending($stateParams.sort),
+                        search: $stateParams.search
+                    };
+                }],
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('need');
+                    $translatePartialLoader.addPart('global');
+                    return $translate.refresh();
+                }]
+            }
+        })
         .state('need-detail', {
             parent: 'entity',
             url: '/need/{id}',
@@ -75,8 +118,8 @@
                 }]
             }
         })
-        .state('need.new', {
-            parent: 'need',
+        .state('app-user-need.new', {
+            parent: 'app-user-need',
             url: '/new',
             data: {
                 authorities: ['ROLE_APPUSER']
@@ -106,8 +149,8 @@
                 });
             }]
         })
-        .state('need.edit', {
-            parent: 'need',
+        .state('app-user-need.edit', {
+            parent: 'app-user-need',
             url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_APPUSER']
@@ -131,8 +174,8 @@
                 });
             }]
         })
-        .state('need.delete', {
-            parent: 'need',
+        .state('app-user-need.delete', {
+            parent: 'app-user-need',
             url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_APPUSER']
@@ -149,7 +192,7 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('need', null, { reload: true });
+                    $state.go('app-user-need', null, { reload: true });
                 }, function() {
                     $state.go('^');
                 });

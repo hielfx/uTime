@@ -116,6 +116,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/audits/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/genders").permitAll()
             .antMatchers("/api/needs/**").hasAuthority(AuthoritiesConstants.APPUSER)
+            .antMatchers("/api/appUser/needs/**").hasAnyAuthority(AuthoritiesConstants.APPUSER)
             .antMatchers("/api/**").not().anonymous()//Changed to not anonymous from permitAll
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()

@@ -1,11 +1,14 @@
 {
     "volunteercrowdApp": {
         "need" : {
+            "appUser": {
+              "title": "Mis necesidades"
+            },
             "home": {
-                "title": "Needs",
-                "createLabel": "Crear nuevo Need",
-                "createOrEditLabel": "Crear o editar Need",
-                "search": "Search for Need"
+                "title": "Necesidades",
+                "createLabel": "Crear nueva necesidad",
+                "createOrEditLabel": "Crear o editar necesidad",
+                "search": "Buscar necesidad"
             },
             "created": "Un nuevo Need ha sido creado con el identificador {{ param }}",
             "updated": "Un Need ha sido actualizado con el identificador {{ param }}",
@@ -16,18 +19,18 @@
             "detail": {
                 "title": "Need"
             },
-            "title": "Title",
-            "description": "Description",
-            "category": "Category",
-            "deleted": "Deleted",
-            "location": "Location",
-            "creationDate": "CreationDate",
-            "modificationDate": "ModificationDate",
-            "completed": "Completed",
-            "appUser": "AppUser",
-            "neededAbilitie": "NeededAbilitie",
-            "availabilitie": "Availabilitie",
-            "request": "Request"
+            "title": "Título",
+            "description": "Descripción",
+            "category": "Categoría",
+            "deleted": "Borrado",
+            "location": "Localización",
+            "creationDate": "Fecha de creación",
+            "modificationDate": "Fecha de modificación",
+            "completed": "Completado",
+            "appUser": "Usuario",
+            "neededAbilities": "Habilidades necesarias",
+            "availabilities": "Disponibilidad",
+            "request": "Petición"
         }
     }
 }

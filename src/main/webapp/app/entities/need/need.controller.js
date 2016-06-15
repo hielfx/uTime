@@ -5,9 +5,12 @@
         .module('volunteercrowdApp')
         .controller('NeedController', NeedController);
 
-    NeedController.$inject = ['$scope', '$state', 'Need', 'NeedSearch', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
+    NeedController.$inject = ['$scope', '$state', 'Need', 'NeedSearch', 'AppUserNeed', 'AppUserNeedSearch', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
 
-    function NeedController ($scope, $state, Need, NeedSearch, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    function NeedController ($scope, $state, Need, NeedSearch, AppUserNeed, AppUserNeedSearch, ParseLinks, AlertService, pagingParams, paginationConstants) {
+
+        var useAppUser = $state.current.data.useAppUser; //Check if we have to use the appUserNeed service
+
         var vm = this;
         vm.loadAll = loadAll;
         vm.loadPage = loadPage;
@@ -20,20 +23,40 @@
         vm.currentSearch = pagingParams.search;
         vm.loadAll();
 
+        vm.useAppUser = useAppUser; //To load it to the view
+        $scope.useAppUser = useAppUser;
+
         function loadAll () {
             if (pagingParams.search) {
-                NeedSearch.query({
-                    query: pagingParams.search,
-                    page: pagingParams.page - 1,
-                    size: paginationConstants.itemsPerPage,
-                    sort: sort()
-                }, onSuccess, onError);
+                if(useAppUser!=true) {
+                    NeedSearch.query({
+                        query: pagingParams.search,
+                        page: pagingParams.page - 1,
+                        size: paginationConstants.itemsPerPage,
+                        sort: sort()
+                    }, onSuccess, onError);
+                }else{
+                    AppUserNeedSearch.query({
+                        query: pagingParams.search,
+                        page: pagingParams.page - 1,
+                        size: paginationConstants.itemsPerPage,
+                        sort: sort()
+                    }, onSuccess, onError);
+                }
             } else {
-                Need.query({
-                    page: pagingParams.page - 1,
-                    size: paginationConstants.itemsPerPage,
-                    sort: sort()
-                }, onSuccess, onError);
+                if(useAppUser!=true) {
+                    Need.query({
+                        page: pagingParams.page - 1,
+                        size: paginationConstants.itemsPerPage,
+                        sort: sort()
+                    }, onSuccess, onError);
+                }else{
+                    AppUserNeed.query({
+                        page: pagingParams.page - 1,
+                        size: paginationConstants.itemsPerPage,
+                        sort: sort()
+                    }, onSuccess, onError);
+                }
             }
             function sort() {
                 var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
@@ -89,4 +112,5 @@
         }
 
     }
+
 })();

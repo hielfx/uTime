@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="need.new" >
+                <button class="btn btn-primary" ui-sref="app-user-need.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs"  translate="volunteercrowdApp.need.home.createLabel">
                         Create new Need
@@ -35,32 +35,28 @@
         <table class="jh-table table table-striped">
             <thead>
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="title"><span translate="volunteercrowdApp.need.title">Title</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="description"><span translate="volunteercrowdApp.need.description">Description</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="category"><span translate="volunteercrowdApp.need.category">Category</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="deleted"><span translate="volunteercrowdApp.need.deleted">Deleted</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="location"><span translate="volunteercrowdApp.need.location">Location</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="creationDate"><span translate="volunteercrowdApp.need.creationDate">CreationDate</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="modificationDate"><span translate="volunteercrowdApp.need.modificationDate">ModificationDate</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="completed"><span translate="volunteercrowdApp.need.completed">Completed</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="appUser.id"><span translate="volunteercrowdApp.need.appUser">appUser</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="completed" ng-show="vm.useAppUser==true"><span translate="volunteercrowdApp.need.completed">Completed</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="appUser.id" ng-show="vm.useAppUser!=true"><span translate="volunteercrowdApp.need.appUser">appUser</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="need in vm.needs track by need.id">
-                    <td><a ui-sref="need-detail({id:need.id})">{{need.id}}</a></td>
                     <td>{{need.title}}</td>
                     <td>{{need.description}}</td>
                     <td>{{need.category}}</td>
-                    <td>{{need.deleted}}</td>
                     <td>{{need.location}}</td>
                     <td>{{need.creationDate | date:'medium'}}</td>
                     <td>{{need.modificationDate | date:'medium'}}</td>
-                    <td>{{need.completed}}</td>
-                    <td>
-                        <a ui-sref="app-user-detail({id:need.appUser.id})">{{need.appUser.id}}</a>
+                    <td ng-show="vm.useAppUser==true">{{need.completed}}</td>
+                    <td ng-show="vm.useAppUser!=true">
+                        <a ui-sref="app-user-detail({id:need.appUser.id})">{{need.appUser.user.login}}</a>
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
@@ -70,18 +66,18 @@
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                             </button>
-                            <button type="submit"
-                                    ui-sref="need.edit({id:need.id})"
+                            <!--<button type="submit"
+                                    ui-sref="app-user-need.edit({id:need.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="need.delete({id:need.id})"
+                                    ui-sref="app-user-need.delete({id:need.id})"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
-                            </button>
+                            </button>-->
                         </div>
                     </td>
                 </tr>
