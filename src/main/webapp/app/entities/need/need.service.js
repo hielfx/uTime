@@ -40,15 +40,12 @@
             'query': {method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
-                transformResponse: function (data,headers) {
-                    var response = {};
-                    data = angular.fromJson(data);
-                    data.creationDate = DateUtils.convertDateTimeFromServer(data.creationDate);
-                    data.modificationDate = DateUtils.convertDateTimeFromServer(data.modificationDate);
+                transformResponse: function (data) {
+                    var json_data = angular.fromJson(data);
+                    json_data.creationDate = DateUtils.convertDateTimeFromServer(data.creationDate);
+                    json_data.modificationDate = DateUtils.convertDateTimeFromServer(data.modificationDate);
 
-                    response.data = data;
-                    response.headers = headers();
-                    return response;
+                    return json_data;
                 }
             },
             'update': {method: 'PUT'}
